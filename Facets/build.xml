@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<project name="Facets" default="createLibJar">
+	<property name="appName" value="PlaneEdit"/>
+	<property name="appPath" value="bench.plane"/>
+	<property name="sourceDir" value="C:\Users\dwright\eclipse\Facet"/>
+	<property name="buildDir" value="_build"/>
+	<property name="outputJar" value="${sourceDir}/${appName}.jar" />
+	<target name="clearOutput">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${buildDir}" includes="**/*"/>
+		</delete>
+		<delete file="${outputJar}"/>
+	</target>
+	<target name="createLibJar" depends="clearOutput">
+	  <jar destfile="${sourceDir}/Facets_.jar" filesonly="true">
+	  	<fileset dir="${sourceDir}" 
+	 			includes="facets/**/*.class 
+	  		applicable/**/*.class
+	  		_image/icon/**/*.gif
+	  		_image/icon/**/*.png
+	  		"/>
+		</jar>
+	</target>
+	<target name="createAppJar" depends="clearOutput">
+	  <jar destfile="${outputJar}" filesonly="true" 
+	   	filesetmanifest="mergewithoutmain">
+	 		<manifest>
+				<attribute name="Main-Class" value="${appPath}.${appName}"/>
+	      <attribute name="Class-Path" value="."/>
+	 		</manifest>
+	  	<fileset dir="${sourceDir}" 
+	 			includes="facets/**/*.class 
+	  		bench/plane/**/*.class
+	  		applicable/BoxValues.class
+	  		_image/icon/**/*.gif
+	  		build.xml
+	  		"
+	 		/>
+		</jar>
+	</target>
+  <target name="javadoc">
+    <javadoc access="protected" author="true" destdir="../doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="facets.facet,facets.facet.app.tree,facets.facet.app,facets.facet.kit" source="1.6" sourcepath="." splitindex="true" use="true" version="true"/>
+  </target>
+ 	<property name="releaseStr" value="0.8.95"/>
+ 	<property name="outputDir" value="${buildDir}/.." />
+	<target name="createZip" depends="createLibJar,addSourceFooters">
+		<copy todir="${buildDir}">
+			<fileset dir="${sourceDir}/_doc"
+				includes="license-LGPL.txt,ReadMe.html"/>
+		</copy>
+		<copy todir="${buildDir}" file="${outputJar}"/>
+		<echo>Inserting releaseStr...</echo>
+		<property name="releaseTag" value="@releaseTag@"/>
+		<replace dir="${buildDir}" 
+			token="${releaseTag}" 
+			value="${releaseStr}"/>
+		<zip basedir="${buildDir}" 
+			destfile="${outputDir}/${appName}_${releaseStr}.zip"/>
+	</target>
+	<target name="getSourceFiles" depends="clearOutput">
+		<copy todir="${buildDir}">
+			<fileset dir="${sourceDir}"
+				includes="facets/**/*.java"/>
+		</copy>
+	</target>
+	<property name="footerTag" value="@footerTag@"/>
+	<target name="addSourceFooters" depends="getSourceFiles">
+		<echo>Inserting footer tag...</echo>
+		<replaceregexp match="$" replace="${footerTag}${line.separator}">
+			<fileset dir="${buildDir}" includes="**/*.java"/>
+		</replaceregexp>
+		<echo>Inserting footer...</echo>
+		<replace dir="${buildDir}" token="${footerTag}">
+			<replacevalue><![CDATA[/*
+This file forms part of Version @releaseTag@ of Facets, a framework demonstrating 
+the Superficial approach to GUI-driven interactive applications.  
+http://superficial.sourceforge.net 				
+Copyright (C) 2017  David M Wright 
+This library is free software; you can redistribute it and/or modify it under 
+the terms of the GNU Lesser General Public License as published by the 
+Free Software Foundation; either release 3 of the License, or (at your 
+option) any later release.
+This library is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR 
+A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more 
+details.
+You should have received a copy of the GNU Lesser General Public License along 
+with this library; if not, write to the Free Software Foundation, Inc., 
+59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+*/]]></replacevalue>
+		</replace>
+	</target>
+<fileset dir="${sourceDir}" 
+	includes="${jarIncludesWatchingProviding} ${appName}.html"
+/>
+</project>

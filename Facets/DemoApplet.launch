@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.javaApplet">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/Facets/demo/DemoApplet.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<intAttribute key="org.eclipse.jdt.launching.APPLET_HEIGHT" value="200"/>
+<stringAttribute key="org.eclipse.jdt.launching.APPLET_NAME" value="Hello"/>
+<mapAttribute key="org.eclipse.jdt.launching.APPLET_PARAMETERS">
+<mapEntry key="browser" value="true"/>
+<mapEntry key="hello" value="Label"/>
+</mapAttribute>
+<intAttribute key="org.eclipse.jdt.launching.APPLET_WIDTH" value="400"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="demo.DemoApplet"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="Label Field List All Choose Spaces Select Limit Commit"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Facet"/>
+</launchConfiguration>

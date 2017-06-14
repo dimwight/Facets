@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>Select Panes Dialog</title>
+</head>
+<body>
+<p>This dialog is accessed from the <a href="../Menus/Pane.html">Pane</a> 
+	menu. It allows the user to </p>
+<ul>
+	<li>choose which <a href="../Panes.html">view panes</a> are displayed 
+		and how they are laid out</li>
+	<li>define a default pane layout and when this should be confirmed</li>
+</ul>
+<h2>Pane selection and arrangement</h2>
+<p>The available view panes are grouped as follows:</p>
+<ul>
+	<li> <i>Pages</i>, <i>Document</i> and <i>Trailer</i> panes under <i>Structure</i></li>
+	<li> <i>Rendering</i>, <i>Extracted</i> and <i>Stream</i> panes under <i>Page</i></li>
+</ul>
+<p>Panes checked appear in the layout; panes in each group appear in sash 
+	panes unless the <i>Show in Tabs </i>checkbox for the group is checked. 
+	The <i>Flip</i> and <i>Reset</i> buttons duplicate the corresponding items 
+	in the <a href="../Menus/Pane.html">Pane</a> menu. </p>
+<p>As settings are changed the display changes to match. Pressing OK confirms 
+	the layout; if the dialog is cancelled all changes are abandoned. </p>
+<p>Once a layout has been confirmed for the content it is saved to <a href="../State.html">session 
+	state</a> and applied whenever this content is loaded. </p>
+<h2>Options</h2>
+<p>Pressing the <i>Options&gt;&gt;</i> button extends the dialog with two 
+	checkbox items:</p>
+<dl> 
+	<dt>Set as default</dt>
+	<dd>When this item is checked before confirming the layout, the layout 
+		will be applied whenever unknown content is loaded. </dd>
+	<dt>Always ask</dt>
+	<dd>When this item is checked, the dialog will be opened whenever unknown 
+		content is loaded. </dd>
+</dl>
+</body>
+</html>
