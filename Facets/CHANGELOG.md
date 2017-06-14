@@ -1,7 +1,7 @@
 # Changelog for Facets
 ## 9.06
 
-Updated LIVE.
+Updated LIVE etc
 
 ## 9.05
 
