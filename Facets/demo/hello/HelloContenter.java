@@ -126,7 +126,7 @@ public abstract class HelloContenter extends Tracer implements DemoSurface.Conte
 </ul>  
 	@see SContenter#newContentArea(boolean)
 	 */
-	public AreaRoot newContentArea(boolean faceted) {
+	public SAreaTarget newContentArea(boolean faceted) {
 		
 		//Create root
 		AreaRoot root = new SContentAreaTargeter.ContentArea(title(),this,

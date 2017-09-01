@@ -1,4 +1,5 @@
 package applicable.eval;
+import static applicable.eval.Value.*;
 import static facets.util.Objects.*;
 import facets.util.Debug;
 import facets.util.ItemList;
@@ -24,16 +25,14 @@ public abstract class EvalCoded extends TreeCoded{
 	public final Value[]evaluate(){
 		if(false)trace(".evaluate:\n",codeds);
 		for(TreeCoded c:codeds)
-			if(c instanceof IfValue&&((EvalCoded)c).evaluate()[0].equals(Value.FALSE))
-				return Value.VOIDS;
+			if(c instanceof IfValue&&((EvalCoded)c).evaluate()[0].equals(FALSE))
+				return asValues(FALSE);
 		Value[]values=doEvaluation();
-		if(false)for(int i=0;i<values.length;i++)
-			values[i]=values[i].labelled(label);
 		if(false)trace(".~evaluate:\n",values);
 		return values;
 	}
 	protected Value[]doEvaluation(){
-		return Value.VOIDS;
+		return asValues(FALSE);
 	}
 	final protected Value[]asValues(Value eval){
 		return new Value[]{eval};

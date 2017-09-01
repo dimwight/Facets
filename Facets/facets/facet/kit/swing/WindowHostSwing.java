@@ -5,7 +5,6 @@ import static javax.swing.SwingUtilities.*;
 import facets.core.app.ActionAppSurface;
 import facets.core.app.AppConstants;
 import facets.core.app.AppSpecifier;
-import facets.core.app.AppSurface;
 import facets.core.app.AppWindowHost;
 import facets.core.app.Dialogs;
 import facets.core.app.SurfaceServices;
@@ -15,7 +14,6 @@ import facets.core.superficial.app.SSurface;
 import facets.core.superficial.app.SSurface.WindowAppSurface;
 import facets.facet.FacetFactory.SimpleServices;
 import facets.facet.app.FacetAppSpecifier;
-import facets.facet.app.FacetAppSurface;
 import facets.facet.kit.KitCore;
 import facets.util.NumberPolicy;
 import facets.util.Times;
@@ -43,6 +41,7 @@ import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 final class WindowHostSwing extends AppWindowHost{
+	private static final boolean sequenceCheck=false;
 	private final KitSwing kit;
 	private final JFrame frame;
 	private final JComponent headerBar;
@@ -71,11 +70,25 @@ final class WindowHostSwing extends AppWindowHost{
 			}
 		}));
 		KitCore.widgets+=2;
+		if(sequenceCheck)trace(".WindowHostSwing: ");
+	}
+	@Override
+	protected void setWindowBounds(final Rectangle bounds){
+		Runnable doSet=new Runnable(){public void run(){
+			if(sequenceCheck)trace(".setWindowBounds.doSet");
+			frame.setLocation(-100,-100);
+			frame.setVisible(true);
+			frame.setBounds(bounds);
+			if(false)frame.invalidate();
+		}};
+		if(false)SwingUtilities.invokeLater(doSet);
+		else doSet.run();
 	}
 	@Override
 	public void openWindow(){
 		super.openWindow();
-		Runnable openFrame=new Runnable(){public void run(){
+		Runnable fillFrame=new Runnable(){public void run(){
+			if(sequenceCheck)trace("openWindow.fillFrame:");
 			Container content=frame.getContentPane();
 			if(headerBar instanceof RibbonBar)content.add(headerBar,BorderLayout.NORTH);
 			else frame.setJMenuBar((JMenuBar)headerBar);
@@ -83,10 +96,9 @@ final class WindowHostSwing extends AppWindowHost{
 			ImageIcon icon=(ImageIcon)kit.getAppIcon(app.title());
 			if(icon!=null)frame.setIconImage(icon.getImage());
 			SwingUtilities.updateComponentTreeUI(frame);
-			frame.setVisible(true);
 		}};
-		if(isEventDispatchThread())openFrame.run();
-		else invokeLater(openFrame);
+		if(isEventDispatchThread())fillFrame.run();
+		else invokeLater(fillFrame);
 	}
 	@Override
 	public void openHostedSurface(){
@@ -200,15 +212,6 @@ final class WindowHostSwing extends AppWindowHost{
 	@Override
 	public void setTitle(String text){
 		frame.setTitle(kit.decodeTitleText(text));
-	}
-	@Override
-	protected void setWindowBounds(final Rectangle bounds){
-		Runnable doRun=new Runnable(){public void run(){
-			frame.setBounds(bounds);
-			frame.invalidate();
-		}};
-		if(false)SwingUtilities.invokeLater(doRun);
-		else doRun.run();
 	}
 	@Override
 	public void updateLayout(SSurface surface){

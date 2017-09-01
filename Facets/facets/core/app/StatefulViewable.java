@@ -17,8 +17,10 @@ and drag and drop implementation
 <li>state management (undo/redo)
 </ul> 
  */
-public abstract class StatefulViewable<S extends Stateful> extends StatefulViewableCore{
+public abstract class StatefulViewable<S extends Stateful> 
+		extends StatefulViewableCore{
 	/**
+	final static boolean selectionEdits=System.getProperty("NodeSelectionEdit")!=null;
 	Can supply a {@link StatefulViewable} with a suitable {@link Clipper}. 
 	 */
 	public interface ClipperSource{
@@ -42,6 +44,7 @@ public abstract class StatefulViewable<S extends Stateful> extends StatefulViewa
 		 */
 		Stateful[]newStatefuls();
 	}
+	final static boolean undoableEdits=System.getProperty("undoableEdits")!=null;
 	protected final Clipper clipper;
 	private S copyFramed;
 	protected final S copyFramed(){
@@ -90,6 +93,14 @@ public abstract class StatefulViewable<S extends Stateful> extends StatefulViewa
 		return false;
 	}
 	/**
+	Re-implementation that understands {@link ActionViewerTarget.Action}s. 
+	 */
+	public boolean actionIsLive(SViewer viewer,ViewableAction action){
+		return action==UNDO?states.canUndo() 
+			:action==REDO?states.canRedo() 
+			:super.actionIsLive(viewer,action);
+	}
+	/**
 	Valid implementation that understands {@link ActionViewerTarget.Action}s. 
 	 */
 	protected void actionTriggered(SViewer viewer,ViewableAction action){
@@ -97,19 +108,45 @@ public abstract class StatefulViewable<S extends Stateful> extends StatefulViewa
 		else if(action==ITERATE_FORWARD||action==ITERATE_BACK)
 			iterateSelection(action==ITERATE_FORWARD);
 		else if(action==CUT||action==COPY)copyStatefulSelection();
-		boolean editing=action==PASTE||action==PASTE_INTO||action==EDIT
+		boolean editing=action==PASTE||action==PASTE_INTO||action==MODIFY
 				||action==CUT||action==DELETE||action==UNDO||action==REDO;
 		if(!editing)return;
 		copyFramedState();
 		if(action==PASTE||action==PASTE_INTO)
 			insertStatefuls(action==PASTE_INTO,newPasteStatefuls());
-		else if(action==CUT||action==DELETE)deleteSelection();
-		else if(action==EDIT)editing&=editSelection();
+		else if(action==CUT||action==DELETE)deleteSelection(action==CUT);
+		else if(action==MODIFY){
+			editing&=editSelection();//modifySelection?
+			if(undoableEdits){
+				Stateful modifiedState=((Stateful)framed).copyState();
+				restoreAfterEditAction();
+				setModifyState(modifiedState);
+				updateAfterEditAction();
+			}
+		}
 		else if(action==UNDO)states.undo();
 		else if(action==REDO)states.redo();
 		if(!editing)return;
 		if(stateIsValid())updateAfterEditAction();
 		else restoreAfterEditAction();
+	}
+	protected void setModifyState(Stateful state){
+		((Stateful)framed).setState(state);
+	}
+	final public void updateAfterEditAction(){
+		copyFramedState();
+		((Stateful)framed).updateStateStamp();
+	}
+	protected final void copyFramedState(){
+		S src=(S)framed;
+		copyFramed=clipper==null?src:(S)src.copyState();
+	}
+	protected void restoreAfterEditAction(){
+		if(!undoableEdits)trace(".restoreAfterEditAction");
+		((S)framed).setState(copyFramed);
+	}
+	protected boolean stateIsValid(){
+		return true;
 	}
 	public void iterateSelection(boolean forward){
 		throw new RuntimeException("Not implemented in "+Debug.info(this));
@@ -117,33 +154,10 @@ public abstract class StatefulViewable<S extends Stateful> extends StatefulViewa
 	public void insertStatefuls(boolean into, Stateful...stateful){
 		throw new RuntimeException("Not implemented in "+Debug.info(this));
 	}
-	public void deleteSelection(){
+	public void deleteSelection(boolean asCut){
 		throw new RuntimeException("Not implemented in "+Debug.info(this));
 	}
 	public boolean editSelection(){
 		throw new RuntimeException("Not implemented in "+Debug.info(this));
-	}
-	protected boolean stateIsValid(){
-		return true;
-	}
-	protected final void copyFramedState(){
-		S src=(S)framed;
-		S copy=clipper==null?src:(S)src.copyState();
-		copyFramed=copy;
-	}
-	final public void updateAfterEditAction(){
-		copyFramedState();
-		((S)framed).updateStateStamp();
-	}
-	protected void restoreAfterEditAction(){
-		((S)framed).setState(copyFramed);
-	}
-	/**
-	Re-implementation that understands {@link ActionViewerTarget.Action}s. 
-	 */
-	public boolean actionIsLive(SViewer viewer,ViewableAction action){
-		return action==UNDO?states.canUndo() 
-			:action==REDO?states.canRedo() 
-			:super.actionIsLive(viewer,action);
 	}
 }

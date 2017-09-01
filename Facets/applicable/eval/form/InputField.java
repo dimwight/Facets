@@ -17,7 +17,7 @@ public abstract class InputField extends EvalField{
 		boolean valueFound=false;
 		for(int evalAt=0;evalAt<codeds.length;evalAt++)
 			if((valueFound|=codeds[evalAt]instanceof Value)){
-				codeds[evalAt]=value.unlabelled();
+				codeds[evalAt]=value.copyValue();
 				break;
 			}
 		if(!valueFound)throw new IllegalStateException("Value '"+value.asText()+

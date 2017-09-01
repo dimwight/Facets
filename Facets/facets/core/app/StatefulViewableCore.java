@@ -1,17 +1,16 @@
 package facets.core.app;
 import facets.core.app.ViewableStates.Change;
-import facets.core.superficial.STarget;
-import facets.core.superficial.TargetCore;
-import facets.core.superficial.app.SViewer;
-import facets.core.superficial.app.ViewableAction;
+import facets.core.superficial.app.SSelection;
 import facets.core.superficial.app.ViewableFrame;
-import facets.util.Debug;
 import facets.util.Objects;
 import facets.util.Stateful;
-import facets.util.Util;
+import facets.util.tree.NodePath;
+import facets.util.tree.TypedNode;
+import javax.swing.undo.UndoManager;
 abstract class StatefulViewableCore extends ViewableFrame{
 	private static final boolean noUndo=false;
-	final ViewableStates states=new ViewableStates((StatefulViewable)this);
+	final UndoManager states=//new ViewableStates((StatefulViewable)this)
+			new UndoManager();
 	private Stateful[]statesThen;
 	protected StatefulViewableCore(String title,Stateful content){
 		super(title,content);
@@ -29,10 +28,22 @@ abstract class StatefulViewableCore extends ViewableFrame{
 	<li>stores non-interim changes in a private state management sequence
 	</ol>
 	 */
-	public void setFramedState(Object stateSpec,boolean interim){
-		if(false)trace(".setFramedState: ",stateSpec);
-		Stateful[]selections=newStatefulArray(selection().multiple()),
-			edits=newStatefulArray((Object[])stateSpec),
+	public void setFramedState(final Object stateSpec,boolean interim){
+		Stateful[]selections=newSelectionArray(selection()),
+			edits=newSelectionArray(new SSelection(){
+				@Override
+				public Object[] multiple(){
+					return (Object[])stateSpec;
+				}
+				@Override
+				public Object single(){
+					throw new RuntimeException("Not implemented in "+this);
+				}
+				@Override
+				public Object content(){
+					throw new RuntimeException("Not implemented in "+this);
+				}
+			}),
 			matches=matchSelectionEdits(selections,edits);
 		if(matches==null)throw new IllegalStateException(
 				"No matches for edits\n"+Objects.toStringWithHeader(edits));
@@ -49,7 +60,7 @@ abstract class StatefulViewableCore extends ViewableFrame{
 			changes[i]=new Change(selections[i],stateThen,stateNow);
 			if(false)trace(".setFramedState [" ,changed+"]:\n"+stateThen+"\n"+stateNow);
 		}
-		if(changed)states.storeChanges(changes);
+//		if(changed)states.storeViewableChanges(changes);
 		if(!interim)statesThen=null;
 	}
 	/**
@@ -72,6 +83,9 @@ abstract class StatefulViewableCore extends ViewableFrame{
 	protected boolean checkStateChange(Stateful stateThen,Stateful stateNow){
 		return false;
 	}
+	protected void restoreState(Stateful content,Stateful state){
+		content.setState(state);
+	}
 	/**
 	Can one edit state subsume the other? 
 	<p>Called (indirectly) from {@link #setFramedState(Object, boolean)}; default is <code>false</code>
@@ -81,10 +95,17 @@ abstract class StatefulViewableCore extends ViewableFrame{
 	protected boolean canMergeEdits(Stateful[]earlier,Stateful[]later){
 		return false;
 	}
-	protected void restoreState(Stateful content,Stateful state){
-		content.setState(state);
-	}
-	final public static Stateful[]newStatefulArray(Object[]array){
-		return Objects.newTyped(Stateful.class,array);
+	final public static Stateful[]newSelectionArray(SSelection selection){
+		Object[]multiple=selection.multiple();
+		if(multiple.length>1)throw new RuntimeException("Not implemented for "+selection);
+		NodePath path=(NodePath)((PathSelection)selection).paths[0];
+		int valueAt=path.valueAt();
+		if(valueAt>=0){
+			TypedNode parent=(TypedNode)((Stateful)multiple[0]);
+			Object[]content=parent.contents();
+			multiple[0]=new NodeUndoableEdit.ValueCarrier(parent,
+					content[NodeUndoableEdit.contentAt(content,parent,valueAt)]);
+		}
+		return Objects.newTyped(Stateful.class,multiple);
 	}
 }

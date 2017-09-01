@@ -69,7 +69,7 @@ public final class EvalForms extends EvalTypes{
 	 */
 	public String newEncodedRecord(EvalForm form){
 		forms.put(form.stamp,form);
-		return Nodes.encode((DataNode)form.records[0].source,0).values()[0];
+		return Nodes.encode((DataNode)form.active.source,0).values()[0];
 	}
 	/**
 	Creates a {@link EvalRecord} from encoded text. 

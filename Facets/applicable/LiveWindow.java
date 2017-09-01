@@ -81,7 +81,7 @@ class LiveWindow{
   @return any return value
    */
   final protected Object call(String function,String[]args){
-    return window.call(function,args);
+    return window.call(function,(Object[])args);
   }
   /**
 	Calls eval() in the browser window. 

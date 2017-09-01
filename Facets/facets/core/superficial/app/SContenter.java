@@ -1,5 +1,4 @@
 package facets.core.superficial.app;
-import facets.core.app.AreaRoot;
 import facets.core.superficial.SFrameTarget;
 import facets.core.superficial.STarget;
 import facets.util.Titled;
@@ -27,7 +26,7 @@ public interface SContenter extends Titled{
 	{@link SAreaTarget#newTargeter()} a {@link SContentAreaTargeter} for the content
 	wrapped by the {@link SContenter}.
 	 */
-	AreaRoot newContentArea(boolean faceted);
+	SAreaTarget newContentArea(boolean faceted);
 	/**
 	Notify the contenter of retargeting. 
 	<p>Should be called by the surface whenever its root {@link SContentAreaTargeter}

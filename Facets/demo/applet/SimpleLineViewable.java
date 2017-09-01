@@ -2,7 +2,6 @@ package demo.applet;
 
 import static applicable.textart.TextArtConstants.*;
 import facets.core.app.ActionViewerTarget;
-import facets.core.app.ArrayPath;
 import facets.core.app.NodeViewable;
 import facets.core.app.PathSelection;
 import facets.core.app.avatar.AvatarContent;
@@ -15,6 +14,7 @@ import facets.core.superficial.app.SViewer;
 import facets.core.superficial.app.SelectionView;
 import facets.core.superficial.app.ViewableAction;
 import facets.core.superficial.app.ViewableFrame;
+import facets.util.ArrayPath;
 import facets.util.NumberPolicy;
 import facets.util.OffsetPath;
 import facets.util.geom.AnglePolicy;

@@ -202,7 +202,7 @@ public abstract class AppSurface extends Tracer implements WindowAppSurface{
 			this.app=app;
 		}
 		@Override
-		public final AreaRoot newContentArea(boolean faceted){
+		public final SAreaTarget newContentArea(boolean faceted){
 			return new ContentArea(title(),this,SAreaTarget.EMPTY_AREA_CHILDREN){};
 		}
 		@Override

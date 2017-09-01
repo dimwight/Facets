@@ -75,14 +75,14 @@ public abstract class AvatarViewable extends NodeViewable{
 	@Override
 	public ViewableAction[]viewerActions(SView view){
 		return view instanceof TextView?new ViewableAction[]{}
-				:new ViewableAction[]{ITERATE_BACK,ITERATE_FORWARD,COPY,CUT,PASTE,DELETE,EDIT};
+				:new ViewableAction[]{ITERATE_BACK,ITERATE_FORWARD,COPY,CUT,PASTE,DELETE,MODIFY};
 	}
 	@Override
 	public boolean actionIsLive(SViewer viewer,ViewableAction action){
 		SView view=viewer.view();
 		return view instanceof TextView?false
 			:action==ITERATE_BACK||action==ITERATE_FORWARD?view instanceof AvatarView
-			:action==EDIT||action==COPY||action==PASTE
+			:action==MODIFY||action==COPY||action==PASTE
 				||tree().children().length>1?super.actionIsLive(viewer,action)
 			:false;
 	}

@@ -1,7 +1,8 @@
 package facets.util;
 import static facets.util.Regex.*;
+import static java.lang.Math.*;
+import facets.core.app.TextView;
 public abstract class HtmlFormBuilder extends HtmlBuilder{
-	private static final String TextViewDEBUG_TEXT="The quick brown fox jumped over the laziest dog. ";
 	public static final class FormInput{
 		public final String name,value;
 		public FormInput(String name,String value){
@@ -30,7 +31,7 @@ public abstract class HtmlFormBuilder extends HtmlBuilder{
 			return chars==1?"":value.substring(1,chars-1);
 		}
 		public static String newInputText(String name,int size,String value){
-		  if(value==TextViewDEBUG_TEXT)size=30;
+		  if(value==TextView.DEBUG_TEXT)size=30;
 			boolean singles=value.indexOf("'")>-1,doubles=value.indexOf('"')>-1;
 			if(singles&doubles){
 				if(false)throw new IllegalArgumentException("Can't quote value="+value);
@@ -43,12 +44,12 @@ public abstract class HtmlFormBuilder extends HtmlBuilder{
 					+quote+">\n";
 		}
 		public static String newTextArea(String name,int cols,int rows,String value){
-		  if(value==TextViewDEBUG_TEXT)cols=30;
+		  if(value==TextView.DEBUG_TEXT)cols=30;
 			return "\n<textarea wrap='virtual' rows='"+rows+"'" +
 					" cols='"+(value.trim().equals("")?1:cols)+"' name='"+name+"'>"+value+"</textarea>\n";
 		}
 		public static String newInputCheckbox(String name,String value){
-			return "\n<input type='checkbox' name='"+name+" ' value='"+value+"'>\n";
+			return "\n<input type='checkbox' name='"+name+"' value='"+value+"'>\n";
 		}
 		public static String newSelect(String name,String[]options,String value){
 			StringBuilder code=new StringBuilder("\n<select name='" +name+"' value='"+value+"'>\n"); 

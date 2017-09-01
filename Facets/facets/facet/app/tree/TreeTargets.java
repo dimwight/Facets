@@ -37,7 +37,7 @@ public class TreeTargets extends Tracer{
 	public static final int TARGET_SEARCH=0,TARGET_TYPE=1,TARGET_ENCODE=2,
 		TARGET_NAMES=3,TARGET_TABLE=4,TARGETS_TREE=TARGET_TABLE+1;
 	public static final String TYPE_TABLE_ROWS="TableRows",TYPE_TABLE_ROW="TableRow",
-		TITLE_MENU="Tree",TITLE_FIND="Find...",TITLE_FIND_NEXT="Find &Next",
+		TITLE_MENU="Tree",
 		TITLE_SEARCH_FIND="Find in Tree",TS=TreeSearch.class.getSimpleName(),
 		TITLE_SEARCH_TYPE=TS+"Type",TITLE_SEARCH_TITLE=TS+"Title",
 		TITLE_SEARCH_KEY=TS+"Key",TITLE_SEARCH_VALUE=TS+"Value",TITLE_SEARCH_RESULTS=TS+"Results";
@@ -53,22 +53,6 @@ public class TreeTargets extends Tracer{
 		}
 	};
 	private final STarget 
-	find=new STrigger(TITLE_FIND,new Coupler(){
-		@Override
-		public void fired(STrigger t){
-			ValueNode selected=selectedValueNode();
-			if(selected!=null)TreeSearch.launchDialog(
-					new TreeSearch(app,viewable,searchStore));
-			findNext.setLive(searchStore.size()>0);
-		}
-	}),
-	findNext=new STrigger(TITLE_FIND_NEXT,new Coupler(){
-		@Override
-		public void fired(STrigger t){
-			if(searchAt>searchStore.size()-1)searchAt=0;
-			viewable.defineSelection(new PathSelection(tree,searchStore.get(searchAt++)));
-		}
-	}),
 	encode=new STrigger("Encode",encodeDecode),
 	decode=new STrigger("Decode",encodeDecode),
 	type=new STrigger("Change &Type...",new Coupler(){
@@ -133,17 +117,17 @@ public class TreeTargets extends Tracer{
 	private final FacetAppSurface app;
 	private final NodeViewable viewable;
 	private final TypedNode tree;
+	private final TreeSearcher searcher;
 	private int searchAt;
 	public TreeTargets(FacetAppSurface app,NodeViewable viewable){
 		this.app=app;
 		this.viewable=viewable;
 		tree=(TypedNode)viewable.framed;
-		findNext.setLive(false);
+		searcher=new TreeSearcher(app.spec,viewable);
 	}
 	public final STarget[]appTargets(){
-		TargetCore codecs=new TargetCore("Encoding",encode,decode),
-			finds=new TargetCore("Find Nodes",find,findNext);
-		return new STarget[]{finds,type,codecs,listNames,insertTable};
+		TargetCore codecs=new TargetCore("Encoding",encode,decode);
+		return new STarget[]{searcher.targets,type,codecs,listNames,insertTable};
 	}
 	protected String getNameListType(){
 		return TYPE_DATA;

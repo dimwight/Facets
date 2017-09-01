@@ -1,12 +1,10 @@
 package facets.core.superficial.app;
+import facets.core.app.PagedContentArea;
 import facets.core.app.PagedContentArea.PagedContentAreaTargeter;
 import facets.core.superficial.Notifiable;
 import facets.core.superficial.Notifying;
-import facets.core.superficial.STarget;
 import facets.core.superficial.STargeter;
-import facets.core.superficial.Notifying.Impact;
 import facets.util.Debug;
-import facets.util.Util;
 /**
 Type of all targeters returned by {@link SAreaTarget}s. 
 <p>{@link AreaTargeter} extends its superclass only in its behaviour when
@@ -22,7 +20,7 @@ public class AreaTargeter extends IndexingTargeter{
   Constructs an {@link AreaTargeter} to be retargeted on an 
   {@link SAreaTarget}.     
      */
-  protected AreaTargeter(Class type){
+  public AreaTargeter(Class type){
   	super(type);
   	Class c1=getClass();
   	boolean ok=false;

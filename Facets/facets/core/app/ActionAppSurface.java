@@ -10,7 +10,6 @@ import facets.core.superficial.Notice;
 import facets.core.superficial.STarget;
 import facets.core.superficial.TargetCore;
 import facets.core.superficial.Notifying.Impact;
-import facets.core.superficial.app.AreaTargeter;
 import facets.core.superficial.app.SSurface;
 import facets.core.superficial.app.SSurface.WindowAppSurface;
 import facets.util.Debug;

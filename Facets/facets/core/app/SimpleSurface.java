@@ -44,7 +44,7 @@ public class SimpleSurface extends Tracer implements SSurface{
 	final public void buildRetargeted(){
 		traceEvent(">Opening surface "+info(this));
 		traceEvent(">Creating areas for "+info(content));
-		AreaRoot root=content.newContentArea(true);
+		SAreaTarget root=content.newContentArea(true);
 		targeter=(SContentAreaTargeter)root.newTargeter();
 		targeter.setNotifiable(this);
 		traceEvent(">Creating targeter "+info(targeter));
@@ -61,10 +61,10 @@ public class SimpleSurface extends Tracer implements SSurface{
 		if(false)traceDebug(".replaceContent: ",this);
 		if(content.getClass()!=this.content.getClass())
 			throw new IllegalArgumentException("Non-matching content in "+info(this));
-		AreaRoot rootThen=(AreaRoot)targeter.target(),
+		SAreaTarget rootThen=(AreaRoot)targeter.target(),
 			rootNow=content.newContentArea(SAreaTarget.mutableAreaFacets);
 		content.alignContentAreas(rootThen,rootNow);
-	  rootNow.attachThenFacets(rootThen);
+	  ((AreaRoot)rootNow).attachThenFacets(rootThen);
 	  targeter.retarget(rootNow,DEFAULT);
 		targeter.retargetFacets(DEFAULT);
 	  this.content.wasRemoved();

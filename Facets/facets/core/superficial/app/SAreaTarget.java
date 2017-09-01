@@ -1,7 +1,6 @@
 package facets.core.superficial.app;
 import static facets.util.Debug.*;
 import static facets.util.app.Events.*;
-import facets.core.app.NestedView;
 import facets.core.superficial.Facetable;
 import facets.core.superficial.FacetedTarget;
 import facets.core.superficial.SFacet;

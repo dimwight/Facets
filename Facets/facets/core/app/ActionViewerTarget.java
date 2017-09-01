@@ -48,7 +48,7 @@ public abstract class ActionViewerTarget extends ViewerTarget{
 	 */
 	public enum Action implements ViewableAction{
 		COPY("C&opy"),CUT("Cu&t"),PASTE("P&aste"),PASTE_INTO("Paste &Child"),
-		DELETE("De&lete"),EDIT("Mo&dify|Re&name"),
+		DELETE("De&lete"),MODIFY("Mo&dify|Re&name"),
 		ITERATE_FORWARD("Next|"+AppConstants.ARROW_RIGHT),
 		ITERATE_BACK("Previous|"+AppConstants.ARROW_LEFT),
 		SELECT_ALL("Select &All"),

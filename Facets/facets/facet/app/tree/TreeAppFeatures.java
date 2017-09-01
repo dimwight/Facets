@@ -15,6 +15,7 @@ import facets.facet.FacetFactory;
 import facets.facet.app.FacetAppSpecifier;
 import facets.facet.app.FacetAppSurface;
 import facets.facet.app.FileAppActions;
+import facets.util.ItemList;
 import facets.util.TitledList;
 /**
 {@link FacetFactory} for use with {@link TreeAppContenter}. 
@@ -34,6 +35,34 @@ final public class TreeAppFeatures extends FacetFactory{
 		super(app.ff);
 		this.app=app;
 		this.area=root;
+	}
+	/**
+	Creates edit/save/restore/search toolbar. 
+	 */
+	@Override
+	public SFacet toolbar(){
+		ItemList<SFacet>facets=new ItemList(SFacet.class);
+		if(app.spec.canEditContent()){
+			SFacet[]editTools=editTools(area.viewer());
+			TitledList<STargeter>files=!app.spec.canSaveContent()?null
+					:new TitledList(Notice.findElement(
+							(STargeter)area.notifiable(),TARGETS_FILE).elements());
+			if(files!=null)facets.addItems(
+				triggerButtons(files.titled(TITLE_SAVE),HINT_BARE),
+				triggerButtons(files.titled(TITLE_REVERT),HINT_BARE),
+				spacerWide(5));
+			facets.addItems(editTools);
+		}
+		STargeter[]search=area.content().elements()[TARGET_SEARCH].elements();
+		facets.addItems(new SFacet[]{
+				spacerWide(10),
+				textualField(search[0],10,HINT_NONE),
+				spacerWide(5),
+				indexingIteratorButtons(search[1],HINT_BARE),
+				spacerWide(5),
+				textualLabel(search[2],HINT_NONE),
+			});
+		return toolGroups(area,HINT_PANEL_MIDDLE,facets.items());
 	}
 	/**
 	Calls {@link #newAdjustedMenus(FacetAppSurface, SContentAreaTargeter)} to add 
@@ -78,23 +107,6 @@ final public class TreeAppFeatures extends FacetFactory{
 		};
 	}
 /**
-	Creates edit/save/restore toolbar. 
-	 */
-	@Override
-	public SFacet toolbar(){
-		SFacet[]editTools=editTools(area.viewer());
-		if(!app.spec.canEditContent())return null;
-		TitledList<STargeter>files=!app.spec.canSaveContent()?null
-			:new TitledList(Notice.findElement(
-					(STargeter)area.notifiable(),TARGETS_FILE).elements());
-		return toolGroups(area,HINT_NONE,files==null?editTools
-				:join(new SFacet[]{
-						triggerButtons(files.titled(TITLE_SAVE),HINT_BARE),
-						triggerButtons(files.titled(TITLE_REVERT),HINT_BARE),
-					},
-					editTools));
-	}
-	/**
 	Creates specialised {@link MenuFacets} to match {@link TreeAppSpecifier}. 
 	<p>Edit facets are appended where appropriate to tree expansion sub-menu.  
  */
@@ -114,7 +126,7 @@ final public class TreeAppFeatures extends FacetFactory{
 		return context;
 	}
 	/**
-	Final implementation setting diagnostic status display. 
+	Implementation setting diagnostic status display. 
 	 */
 	@Override
 	public SFacet status(){

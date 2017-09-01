@@ -239,7 +239,7 @@ final class DialogsSwing extends Dialogs{
 		return (Component)app.host().wrapped();
 	}
 	private FileChooser fileChooser(){
-		return fileChooser==null?new FileChooser((ActionAppSurface)app):fileChooser;
+		return fileChooser==null?fileChooser=new FileChooser((ActionAppSurface)app):fileChooser;
 	}
 	static Response warningExceptionSwing(MessageTexts tt,Exception e,Component parent,
 			boolean inOpen){

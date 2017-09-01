@@ -96,7 +96,7 @@ abstract class IndexingApplet extends DemoApplet implements DemoSurface.Contente
 	Creates the initial {@link STarget} tree. 
 	@see SContenter#newContentArea(boolean)
 	 */
-	final public AreaRoot newContentArea(boolean faceted) {
+	final public SAreaTarget newContentArea(boolean faceted) {
 		
 		//Create area
 		AreaRoot area = new AreaRoot(title(), contentFrame) {

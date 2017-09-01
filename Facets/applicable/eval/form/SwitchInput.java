@@ -6,6 +6,7 @@ import facets.util.tree.ValueNode;
 import java.util.HashMap;
 import java.util.Map;
 import applicable.eval.EvalContext;
+import applicable.eval.Value;
 import applicable.field.OptionField;
 import applicable.field.ValueField;
 import applicable.treecode.TreeCodeContext;
@@ -24,8 +25,9 @@ public final class SwitchInput extends InputField{
 	@Override
 	public ValueField[]newFormFields(String keyTitle,final boolean showCodes){
 		final Map<String,String>codes=new HashMap(),texts=new HashMap();
+		trace(".newFormFields: inputs=",inputs());
 		final String[]options=Objects.toString(inputs()
-				).replaceAll("Value \\.\\.\\.=",""
+				).replaceAll(Value.type+"=",""
 				).replaceAll("#[^,]+,?","").split(",");
 		new IndexingIterator<String>(options){
 		protected void itemIterated(String option,int at){

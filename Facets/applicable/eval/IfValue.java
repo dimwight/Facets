@@ -18,8 +18,8 @@ public final class IfValue extends EvalCoded{
 	}
 	@Override
 	public Value[]doEvaluation(){
-		Value[]asFalse=new Value[]{FALSE.labelled(label)},
-				asTrue=new Value[]{TRUE.labelled(label)};
+		Value[]asFalse=new Value[]{FALSE},
+				asTrue=new Value[]{TRUE};
 		if(false&&codeds.length==0)return asTrue;
 		Value check=getSingleFieldValue(label);
 		for(TreeCoded eval:codeds)

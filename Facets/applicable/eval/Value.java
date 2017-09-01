@@ -10,6 +10,7 @@ import applicable.treecode.TreeCoded;
 {@link TreeCoded} that can represent simple data, including a set of {@link Value}s.
  */
 public final class Value extends TreeCoded{
+	private static final boolean titles=true;
 	final public static TreeCodeType<Value>type=new TreeCodeType(
 			Value.class.getSimpleName()){
 		@Override
@@ -17,41 +18,29 @@ public final class Value extends TreeCoded{
 			return new Value(code);
 		};
 	};
-	public static final Value FALSE=newContentValue("false"),
-			TRUE=newContentValue("true"),
-			VOIDS[]=new Value[]{FALSE};
+	public static final Value FALSE=newContentValue("FALSE"),
+			TRUE=newContentValue("TRUE");
 	public static Value newContentValue(String content){
-		return new Value(new DataNode(type.name,UNTITLED,new String[]{content}));
+		return new Value(new DataNode(type.name,content));
 	}
 	private Value(TypedNode source){
 		super(source,type);
 	}
-	public void updateSource(Value value){
-		source.setContents(((TypedNode)value.source.copyState()).contents());
-	}
 	public String asText(){
-		String[]values=(String[])source.values();
-		return values.length==0?"":values[0];
+		return source.title();
+	}
+	public void updateSource(Value value){
+		source.setTitle(value.asText());
 	}
 	@Override
 	public boolean equals(Object that){
-		return source.values()[0].equals(((Value)that).source.values()[0]);
+		return asText().equals(((Value)that).asText());
 	}
-	public Value labelled(Label label){
-		DataNode copy=(DataNode)source.copyState();
-		copy.setTitle(label.text);
-		return new Value(copy);
-	}
-	public Value unlabelled(){
-		DataNode copy=(DataNode)source.copyState();
-		copy.setTitle(UNTITLED);
-		return new Value(copy);
+	public Value copyValue(){
+		return new Value((DataNode)source.copyState());
 	}
 	@Override
 	public String toString(){
-		return super.toString()+"="+asText();
-	}
-	public boolean isFalse(){
-		return asText().equals(FALSE.asText());
+		return type+"="+asText().replaceAll(" .*","");
 	}
 }

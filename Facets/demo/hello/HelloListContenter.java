@@ -173,7 +173,7 @@ public abstract class HelloListContenter extends HelloContenter{
 	Implements interface method. 
 	@see SContenter#newContentArea(boolean)
 	 */
-	final public AreaRoot newContentArea(boolean faceted) {
+	final public SAreaTarget newContentArea(boolean faceted) {
 		
 		//Create root
 		AreaRoot root = new SContentAreaTargeter.ContentArea(title(),this,

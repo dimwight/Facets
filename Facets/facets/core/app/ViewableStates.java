@@ -1,20 +1,18 @@
 package facets.core.app;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.ViewableFrame;
 import facets.util.Debug;
 import facets.util.Stateful;
 import facets.util.Tracer;
 import facets.util.Util;
-
 import java.util.Hashtable;
 import javax.swing.undo.StateEdit;
 import javax.swing.undo.StateEditable;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 final class ViewableStates extends Tracer implements StateEditable{
-	private final static class State{
+	private final static class ContentState{
 	  final Stateful content,state;
-		State(Stateful content,Stateful state){
+		ContentState(Stateful content,Stateful state){
 			this.content=content;
 			this.state=state;
 		}
@@ -31,34 +29,34 @@ final class ViewableStates extends Tracer implements StateEditable{
 			this.afterState=afterState;
 			if(false)Util.printOut("Change.Change: ",beforeState+"->"+afterState);
 		}
-		State newBeforeState(){
-			return new State(content,beforeState);
+		ContentState newBeforeState(){
+			return new ContentState(content,beforeState);
 		}
-		State newAfterState(){
-			return new State(content,afterState);
+		ContentState newAfterState(){
+			return new ContentState(content,afterState);
 		}
 		public String toString(){
 			return Debug.info(this)+" "+Debug.info(beforeState)+">"+Debug.info(afterState);
 		}
 	}
 	private class StateSet{
-		private State[]storePairs;
+		private ContentState[]storePairs;
 		private SSelection paths;
 		StateSet(){
 			if(false)trace(".StateSet: ",viewable.selection());
 			paths=(SSelection)Util.deserializedCopy(viewable.selection());
 		}
 		void storeBefores(Change[]changes){
-			storePairs=new State[changes.length];
+			storePairs=new ContentState[changes.length];
 			for(int i=0;i<storePairs.length;i++)
 				storePairs[i]=changes[i].newBeforeState();
 		}
 		void storeAfters(Change[]changes){
-			storePairs=new State[changes.length];
+			storePairs=new ContentState[changes.length];
 			for(int i=0;i<storePairs.length;i++)
 				storePairs[i]=changes[i].newAfterState();
 		}
-		void restore(){
+		void restoreViewableStateAndSelection(){
 			for(int i=0;i<storePairs.length;i++)
 				viewable.restoreState(storePairs[i].content,storePairs[i].state);
 			PathSelection reconstructed=new PathSelection(viewable.framed,
@@ -76,23 +74,24 @@ final class ViewableStates extends Tracer implements StateEditable{
 		}
 	}
 	private final class Edit extends StateEdit{
-		private boolean absorbed;
+		private boolean added;
 		Edit(StateEditable object){super(object);}
 		public boolean addEdit(UndoableEdit edit){
 			Edit e=(Edit)edit;
-			boolean add=viewable.canMergeEdits(after().stateCopies(),
-					e.after().stateCopies());
-			if(false)trace(this+"\naddEdit: "+add+" "+e.after());
-			if(add)postState.put(object,e.after());
-			return e.absorbed=add;
+			StateSet eAfter=e.after();
+			boolean eAddable=viewable.canMergeEdits(this.after().stateCopies(),
+					eAfter.stateCopies());
+			if(false)trace(this+"\naddEdit: "+eAddable+" "+eAfter);
+			if(eAddable)postState.put(object,eAfter);
+			return e.added=eAddable;
 		}
 		public String toString(){
-			return Debug.info(this)+":\nbefore="+before()+"\nafter="+after();
+			StateSet before=(StateSet)preState.get(object);
+			return Debug.info(this)+":\nbefore="+before+"\nafter="+after();
 		}
-		StateSet before(){return(StateSet)preState.get(object);}
 		StateSet after(){return(StateSet)postState.get(object);}
-		public boolean canUndo(){return!absorbed;}
-		public boolean canRedo(){return!absorbed;}
+		public boolean canUndo(){return!added;}
+		public boolean canRedo(){return!added;}
 	}
   final private UndoManager undoer=new UndoManager();
   final private StatefulViewable viewable;  
@@ -100,15 +99,15 @@ final class ViewableStates extends Tracer implements StateEditable{
 	ViewableStates(StatefulViewable viewable){
 		this.viewable=viewable;
 	}
-	public void storeState(Hashtable states){
-		states.put(this,stateSet);
+	public void storeState(Hashtable store){
+		store.put(this,stateSet);
 		if(false)trace(".store:\n",stateSet);
 	}
-	public void restoreState(Hashtable states){
-		((StateSet)states.get(this)).restore();
+	public void restoreState(Hashtable store){
+		((StateSet)store.get(this)).restoreViewableStateAndSelection();
 	}
-	void storeChanges(Change[]changes){  
-		if(false)trace(".storeChanges: ",changes);
+	void storeViewableChanges(Change[]changes){  
+		if(true)trace(".storeChanges: ",changes);
 		stateSet=new StateSet();
 		stateSet.storeBefores(changes);
 	  StateEdit stateEdit=new Edit(this);

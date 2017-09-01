@@ -45,9 +45,9 @@ public abstract class SimpleContenter extends Tracer implements PagedContenter{
 	child created from the content. 
 	<p><b>Note</b> If the {@link SimpleContenter} is to be used in an 
 	{@link AppSurface} this method must be re-implemented to return a
-	{@link facets.core.app.ViewerContentArea}.  
+	{@link facets.core.app.AppAreas.ViewerContentArea}.  
 	 */
-	public AreaRoot newContentArea(boolean faceted){
+	public SAreaTarget newContentArea(boolean faceted){
 		ContentArea area=new PagedContentArea(title,
 				new STarget[]{contentFrame=new SFrameTarget(title,Debug.info(SimpleContenter.this))},
 				this);

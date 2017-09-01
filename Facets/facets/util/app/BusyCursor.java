@@ -45,10 +45,7 @@ public abstract class BusyCursor extends Tracer{
 	}
 	final void checkBusyState(boolean busy){
 		if(busyThen==busy)return;
-		if(busyThen&&!busy){
-			traceEvent(">Cursor not busy");
-			if(true)Times.printElapsed("BusyCursor: Not busy");
-		}
+		if(busyThen&&!busy)traceEvent(">Cursor not busy");
 		busyThen=busy;
 		final int call=calls++;
 		trace(newCallMsg(call,"checkBusyState",busy));

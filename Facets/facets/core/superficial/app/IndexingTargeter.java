@@ -31,7 +31,7 @@ public class IndexingTargeter extends TargeterCore{
 		return targeters.get(targetType);
 	}
 	private STargeter indexedTargeter,indexing;
-	IndexingTargeter(Class targetType){
+	protected IndexingTargeter(Class targetType){
 		super(targetType);
 	}
   /**
@@ -89,7 +89,7 @@ public class IndexingTargeter extends TargeterCore{
 	{@link TargetCore#newTargeter()} in <code>target</code>; this will generally 
 	have been stored during a previous retargeting. 
 	 */
-	final STargeter retargetedTargeter(STarget target,Impact impact){
+	protected final STargeter retargetedTargeter(STarget target,Impact impact){
 		boolean debug=false||(Events.trace);
 	  STargeter checkTargeter=((TargetCore)target).newTargeter();
 	  TargeterCore.targeters.remove(checkTargeter);

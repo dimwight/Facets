@@ -69,7 +69,7 @@ final public class ClipperSwing extends Tracer implements Clipper{
 	}
 	public Clip newClip(){
 		final Stateful[]copies=newCopyStatefuls(
-				StatefulViewable.newStatefulArray(viewable.selection().multiple()));
+				StatefulViewable.newSelectionArray(viewable.selection()));
 		return new Clip(){
 			public DataFlavor[]getTransferDataFlavors(){
 				return new DataFlavor[]{stringFlavor,dataFlavor};

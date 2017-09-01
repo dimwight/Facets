@@ -2,6 +2,7 @@ package applicable.eval.form;
 import static facets.util.Objects.*;
 import static facets.util.tree.Nodes.*;
 import facets.core.app.TreeView;
+import facets.core.superficial.SIndexing;
 import facets.util.Debug;
 import facets.util.HtmlBuilder.RenderTarget;
 import facets.util.HtmlFormBuilder;
@@ -46,10 +47,11 @@ returns as required with with {@link #getLabelled(Label)}.
  */
 final public class EvalForm extends EvalContext<EvalCoded>implements Stateful{
 	final DateStamp stamp;
-	final EvalRecord[]records;
-final private Map<Label,EvalCoded>fields;
+	final private EvalRecord[]records;
+	EvalRecord active;
+	final private Map<Label,EvalCoded>fields;
+	final private TypedNode copyState;
 	final private boolean showCodes=true;
-	private EvalRecord active;
 	/**
 	Unique constructor. 
 	@param source the root node of the code
@@ -72,8 +74,23 @@ final private Map<Label,EvalCoded>fields;
 		if(stamp!=null)this.stamp=stamp;
 		else if(true)this.stamp=DateStamp.newNow();
 		else throw new IllegalStateException("Null stamp in "+Debug.info(this));
-		source.setTitle("["+this.codeForType(EvalRecord.type)+" " +source.title()
-			+" : "+active.title()+"]");
+		copyState=(TypedNode)source.copyState();
+	}
+	public SIndexing newIndexing(){
+		return new SIndexing(codeForType(EvalRecord.type),new SIndexing.Coupler(){
+			@Override
+			public Object[]getIndexables(){
+				return records;
+			}
+			@Override
+			public void indexSet(SIndexing i){
+				active=records[i.index()];
+				active.updateToFields(fields);
+			}
+		});
+	}
+	public boolean hasChanged(){
+		return !copyState().stateEquals(source);
 	}
 	@Override
 	public EvalCoded getLabelled(Label label){
@@ -158,7 +175,7 @@ final private Map<Label,EvalCoded>fields;
 			if(field instanceof CalculatedField)continue;
 			InputField input=(InputField)field;
 			input.updateValue((names.length>1?(names[1]+"="):"")+splits[1]);
-			records[0].updateFromFields(fields);
+			active.updateFromFields(fields);
 		}
 	}
 	public StringBuilder newPicksBuilder(){
@@ -179,18 +196,18 @@ final private Map<Label,EvalCoded>fields;
 		return picks;
 	}
 	public EvalRecord activeRecord(){
-		return records[0];
+		return active;
 	}
 	@Override
 	public String title(){
-		return source.title();
-	}
-	@Override
-	public void setState(Object src){
-		throw new RuntimeException("Not implemented in "+this);
+		return source.type()+" : "+source.title();
 	}
 	@Override
 	public Stateful copyState(){
+		return copyState;
+	}
+	@Override
+	public void setState(Object src){
 		throw new RuntimeException("Not implemented in "+this);
 	}
 	@Override

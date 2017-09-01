@@ -26,6 +26,7 @@
 /AppAreas$AppArea.class
 /AppAreas$AreasUpdate$1.class
 /AppAreas$AreasUpdate.class
+/AppAreas$ViewerContentArea.class
 /AppAreas.class
 /AppConstants.class
 /AppContenter.class
@@ -36,9 +37,8 @@
 /AppSurface$EmptyContenter.class
 /AppSurface.class
 /AppWindowHost.class
-/AreaPath.class
+/AreaRoot$AreaPath.class
 /AreaRoot.class
-/ArrayPath.class
 /Dialogs$1.class
 /Dialogs$ExceptionTexts.class
 /Dialogs$MessageTexts.class
@@ -78,8 +78,15 @@
 /MenuFacets.class
 /MountFacet.class
 /NestedView.class
+/NodeUndoableEdit$1.class
+/NodeUndoableEdit$2.class
+/NodeUndoableEdit$3.class
+/NodeUndoableEdit$4.class
+/NodeUndoableEdit$ValueCarrier.class
+/NodeUndoableEdit.class
 /NodeViewable$1.class
 /NodeViewable$2.class
+/NodeViewable$3.class
 /NodeViewable.class
 /PagedActionDefaults$1.class
 /PagedActionDefaults$2.class
@@ -110,6 +117,7 @@
 /StatefulViewable$Clipper.class
 /StatefulViewable$ClipperSource.class
 /StatefulViewable.class
+/StatefulViewableCore$1.class
 /StatefulViewableCore.class
 /SurfaceServices.class
 /TableView.class
@@ -129,11 +137,10 @@
 /ValueContent.class
 /ValueEdit.class
 /ViewableStates$Change.class
+/ViewableStates$ContentState.class
 /ViewableStates$Edit.class
-/ViewableStates$State.class
 /ViewableStates$StateSet.class
 /ViewableStates.class
-/ViewerContentArea.class
 /ViewerContenter$1$1.class
 /ViewerContenter$1.class
 /ViewerContenter$ContentSource.class

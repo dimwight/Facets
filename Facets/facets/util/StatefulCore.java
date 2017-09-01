@@ -68,6 +68,11 @@ public class StatefulCore extends Tracer implements Stateful{
    */
   @Override
 	final public Object updateStateStamp(){
+  	if(false&&stamp>0){
+  		trace(".updateStateStamp: "+Debug.info(this)
+  		+ " stamp=",stamp);
+  		Debug.printStackTrace("actionTriggered");
+  	}
 		return stamp=stamps++;
 	}
   /**

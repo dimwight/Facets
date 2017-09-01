@@ -1,23 +1,19 @@
 package facets.facet.kit.swing;
-import static facets.core.app.AppConstants.*;
 import static facets.facet.kit.swing.KitSwing.*;
+import static facets.util.FileSpecifier.*;
 import static facets.util.app.AppFileValues.*;
-import static facets.util.app.AppValues.*;
-import static javax.swing.SwingUtilities.*;
 import facets.core.app.ActionAppSurface;
 import facets.core.app.AppWindowHost;
 import facets.core.app.Dialogs;
 import facets.core.app.Dialogs.Response;
-import facets.util.Debug;
+import facets.facet.app.FacetAppSurface;
+import facets.facet.app.FileAppActions;
 import facets.util.FileSpecifier;
+import facets.util.Tracer;
 import facets.util.Util;
 import facets.util.app.AppFileValues;
-import facets.util.app.AppValues;
-import facets.util.tree.Nodes;
-import facets.util.tree.TypedNode;
 import facets.util.tree.ValueNode;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -27,62 +23,122 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JList;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JPopupMenu.Separator;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.filechooser.FileFilter;
 import sun.swing.FilePane;
-import sun.swing.SwingUtilities2;
 final class FileChooser extends JFileChooser{
-  private final AppFileValues values;
+	private final Tracer t=Tracer.newTopped("FileChooser",false);
 	private final ActionAppSurface app;
-	protected FileSpecifier activeSpecifier;
+  private final AppFileValues files;
+  private FileSpecifier appSpecs[],activeSpec;
+  private File selected;
 	private JDialog dialog;
 	private boolean moved;
 	private int returnValue;
 	FileChooser(ActionAppSurface app){
 		this.app=app;
-		values=new AppFileValues(app.spec){};
+		files=((FileAppActions)app.actions).values();
+		setDialogTitle(app.title()+" - Files");
 		if(false)KitSwing.adjustComponents(false,this);
+		addPropertyChangeListener(FILE_FILTER_CHANGED_PROPERTY,
+				new PropertyChangeListener(){
+			@Override
+			public void propertyChange(PropertyChangeEvent e){
+				FileFilter filter=getFileFilter();
+				if(filter==null||appSpecs==null||selected==null)return;
+				String check=filter.getDescription(),name=selected.getName();
+				if(name.equals(""))return;
+				for(FileSpecifier spec:appSpecs)
+					if(spec.rubric.equals(check)){
+						setSelectedFile(selected=new File(selected.getParentFile(),
+								(activeSpec=spec).newFileName(name.substring(0,name.indexOf(".")))));
+					}
+			}
+		});
 	}
-	File getFile(File proposed,FileSpecifier[]specifiers){
+	File getFile(final File proposed,FileSpecifier[]specs){
 		boolean saving=proposed!=null;
 		setDialogType(saving?SAVE_DIALOG:OPEN_DIALOG);
-		if(!saving)setDialogTitle(app.title()+" - Open File");
-		if(saving)setSelectedFile(proposed);
-		setCurrentDirectory(values.stateGetPath());
+		setCurrentDirectory(!saving?files.stateGetPath():proposed.getParentFile());
 		resetChoosableFileFilters();
-		if(specifiers.length>0)setAcceptAllFileFilterUsed(false);
+		appSpecs=((FacetAppSurface)app).getFileSpecifiers();
+		if(true)t.trace(".getFile: proposed="+proposed+"\n appSpecs=",appSpecs);
+		if(appSpecs.length>0)setAcceptAllFileFilterUsed(false);
+		File recent[]=files.recentFiles(),lastOpened=recent.length>0?recent[0]:null;
+		FileSpecifier matchSpecs[]=null;
 		ValueNode nature=app.spec.nature();
-		int specAt=nature.getInt(FileSpecifier.KEY_AT);
-		activeSpecifier=specifiers[specAt==ValueNode.NO_INT?specifiers.length-1:specAt];
-		for(FileSpecifier specifier:specifiers)
-			if(specifier!=activeSpecifier)setSpecifierFilter(specifier);
-		setSpecifierFilter(activeSpecifier);
+		if(!saving&&(lastOpened==null
+				||!lastOpened.getParentFile().equals(getCurrentDirectory())))
+			activeSpec=appSpecs[nature.getOrPutInt(KEY_AT,0)];
+		else{
+			final String ALL="All file types",
+					_toFirstDot="^([^.]+)\\.",_toLastDot=".+\\.([^.]+)",
+					toMatch=(saving?proposed:lastOpened).getName();
+			List<FileSpecifier>matched=new ArrayList();
+			for(FileSpecifier spec:appSpecs)
+				if(!spec.rubric.equals(ALL)
+						&&(toMatch.replaceAll(_toFirstDot,"").matches(spec.extension))
+							||toMatch.replaceAll(_toLastDot,"$1").matches(spec.extension))
+					activeSpec=spec;
+				else matched.add(spec);
+			t.trace(".getFile: activeSpec=",activeSpec);
+			if(activeSpec==null)activeSpec=matched.remove(0);
+			matched.add(activeSpec);
+			matchSpecs=matched.toArray(new FileSpecifier[]{});
+		}
+		for(FileSpecifier spec:matchSpecs!=null?matchSpecs:appSpecs)
+			if(spec!=activeSpec)setSpecifierFilter(spec);
+		setSpecifierFilter(activeSpec);
+		setSelectedFile(selected=saving?proposed:new File(""));
+		t.trace(".getFile: ",getSelectedFile());
+		if(dialog==null)setUpFilePane();
 		if(false)rescanCurrentDirectory();
 		int returnValue=ERROR_OPTION;
-		File selected;
+		while(true){
+			returnValue=displayDialog((Component)app.host().wrapped());
+			selected=getSelectedFile();
+			t.trace(".getFile: selected=",selected);
+			if(saving||returnValue==CANCEL_OPTION
+					||selected==null||selected.exists())break;
+		}
+		files.statePutPath(getCurrentDirectory());
+		for(int at=0;at<appSpecs.length;at++)
+			if(appSpecs[at]==activeSpec)nature.put(KEY_AT,at);
+		return returnValue!=APPROVE_OPTION?null
+				:saving?activeSpec.specifiedFile(selected)
+				:selected;
+	}
+	private void setSpecifierFilter(final FileSpecifier spec){
+		setFileFilter(new FileFilter(){
+			@Override
+			public String getDescription(){
+				return spec.rubric;
+			}
+			@Override
+			public boolean accept(File path){
+				return path.isDirectory()||spec==FileSpecifier.ALL
+					||spec.specifies(path);
+			}
+		});
+	}
+	private void setUpFilePane(){
 		if(false)Util.printOut("FileChooser.getFile: ",componentTree(this));
-		Component[]components=allComponents(this);
-		for(final Component c:components){
+		for(Component c:allComponents(this)){
 			if(!(c instanceof FilePane))continue;
 			final FilePane pane=(FilePane)c;
-			final ValueNode state=values.stateRoot();
+			final ValueNode state=files.stateRoot();//FILE_FILTER_CHANGED_PROPERTY
 			pane.setViewType(state.getOrPutInt(KEY_VIEW,pane.getViewType()));
-			pane.addPropertyChangeListener("viewType",new PropertyChangeListener(){
+			pane.addPropertyChangeListener(KEY_VIEW,new PropertyChangeListener(){
 				@Override
 				public void propertyChange(PropertyChangeEvent e){
 					state.put(KEY_VIEW,pane.getViewType());
@@ -137,19 +193,6 @@ final class FileChooser extends JFileChooser{
 			menu.add(newMnemonicItem(backup));
 			menu.add(newMnemonicItem(delete));
 		}
-		while(true){
-			returnValue=displayDialog((Component)app.host().wrapped());
-			selected=getSelectedFile();
-			boolean canQuit=saving||returnValue==CANCEL_OPTION;
-			canQuit|=selected==null||(selected!=null&&selected.exists());
-			if(canQuit)break;
-		}
-		values.statePutPath(getCurrentDirectory());
-		for(int at=0;at<specifiers.length;at++)if(specifiers[at]==activeSpecifier)
-			nature.put(FileSpecifier.KEY_AT,at);
-		return returnValue!=APPROVE_OPTION?null
-				:saving?activeSpecifier.specifiedFile(selected)
-				:selected;
 	}
 	private JMenuItem newMnemonicItem(Action a){
 		JMenuItem item=new JMenuItem(a);
@@ -191,19 +234,5 @@ final class FileChooser extends JFileChooser{
   public void cancelSelection(){
 		returnValue=CANCEL_OPTION;
 		dialog.setVisible(false);
-	}
-	private void setSpecifierFilter(final FileSpecifier specifier){
-		setFileFilter(new FileFilter(){
-			@Override
-			public String getDescription(){
-				return specifier.rubric;
-			}
-			@Override
-			public boolean accept(File path){
-				FileSpecifier active=activeSpecifier=specifier;
-				return path.isDirectory()||active==FileSpecifier.ALL
-					||active.specifies(path);
-			}
-		});
 	}
 }

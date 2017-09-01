@@ -7,6 +7,7 @@ import facets.core.superficial.STargeter;
 import facets.core.superficial.app.AreaTargeter;
 import facets.core.superficial.app.SContentAreaTargeter;
 import facets.core.superficial.app.SContenter;
+import facets.core.superficial.app.ViewableFrame;
 import facets.facet.FacetFactory;
 import facets.facet.app.FacetAppSpecifier;
 import facets.facet.app.FacetAppSurface;
@@ -20,21 +21,21 @@ import applicable.eval.form.EvalForm;
 public abstract class EvalSpecifier extends FacetAppSpecifier{
 	public static final String ARG_EVALUATE="launchEvaluate";
 	private EvalFeatures features;
-	private SContentAreaTargeter coderTargeter;
+	private SContentAreaTargeter code,form;
 	public EvalSpecifier(Class appClass){
 		super(appClass);
 	}
 	public Object[][]decorationValues(){
 		return joinDecorations(super.decorationValues(),
 				new Object[][]{
-			{EvalCoder.TITLE_LAUNCH,"","export_wiz.gif","Launch evaluators in new window"},
+			{EvalCoder.TITLE_LAUNCH,"","export_wiz.gif","New configurator"},
 		});
 	}
 	void setFeatureLives(FacetAppSurface app){
-		if(coderTargeter==null)return;
+		if(code==null)return;
 		boolean live=app.findActiveContent()instanceof EvalCoder;
-		coderTargeter.content().target().setLive(live);
-		coderTargeter.viewer().target().setLive(live);
+		code.content().target().setLive(live);
+		code.viewer().target().setLive(live);
 		STargeter[]appElements=app.surfaceTargeter().elements();
 		if(!isFileApp())return;
 		appElements[FileAppActions.TARGETS_NEW].target().setLive(false);
@@ -42,14 +43,12 @@ public abstract class EvalSpecifier extends FacetAppSpecifier{
 		appElements[FileAppActions.TARGETS_RECENT].target().setLive(live);
 	}
 	LayoutFeatures getDesktopFeatures(FacetAppSurface app,
-			SContentAreaTargeter coderTargeter){
-		if(coderTargeter!=null)this.coderTargeter=coderTargeter;
-		return features==null?features=new EvalFeatures(app,coderTargeter)
-			:features;
+			SContentAreaTargeter targeter){
+		if(targeter.content().target()instanceof EvalFormViewable)form=targeter;
+		else code=targeter;
+		return new EvalFeatures(app,targeter,targeter==form);
 	}
-	protected String codeRootType(){
-		return "EvalCode";
-	}
+	protected abstract String codeRootType();
 	@Override
 	final protected FacetAppSurface newApp(FacetFactory ff,FeatureHost host){
 		return new FacetAppSurface(this,ff){
@@ -75,8 +74,8 @@ public abstract class EvalSpecifier extends FacetAppSpecifier{
 			@Override
 			protected void appOpened(){//${string_prompt:mode:noFiles}
 				AppContenter content=findActiveContent();
-				if(spec.nature().getBoolean(ARG_NO_FILES)
-						&&content instanceof EvalCoder)((EvalCoder)content).launchEvaluate();
+				if(false&&spec.nature().getBoolean(ARG_NO_FILES)
+						&&content instanceof EvalCoder)((EvalCoder)content).launchForm();
 			}
 		};
 	}
@@ -86,6 +85,7 @@ public abstract class EvalSpecifier extends FacetAppSpecifier{
 				new FileSpecifier("xml","XML files"),
 			};
 	}
-	protected abstract EvalViewer newEvalViewer(EvalForm form,FacetAppSurface app, EvalCoder coder);
+	protected abstract EvalViewer newEvalViewer(EvalForm form,FacetAppSurface app, 
+			EvalCoder coder);
 	protected abstract Object getAppInternalContentSource();
 }

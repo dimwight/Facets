@@ -179,6 +179,8 @@ final public class XmlView extends TreeAppSpecifier{
 		};
 	}
 	public static void main(String[]args){
-		new XmlView().buildAndLaunchApp(args);
+		if(false)for(int i=1;i<12;i+=2)
+			newTestTree("Count",i);
+		else if(true)new XmlView().buildAndLaunchApp(args);
 	}
 }

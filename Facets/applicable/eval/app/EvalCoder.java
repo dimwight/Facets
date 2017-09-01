@@ -1,6 +1,5 @@
 package applicable.eval.app;
 import static facets.core.app.ActionViewerTarget.Action.*;
-import static facets.util.tree.Nodes.*;
 import facets.core.app.ActionViewerTarget;
 import facets.core.app.AreaRoot;
 import facets.core.app.FeatureHost.LayoutFeatures;
@@ -12,7 +11,6 @@ import facets.core.app.ViewerContenter;
 import facets.core.superficial.FacetedTarget;
 import facets.core.superficial.Notice;
 import facets.core.superficial.Notifying.Impact;
-import facets.core.superficial.SFrameTarget;
 import facets.core.superficial.STarget;
 import facets.core.superficial.STrigger;
 import facets.core.superficial.app.SAreaTarget;
@@ -30,7 +28,6 @@ import facets.util.FileSpecifier;
 import facets.util.Stateful;
 import facets.util.TextLines;
 import facets.util.Util;
-import facets.util.tree.TypedNode;
 import facets.util.tree.DataNode;
 import facets.util.tree.NodeList;
 import facets.util.tree.NodePath;
@@ -41,17 +38,20 @@ import facets.util.tree.XmlDocRoot;
 import facets.util.tree.XmlPolicy;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import applicable.eval.EvalTypes;
 import applicable.eval.form.EvalForm;
-import applicable.eval.form.EvalForms;
 import applicable.eval.form.EvalRecord;
 /**
 {@link ViewerContenter} that can edit a graph of {@link EvalTypes} 
 and launch an {@link EvalViewer} 
  */
 public final class EvalCoder extends ViewerContenter{
-	static final String TITLE_LAUNCH="Evaluators";
-	private final static ViewableAction[]EDIT_ACTIONS={COPY,CUT,PASTE,PASTE_INTO,DELETE,EDIT};
+	static final String TITLE_LAUNCH="New &Configurator";
+	private final static ViewableAction[]EDIT_ACTIONS=
+		{COPY,CUT,PASTE,PASTE_INTO,DELETE,MODIFY,UNDO,REDO};
 	private static final String STATE_OFFSETS="selectionOffsets";
 	private static int launches=1;
 	public final static XmlPolicy XML_POLICY=new XmlPolicy(){
@@ -65,40 +65,67 @@ public final class EvalCoder extends ViewerContenter{
 		}
 		@Override
 		protected ValueNode getTitleAttributeNames(){
-			return newTitleAttributeNames("label",new String[]{});
+			return newTitleAttributeNames("label",new String[]{"Value=text"});
 		}
 	};
+	private static int contents=1;
 	private final FacetAppSurface app;
 	private final EvalSpecifier spec;
 	private Object stateStamp=null;
-	final void launchEvaluate(){
-		TypedNode code=(TypedNode)((TypedNode)contentFrame().framed).children()[0].copyState();
-		code.setTitle("#"+launches+++" "+code.title());
-		EvalForm form=new EvalForm(code,EvalTypes.fromCleanedTree(code));
-		if(true)app.addContent(spec.newEvalViewer(form,app,this));
-	}
 	protected EvalCoder(Object source,FacetAppSurface app,EvalSpecifier spec){
 		super(source);
 		this.app=app;
 		this.spec=spec;
 	}
+	void launchForm(){
+		TypedNode code=(TypedNode)codeRoot().copyState();
+		EvalForm form=new EvalForm(code,EvalTypes.fromCleanedTree(code));
+		app.addContent(spec.newEvalViewer(form,app,this));
+	}
+	void updateFromForm(EvalForm form){
+		TypedNode active=form.activeRecord().source;
+		DataNode root=(DataNode)codeRoot();
+		NodeList all=new NodeList(root,false);
+		List<TypedNode>records=new ArrayList();
+		String recordType=form.codeForType(EvalRecord.type);
+		for(TypedNode each:all)
+			if(each.type().equals(recordType))
+				records.add(each);
+		all.removeAll(records);
+		for(TypedNode record:records)
+			if((record.stateEquals(active))){
+				records.remove(record);
+				records.add(0,active);
+				break;
+			}
+		if(!records.contains(active))
+			records.add(0,active);
+		all.addAll(1,records);
+		all.updateParent();
+	}
 	@Override
 	protected ViewableFrame newContentViewable(Object source){
-		final DataNode root;
+		TextLines lines;
+		String contentName;
 		if(source instanceof File){
 			File file=(File)source;
-			XmlPolicy policy=XML_POLICY;
-			root=new DataNode(spec.codeRootType(),newContentName(file));
-			new XmlDocRoot(root,policy).readFromSource(file);
-			stateStamp=root.stateStamp();
+			contentName=newFileContentName(file);
+			lines=new TextLines(file);
 		}
-		else if(false)root=(DataNode)source;
-		else if(true)throw new RuntimeException("Not implemented for "+Util.helpfulClassName(source));
-		NodeViewable viewable=new NodeViewable(root,
-				app.ff.statefulClipperSource(app.spec.hasSystemAccess())){
+		else if(source instanceof URL){
+			lines=new TextLines((URL)source);
+			contentName="Configurator"+contents++;
+			setSink(new File(contentName+".config.xml"));
+		}
+		else throw new RuntimeException("Not implemented for "+Util.helpfulClassName(source));
+		final DataNode root=new DataNode(spec.codeRootType(),contentName);
+		XmlPolicy policy=XML_POLICY;
+		new XmlDocRoot(root,policy).readFromSource(lines);
+		stateStamp=root.stateStamp();
+		NodeViewable viewable=new NodeViewable(root,app.ff.statefulClipperSource(false)){
 			@Override
 			public String title(){
-				return root.type()+" "+root.title();
+				return root.title();
 			}
 			@Override
 			protected STarget[]lazyElements(){
@@ -142,18 +169,21 @@ public final class EvalCoder extends ViewerContenter{
 		return viewable;
 	}
 	@Override
+	public STarget[]lazyContentAreaElements(SAreaTarget area){
+		return new STarget[]{
+			new STrigger(TITLE_LAUNCH,new STrigger.Coupler(){
+				@Override
+				public void fired(STrigger t){
+					launchForm();
+				}
+			}),
+		};
+	}
+	@Override
 	protected FacetedTarget[]newContentViewers(ViewableFrame viewable){
 		SView view=new TreeView("View"){
-			@Override
-			public SSelection newViewerSelection(SViewer viewer,SSelection viewable){
-				if(true)throw new RuntimeException("Not implemented in "+this);
-				return super.newViewerSelection(viewer,viewable);
-			}
 			public boolean hideRoot(){
 				return true;
-			}
-			public String nodeRenderText(TypedNode node){
-				return super.nodeRenderText(node);
 			}
 			public boolean isLive(){
 				return true;
@@ -168,37 +198,8 @@ public final class EvalCoder extends ViewerContenter{
 		app.ff.areas().attachViewerAreaPanes(area,"",AreaFacets.PANE_SPLIT_VERTICAL);
 	}
 	@Override
-	public STarget[]lazyContentAreaElements(SAreaTarget area){
-		return new STarget[]{new STrigger(TITLE_LAUNCH,
-				new STrigger.Coupler(){
-			@Override
-			public void fired(STrigger t){
-				launchEvaluate();
-			}
-		})};
-	}
-	@Override
 	public void areaRetargeted(SContentAreaTargeter area){
 		spec.setFeatureLives(app);
-	}
-	@Override
-	public void saveToSink(Object sink)throws IOException{
-		File file=(File)sink;
-		String sinkName=file.getName();
-		if(file.exists()&&!sinkName.startsWith("_"))new TextLines(file).copyFile("_"+sinkName);
-		DataNode root=(DataNode)contentFrame().framed;
-		new XmlDocRoot(root,XML_POLICY).writeToSink(file);
-		stateStamp=root.updateStateStamp();
-		root.setTitle(newContentName(file));
-		app.notify(new Notice(contentFrame(),Impact.DEFAULT));
-	}
-	void updateFromForm(EvalForm form){
-		TypedNode active=form.activeRecord().source;
-		boolean matched=false;
-		DataNode root=(DataNode)((TypedNode)contentFrame().framed).children()[0];
-		for(TypedNode record:Nodes.children(root,form.codeForType(EvalRecord.type)))
-			if((matched=record.stateEquals(active)))break;
-		if(!matched)Nodes.appendChild(root,active);
 	}
 	@Override
 	public LayoutFeatures newContentFeatures(final SContentAreaTargeter area){
@@ -220,9 +221,21 @@ public final class EvalCoder extends ViewerContenter{
 		return super.setSink(sink)
 			&&(sink instanceof File&&!((File)sink).getName().startsWith("_"));
 	}
-	private String newContentName(File file){
-		String fileName=file.getName();
-		String name=true?fileName:app.getFileSpecifiers()[0].stripExtension(fileName);
-		return name;
+	@Override
+	public void saveToSink(Object sink)throws IOException{
+		File file=(File)sink;
+		String sinkName=file.getName();
+		if(file.exists()&&!sinkName.startsWith("_"))new TextLines(file).copyFile("_"+sinkName);
+		DataNode root=(DataNode)contentFrame().framed;
+		new XmlDocRoot(root,XML_POLICY).writeToSink(file);
+		stateStamp=root.updateStateStamp();
+		root.setTitle(newFileContentName(file));
+		app.notify(new Notice(contentFrame(),Impact.DEFAULT));
+	}
+	private TypedNode codeRoot(){
+		return ((TypedNode)contentFrame().framed).children()[0];
+	}
+	private String newFileContentName(File file){
+		return app.getFileSpecifiers()[0].stripExtension(file.getName());
 	}
 }

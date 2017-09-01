@@ -108,15 +108,13 @@ public interface FacetConstants extends AppConstants{
 		{TITLE_SLAVE_CLOSE,"","","",VK_W+KEY_CTRL},
 		{TITLE_FILE_SAVE,"","save.gif","",VK_S+KEY_CTRL},
 		{TITLE_FILE_REVERT,"","refresh_nav.gif"},
-		{TreeTargets.TITLE_FIND,"","","",VK_F+KEY_CTRL},
-		{TreeTargets.TITLE_FIND_NEXT,"","","",VK_F+KEY_CTRL+KEY_SHIFT},
 		{TreeTargets.TITLE_SEARCH_TYPE,"Type","","= XML tag name"},
 		{TreeTargets.TITLE_SEARCH_TITLE,"Title","","= primary attribute where defined"},
 		{TreeTargets.TITLE_SEARCH_KEY,"Key","","= XML attribute name"},
 		{TreeTargets.TITLE_SEARCH_VALUE,"Value","","= XML attribute value or content line"},
 		{TreeTargets.TITLE_SEARCH_RESULTS,"Results","",""},
-		{Action.REDO,"","redo_edit.gif"},
-		{Action.UNDO,"","undo_edit.gif"},
+		{Action.REDO,"","redo_edit.gif","Redo edit",VK_Y+KEY_CTRL},
+		{Action.UNDO,"","undo_edit.gif","Undo edit",VK_Z+KEY_CTRL},
 		{Action.COPY,"","copy_edit.gif","Copy selection",VK_C+KEY_CTRL},
 		{Action.CUT,"","cut_edit.gif","Cut selection",VK_X+KEY_CTRL},
 		{Action.DELETE,"","delete_edit.gif","Delete selection",VK_DELETE},
@@ -132,7 +130,7 @@ public interface FacetConstants extends AppConstants{
 		{Action.PASTE,"","paste_edit.gif","Paste at selection",VK_V+KEY_CTRL},
 		{Action.PASTE_INTO,"","addtsk_tsk.gif","Paste into selection",VK_V+KEY_SHIFT+KEY_CTRL},
 		// history_obj.gif stepinto_co.gif
-		{Action.EDIT,"","text_edit.gif","Modify or rename selection",VK_F2},
+		{Action.MODIFY,"","text_edit.gif","Modify or rename selection",VK_F2},
 		//write_obj.gif
 	};
 }

@@ -1,6 +1,5 @@
 package facets.facet.kit.avatar;
 import static java.awt.event.MouseEvent.*;
-import facets.core.app.ArrayPath;
 import facets.core.app.PathSelection;
 import facets.core.app.avatar.AvatarContent;
 import facets.core.app.avatar.AvatarPolicies;
@@ -18,6 +17,7 @@ import facets.core.superficial.app.ViewerTarget;
 import facets.facet.FacetFactory;
 import facets.facet.kit.KitFacet;
 import facets.facet.kit.KitCore.FlashTextNotice;
+import facets.util.ArrayPath;
 import facets.util.Debug;
 import facets.util.ItemList;
 import facets.util.Objects;

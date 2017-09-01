@@ -191,7 +191,7 @@ abstract class SwingAvatarMaster extends ViewerMaster implements CanvasHost{
 					"Bad component "+Debug.info(c));
 			StatefulViewable viewable=(StatefulViewable)from.viewerTarget().viewable;
 			if(action==MOVE){
-				viewable.deleteSelection();
+				viewable.deleteSelection(false);
 				viewable.updateAfterEditAction();
 			}
 			if(to!=null)to.viewerTarget().ensureActive(Impact.ACTIVE);

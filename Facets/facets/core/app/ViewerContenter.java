@@ -118,7 +118,7 @@ public abstract class ViewerContenter extends Tracer implements AppContenter{
 	@param faceted if <code>false</code> can signal a fresh invocation that requires
 	return of an unfaceted area wrapping the existing viewable
 	 */
-	public final AreaRoot newContentArea(boolean faceted){
+	public final SAreaTarget newContentArea(boolean faceted){
 	  traceEvent(">Creating content area in "+info(this));
 	  return newContentViewableArea(sourceOrSink,faceted);
 	}
@@ -233,7 +233,7 @@ public abstract class ViewerContenter extends Tracer implements AppContenter{
 	 @param viewers were created in {@link #newContentViewers(ViewableFrame)}
 	 */
 	final protected AreaRoot newViewersArea(String title,FacetedTarget[]viewers){
-		return new ViewerContentArea(title,viewers,this);
+		return new AppAreas.ViewerContentArea(title,viewers,this);
 	}
 	/**
 	Return elements for the content area. 

@@ -15,8 +15,8 @@ import facets.core.superficial.app.AreaTargeter;
 import facets.core.superficial.app.IndexingTarget;
 import facets.core.superficial.app.SAreaTarget;
 import facets.core.superficial.app.SContentAreaTargeter;
-import facets.core.superficial.app.SContentAreaTargeter.ContentArea;
 import facets.core.superficial.app.SContenter;
+import facets.core.superficial.app.SContentAreaTargeter.ContentArea;
 import facets.core.superficial.app.SHost.FacetLayout;
 import facets.util.Debug;
 import facets.util.ItemList;
@@ -85,12 +85,12 @@ final class AppAreas extends Tracer{
 			appArea().indexing().setIndex(to);
 		}
 		void replaceActiveArea(AppContenter content){
-			AreaRoot areaThen=(ViewerContentArea)appArea().indexedTarget(),
+			SAreaTarget areaThen=(ViewerContentArea)appArea().indexedTarget(),
 				areaNow=((SContenter)content).newContentArea(false);
 			content.alignContentAreas(areaThen,areaNow);
 		  if(areaNow.getClass()!=areaThen.getClass())
 		  	throw new RuntimeException("Non-matching areas in "+Debug.info(app));
-		  else areaNow.attachThenFacets(areaThen); 
+		  else ((AreaRoot)areaNow).attachThenFacets(areaThen); 
 		  for(ViewerContentArea area:viewerAreas(areasThen))
 		  	if(area==areaThen){
 					areas.addItem(areaNow);
@@ -153,8 +153,7 @@ final class AppAreas extends Tracer{
 				for(ViewerContentArea area:Objects.reverse(ViewerContentArea.class,viewers)){
 					SFrameTarget frame=area.contenter.contentFrame();
 					int useCount=counts.get(frame);
-					String superTitle=area.superTitle();
-					area.setUseTitle(superTitle+(useCount>0?":"+useCount:""));
+					area.multi=(useCount>0?":"+useCount:"");
 					counts.put(frame,--useCount);
 				}
 				areaFacets=new MountFacet[areasNow.length];
@@ -183,7 +182,7 @@ final class AppAreas extends Tracer{
 			else op.doOperations();
 		}
 	}
-	final private static class AppArea extends AreaRoot{
+	final static class AppArea extends AreaRoot{
 		private final AppSurface app;
 		AppArea(AppSurface app,SAreaTarget[]areas,int areaAt){
 			super(app.title(),newIndexing(areas));
@@ -209,6 +208,16 @@ final class AppAreas extends Tracer{
 		@Override
 		protected STarget[]lazyElements(){
 			return app.lazyAppAreaElements();
+		}
+	}
+	final static class ViewerContentArea extends ContentArea{
+	  String multi="";
+		ViewerContentArea(String title,STarget[]viewers,SContenter contenter){
+	  	super(title,contenter,viewers);
+	  }
+		final public String title(){
+			if(contenter==null)return super.title();
+			return contenter.title().replace("&","")+multi;
 		}
 	}
 	void updateLayout(final List<AppContenter>contents){

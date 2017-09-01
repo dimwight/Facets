@@ -1,5 +1,4 @@
 package applicable.avatar;
-import facets.core.app.ArrayPath;
 import facets.core.app.PathSelection;
 import facets.core.app.avatar.AvatarContent;
 import facets.core.app.avatar.AvatarContent.Applicable;
@@ -10,6 +9,7 @@ import facets.core.app.avatar.DragPolicy;
 import facets.core.app.avatar.PainterSource;
 import facets.core.superficial.app.SSelection;
 import facets.core.superficial.app.SViewer;
+import facets.util.ArrayPath;
 import facets.util.tree.TypedNode;
 import java.util.ArrayList;
 import java.util.List;

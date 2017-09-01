@@ -293,10 +293,18 @@ public final class Nodes{
 		return limit<=0||line.length()<limit?line:line.substring(0,limit)+"...";
 	}
 	/**
-	@return a tree sized by the parameters;	for <code>broad</code>&lt=0 a minimal tree  
-	 */
-	public static TypedNode newTestTree(String rootType,int broad,double shrinkBy){
-		return new TestTrees(rootType,broad,shrinkBy).tree;
+	@return a tree sized by the parameters;	for <code>width</code>&lt=0 a minimal tree  
+		<p>Typical outcomes:
+	<ul>
+<li>width=1 nodes=19 bytes=3.42K</li>
+<li>width=3 nodes=121 bytes=22.7K</li>
+<li>width=5 nodes=715 bytes=135K</li>
+<li>width=7 nodes=5563 bytes=1050K</li>
+<li>width=9 nodes=9769 bytes=1840K</li>
+<li>width=11 nodes=72385 bytes=13700K</li></ul>
+ */
+	public static TypedNode newTestTree(String rootType,int width){
+		return new TestTree(rootType,width).tree;
 	}
 	public static String treeInfo(TypedNode tree,boolean chars){
 		return ""+Util.sf(!chars?Nodes.descendants(tree).length:Nodes.treeString(tree).length());

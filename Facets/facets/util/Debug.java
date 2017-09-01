@@ -21,8 +21,9 @@ public final class Debug{
 	otherwise the truncated {@link Object#hashCode()}.  
 	 */
 	public static String id(Object o){
-		return o==null?"null":true&&o instanceof Identified?("#"+((Identified)o).identity())
-		:(""+((true?o.hashCode():System.identityHashCode(o))&0xff));
+		return o==null?"null"
+				:o instanceof Identified?("#"+((Identified)o).identity())
+		:(" id="+((false?o.hashCode():System.identityHashCode(o))&0xfff));
 	}
 	/**
 		Returns basic information about an object's type and identity. 
@@ -35,8 +36,12 @@ public final class Debug{
 			 */
 	public static String info(Object o){
 		if(o==null)return "null";
-		if(o instanceof String)return true?o.toString()
-				:("String length="+((String)o).length()+id(o));
+		if(o instanceof String){
+			String text=o.toString();
+			int length=text.length();
+			return text.substring(0,Math.min(length,60))
+					+(": "+(false?("length="+length):id(o)));
+		}
 		return (false?o.getClass().getSimpleName():helpfulClassName(o))+" "+
 			id(o)+(o instanceof Titled?(" "+((Titled)o).title()):false?" "+o:"");
 	}
@@ -47,7 +52,7 @@ public final class Debug{
 		if(array==null)return "null";
 		StringBuilder sb=new StringBuilder(info(array)+"["+array.length+"]{\n");
 		for(int i=0;i<array.length;i++)
-			sb.append((array[i]!=null?info(array[i]):"null")
+			sb.append((true||array[i]!=null?info(array[i]):"null")
 					+(i<array.length-1?"\n":""));
 		return sb+"\n}";
 	}

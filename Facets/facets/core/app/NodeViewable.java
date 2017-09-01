@@ -32,6 +32,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoableEdit;
 /**
 {@link StatefulViewable} for tree-type content. 
 <p>{@link NodeViewable} extends its superclass by 
@@ -75,10 +78,12 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
 	/**
 	Default implementation for {@link TypedNode} tree. 
 	 */
+	@Override
 	public SFrameTarget selectionFrame(){
 	  final Object selection=selection().multiple()[0];
 	  return false&&selection instanceof TypedNode?new NodeViewable((TypedNode)selection)
       :new SFrameTarget(title()+" #"+selections++,selection){
+	  		@Override
   			protected STarget[]lazyElements(){
   				STarget valueTextual=new STextual("Value",selection.toString(),
   						new STextual.Coupler());
@@ -86,6 +91,7 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
   			}
   		};
 	}
+	@Override
 	protected STarget[]lazyElements(){
 		TypedNode tree=tree();
 		STarget valueTextual=new STextual("Node",tree
@@ -99,6 +105,7 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
 	root constructed and from this a {@link PathSelection} which
 	 is passed to {@link #setSelection(SSelection)} PLUS...
 	 */
+	@Override
 	public SSelection defineSelection(Object definition){
 		TypedNode tree=tree();
 		if(definition instanceof PathSelection){
@@ -135,6 +142,7 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
 		if(false)trace("~.defineSelection: ",selection());
 		return selection();
 	}
+	@Override
 	protected void viewerSelectionChanged(SViewer viewer,SSelection selection){
 		SSelection rootPaths=selection.content()instanceof SView?
 				PathSelection.newMinimal(framed)
@@ -163,6 +171,7 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
 		}
 		return new PathSelection(framed,rootPaths);
 	}
+	@Override
 	public boolean actionIsLive(SViewer viewer,ViewableAction action){
 		TypedNode tree=tree();
 		Object[]selected=selection().multiple();
@@ -174,27 +183,16 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
 		OffsetPath firstPath=((PathSelection)selection()).paths[0];
 		if(!(firstPath instanceof NodePath))return iterate;
 		int valueAt=((NodePath)firstPath).valueAt();
-		boolean belowRoot=tree!=selectedNode,nodeSelected=valueAt<0;
+		boolean belowRoot=tree!=selectedNode,nodeSelected=true||valueAt<0;
 		return action==COPY||action==CUT?belowRoot&&nodeSelected
-			:action==EDIT||action==DELETE?belowRoot||!nodeSelected
- 			:action==PASTE||action==PASTE_INTO?canPaste()
+			:action==MODIFY||action==DELETE?belowRoot||!nodeSelected
+ 			:action==PASTE?canPaste()
+ 			:action==PASTE_INTO?canPaste()&&valueAt<0
+ 					&&selectedNode.contents().length==0
 			:action==SELECT_ALL?!empty&&!allSelected
 			:super.actionIsLive(viewer,action);
 	}
-	public void insertStatefuls(boolean pastingInto,Stateful...statefuls){
-		PathSelection paths=(PathSelection)selection();
-		NodePath firstPath=(NodePath)paths.paths[0];
-		int valueAt=firstPath.valueAt();
-		TypedNode inserts[]=newTyped(TypedNode.class,statefuls),
-			first=(TypedNode)selection().multiple()[0],root=tree();
-		NodeList into=new NodeList(valueAt>=0||first==root||pastingInto?first
-				:first.parent(),false);
-		int firstAt=valueAt>=0?valueAt:into.indexOf(first);
-		into.addAll(firstAt>=0?firstAt:0,inserts);
-		if(!hasMixedContents(into.parent))into.updateParent();
-		else into.updateMixedParent(first);
-		setSelection(newNodeChangeSelection(root,inserts,false));
-	}
+	@Override
 	public void iterateSelection(boolean forward){
 		TypedNode tree=tree();
 		TypedNode[]descendants=Nodes.descendants(tree);
@@ -208,7 +206,36 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
 				:markAt==1?lastAt:markAt-1;
 		setSelection(new PathSelection(tree,pathFromRoot(descendants[markAt])));
 	}
-	public void deleteSelection(){
+	@Override
+	public void insertStatefuls(boolean insertInto,Stateful...statefuls){
+		if(undoableEdits){
+			doUndoableEdit(NodeUndoableEdit.newInsert(this,statefuls[0],insertInto));
+			return;
+		}
+		PathSelection paths=(PathSelection)selection();
+		NodePath firstPath=(NodePath)paths.paths[0];
+		int valueAt=firstPath.valueAt();
+		TypedNode inserts[]=newTyped(TypedNode.class,statefuls),
+			first=(TypedNode)selection().multiple()[0],root=tree();
+		NodeList into=new NodeList(valueAt>=0||first==root||insertInto?first
+				:first.parent(),false);
+		int firstAt=valueAt>=0?valueAt:into.indexOf(first);
+		into.addAll(firstAt>=0?firstAt:0,inserts);
+		if(!hasMixedContents(into.parent))into.updateParent();
+		else into.updateMixedParent(first);
+		setSelection(newNodeChangeSelection(root,inserts,false));
+	}
+	@Override
+	protected void setModifyState(Stateful state){
+		if(!undoableEdits)super.setModifyState(state);
+		else doUndoableEdit(NodeUndoableEdit.newModify(this,state));
+	}
+	@Override
+	public void deleteSelection(boolean asCut){
+		if(undoableEdits){
+			doUndoableEdit(NodeUndoableEdit.newDelete(this,asCut));
+			return;
+		}
 		PathSelection paths=(PathSelection)selection();
 		NodePath firstPath=(NodePath)paths.paths[0];
 		int valueAt=firstPath.valueAt();
@@ -243,6 +270,53 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
 		setSelection(newNodeChangeSelection(tree(),
 				reselects.toArray(new TypedNode[]{}),true));
 	}
+	private void doUndoableEdit(final NodeUndoableEdit edit){
+		edit.doEdit();
+		states.addEdit(new UndoableEdit(){
+			@Override
+			public void undo()throws CannotUndoException{
+				edit.undoEdit();
+			}
+			@Override
+			public boolean replaceEdit(UndoableEdit anEdit){
+				return false;
+			}
+			@Override
+			public void redo() throws CannotRedoException{
+				edit.doEdit();
+			}
+			@Override
+			public boolean isSignificant(){
+				return true;
+			}
+			@Override
+			public String getUndoPresentationName(){
+				return "Undo "+getPresentationName();
+				}
+			@Override
+			public String getRedoPresentationName(){
+				return "Redo "+getPresentationName();
+			}
+			@Override
+			public String getPresentationName(){
+				return edit.toString();
+			}
+			@Override
+			public void die(){}
+			@Override
+			public boolean canUndo(){
+				return true;
+			}
+			@Override
+			public boolean canRedo(){
+				return true;
+			}
+			@Override
+			public boolean addEdit(UndoableEdit anEdit){
+				return false;
+			}
+		});
+	}
 	final protected PathSelection newNodeChangeSelection(TypedNode root, 
 			TypedNode[]nodes,boolean removing){
 		OffsetPath[]paths;
@@ -254,6 +328,7 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
 		}
 		return new PathSelection(root,paths);
 	}
+	@Override
 	public boolean textSeemsPastable(String text){
 		return text.startsWith(XmlDocRoot.SHEBANG);
 	}
@@ -271,6 +346,7 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
 	Re-implementation. 
 	<p>Matches based on {@link TypedNode#type()} and {@link TypedNode#title()}.	
 	 */
+	@Override
 	protected Stateful[]matchSelectionEdits(Stateful[]targets,Stateful[]edits){
 		Stateful[]matches=new Stateful[targets.length];
 		for(int m=0;m<matches.length;m++){
@@ -282,7 +358,7 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
 			}
 			if(matches[m]==null)return null;
 		}
-		if(false)trace(".matchedTargetEdits: ",edits);
+		if(false)trace(".matchSelectionEdits: ",edits);
 		return matches;
 	}
 	private OffsetPath pathFromRoot(TypedNode node){
@@ -294,9 +370,11 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
 	final public void putSelectionState(final ValueNode state,String key){
 		PathSelection.putSelectionOffsets((PathSelection)selection(),state,key);
 	}
+	@Override
 	protected void traceOutput(String msg){
 		Util.printOut((true?title():(Debug.info(this)))+msg);
 	}
+	@Override
 	protected SSelection newViewerSelection(SViewer viewer){
 		SView view=viewer.view();
 		if(view instanceof TreeView)return super.newViewerSelection(viewer);

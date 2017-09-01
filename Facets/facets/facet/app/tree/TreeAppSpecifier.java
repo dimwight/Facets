@@ -1,6 +1,7 @@
 package facets.facet.app.tree;
 import static facets.facet.app.FacetPreferences.*;
 import static facets.facet.app.tree.TreeTargets.*;
+import static facets.util.tree.DataConstants.*;
 import facets.XmlView;
 import facets.core.app.ActionAppSurface;
 import facets.core.app.AppActions;
@@ -142,11 +143,11 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	/**
 	Fulfils {@link FacetAppSurface#getInternalContentSource()} in the
 	return of {@link #newApp(FacetFactory, FeatureHost)}.
-	@return by default {@link Nodes#newTestTree(String, int, double)} with <code>broad</code>=5 which
-	may be changed by passing {@link #ARG_TREE_SIZE}=<code>broad</code> 
+	@return by default {@link Nodes#newTestTree(String, int)} with <code>width</code>=3 which
+	may be changed by passing {@link #ARG_TREE_SIZE}=<code>width</code> 
 	 */
 	protected Object getInternalContentSource(){
-		return Nodes.newTestTree("Test",nature().getOrPutInt(ARG_TREE_SIZE,4),0.75);
+		return Nodes.newTestTree("Test",nature().getOrPutInt(ARG_TREE_SIZE,false?-1:3));
 	}
 	/**
 	Enables redefinition of {@link SView}s supplying viewer policy. 
@@ -159,7 +160,7 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 		final boolean liveViews=canEditContent();
 		SView view=new TreeView("View"){
 			public boolean hideRoot(){
-				return true||rootTitle.endsWith(DataConstants.TYPE_XML);
+				return true||rootTitle.endsWith(TYPE_XML);
 			}
 			public boolean isLive(){
 				return liveViews;
@@ -174,7 +175,7 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 				return liveViews;
 			}
 		};
-		return true&&System.getProperty("XmlViewDebug")!=null?new SView[]{basic,view}
+		return System.getProperty("XmlViewDebug")!=null?new SView[]{basic,view}
 			:new SView[]{view};
 	}
 	/**
@@ -195,7 +196,6 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	@param treeLinks exposing {@link TreeTargets#appTargets()} 
 	@param contentLinks targeting returns (if any) of {@link #newContentRootTargets(FacetAppSurface)} 
 	@return by default <code>treeAppFacets</code> indexed with 
-	{@link TreeTargets#TARGET_SEARCH} and with 
 		{@link TreeTargets#TARGET_ENCODE},{@link TreeTargets#TARGET_TYPE} where
 		{@link #canCreateContent()} returns <code>true</code>.
 	 */
@@ -203,7 +203,6 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 			STargeter[]contentLinks){
 		String hint=FacetFactory.HINT_NONE;
 		return canCreateContent()?new SFacet[]{
-			ff.triggerMenuItems(treeLinks[TARGET_SEARCH],hint),
 			ff.triggerMenuItems(treeLinks[TARGET_TYPE],hint),
 			ff.triggerMenu(treeLinks[TARGET_ENCODE],hint),
 		}

@@ -60,8 +60,7 @@ final public class AppContent extends StatefulCore implements Identified{
 	private static final String[]rowSplits={"\n","\\.","\\s+",""},chapters;
 	static{
 		try{
-			File dir=false?AppValues.userDir():new File(Util.runDir(),"_doc");
-			chapters=new TextLines(new File(dir,"chapters.txt")
+			chapters=new TextLines(new File("_doc","chapters.txt")
 				).readLinesString().replaceAll("(Mr|Mrs)\\.","$1")
 				.split("\\" +CHAPTER_SPLIT);
 		}

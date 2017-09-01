@@ -173,6 +173,12 @@ final class HtmlInputPaneMaster extends HtmlPaneMaster{
 			}
 			else if(c instanceof JCheckBox){
 				final JCheckBox box=(JCheckBox)c;
+				box.addActionListener(new ActionListener(){
+					@Override
+					public void actionPerformed(ActionEvent e){
+						checkValue(Boolean.valueOf(box.isSelected()).toString());
+					}
+				});
 			}
 			else if(this.c==c) 
 				throw new RuntimeException("Not implemented for c="+info(c));
