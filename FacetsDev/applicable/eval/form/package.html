@@ -1,0 +1,54 @@
+<html>
+<head><title>applicable.treecode.form</title></head>
+<body bgcolor="#FFFFFF">
+<p>Implements <b>Eval</b> dialect <b>Form </b>that can input and process 
+	named values. </p>
+<h3><b>Eval</b> types</h3>
+<p>A <i>Field</i> is an <i>Evaluable</i> identifiable by its <i>Label</i>; 
+	<i>InputField</i> can accept input validated against contained <i>Value</i>s. 
+</p>
+<p><i>Field</i>s are defined within a <i>Form</i>, which reads and writes 
+	a <i>Record</i> in the following lifecycle:</p>
+<ol>
+	<li>A <i>Record</i> is either read from encoded text or created empty 
+		for an arbitrary <i>Form</i>. </li>
+	<li>A <i>Form</i> is created matching that specified by the <i>Record</i> 
+		and reads labelled <i>Values</i> from the <i>Record</i> into its <i>InputField</i>s. 
+	</li>
+	<li>The <i>Form</i> is passed to a reporting or interactive <i>Consumer. 
+		</i></li>
+	<li>If an <i>InputField</i> is updated, the <i>Form </i> updates the <i>Record</i> 
+		to match. </li>
+	<li>The <i>Record</i> is written to encoded text as required. </li>
+</ol>
+<h3>Java types</h3>
+<p>This package implements the <b>Form </b>dialect with the following types:</p>
+<dl> 
+	<dt><code>Field</code></dt>
+	<dd><code>Evaluable</code> that can be referenced by its <code>Label</code> 
+		within a containing <code>Form</code>. </dd>
+	<dt><code>InputField</code></dt>
+	<dd><code>Field</code> that evaluates to a fixed <code>Value</code> that 
+		can be set and validated against a contained <code>Values</code>. </dd>
+	<dt><code>CalculatedField</code></dt>
+	<dd><code>Field</code> that evaluates its <code>EvalCoded</code> contents. 
+	</dd>
+	<dt><code>Record</code></dt>
+	<dd><code>EvalCoded</code> container for labelled <code>Value</code>s 
+		and the <code>DateStamp</code> of the <code>Form</code> that can process 
+		it. </dd>
+	<dt><code>Form</code></dt>
+	<dd><code>Context</code> containing a <code>DateStamp</code>, a <code>Record</code> 
+		sharing its <code>DateStamp</code><code></code>, a <code>Forms.Dialect</code> 
+		and any number of <code>Field</code>s which it can update from the <code>Record</code> 
+		and evaluate (first validating <code>InputField</code>s against their 
+		contained <code>Values</code>). </dd>
+	<dt><code>FormConsumer</code></dt>
+	<dd>Container <code>EvalCoded</code> coding for objects that can report 
+		on or interact with a <code>Form</code>. </dd>
+	<dt><code>Forms</code></dt>
+	<dd><code>EvalTypes</code> container for a set of <code>Form</code>s created 
+		from encoded text, retrievable by reference to <code>DateStamp</code>s 
+		of decoded or default <code>Record</code>s. </dd>
+</dl>
+</body></html>
