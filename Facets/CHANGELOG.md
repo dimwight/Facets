@@ -1,4 +1,6 @@
 # Changelog for Facets
+##9.26
+
 ##9.25
 demo>apps, SwingCanvasPainters, SwingPainterOutlined, PlaneTest, 
 ImageProviderAwt, SwingPainterSource, SliderPanel, FacetAppSpecifier, 
