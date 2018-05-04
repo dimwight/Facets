@@ -7,10 +7,10 @@ import applicable.treecode.TreeCodeContext;
 import applicable.treecode.TreeCodeType;
 import applicable.treecode.TreeCoded;
 /**
-{@link TreeCoded} that can represent simple data, including a set of {@link Value}s.
+{@link TreeCoded} that can represent a data primitive.
+<p>Data is stored textually as the {@link TypedNode#title()} of the source. 
  */
 public final class Value extends TreeCoded{
-	private static final boolean titles=true;
 	final public static TreeCodeType<Value>type=new TreeCodeType(
 			Value.class.getSimpleName()){
 		@Override
@@ -18,10 +18,11 @@ public final class Value extends TreeCoded{
 			return new Value(code);
 		};
 	};
-	public static final Value FALSE=newContentValue("FALSE"),
-			TRUE=newContentValue("TRUE");
-	public static Value newContentValue(String content){
-		return new Value(new DataNode(type.name,content));
+	/** Constant */
+	public static final Value FALSE=newValue("FALSE"),
+			TRUE=newValue("TRUE"),NONE=newValue("NONE");
+	public static Value newValue(String data){
+		return new Value(new DataNode(type.name,data));
 	}
 	private Value(TypedNode source){
 		super(source,type);
@@ -29,18 +30,22 @@ public final class Value extends TreeCoded{
 	public String asText(){
 		return source.title();
 	}
-	public void updateSource(Value value){
-		source.setTitle(value.asText());
-	}
-	@Override
-	public boolean equals(Object that){
-		return asText().equals(((Value)that).asText());
+	public String asCode(){
+		return asText().replaceAll(" .*","");
 	}
 	public Value copyValue(){
 		return new Value((DataNode)source.copyState());
 	}
 	@Override
 	public String toString(){
-		return type+"="+asText().replaceAll(" .*","");
+		return type+"="+asCode();
+	}
+	@Override
+	public boolean equals(Object that){
+		return toString().equals(((Value)that).toString());
+	}
+	@Override
+	public int hashCode(){
+		return toString().hashCode();
 	}
 }

@@ -1,4 +1,6 @@
 package facets.facet;
+import facets.core.app.SView;
+import facets.core.app.ViewerTarget;
 import facets.core.superficial.Notice;
 import facets.core.superficial.Notifiable;
 import facets.core.superficial.Notifying;
@@ -10,8 +12,6 @@ import facets.core.superficial.TargetCore;
 import facets.core.superficial.TargeterCore;
 import facets.core.superficial.Notifying.Impact;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.SView;
-import facets.core.superficial.app.ViewerTarget;
 import facets.facet.FacetMaster.Viewer;
 import facets.util.Debug;
 /**

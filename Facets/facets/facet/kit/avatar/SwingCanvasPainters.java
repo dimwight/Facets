@@ -22,7 +22,7 @@ import java.util.Arrays;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 final class SwingCanvasPainters extends Tracer{
-	private static final boolean optimise=true,timing=true;
+	private static final boolean optimise=true,timing=false;
 	private final static PdfCanvas pdf=false?null:new PdfCanvas();
 	private final ProvidingCache localCache=
 			System.getProperty("SwingCanvasPaintersLocalCache")==null?null:
@@ -68,7 +68,7 @@ final class SwingCanvasPainters extends Tracer{
 	  if(false&&immediate!=null&&sizeThen!=null&&!sizeThen.equals(size)
 	  		&&(width>sizeThen.width||height>sizeThen.height)
 	  		&&!newImager(cache,0,0,null).hasForValues(allValues))
-	  	scaleWithWait(g2,pane,width,height);
+	  	scaleWithWait_(g2,pane,width,height);
 		else if(!viewId.equals(viewIdThen)||
 	  		motionPainters==null||motionPainters.length==0||immediate==null){
 			if(false)traceDebug(".doOptimisedPainting: viewPainters=",viewPainters);
@@ -95,7 +95,7 @@ final class SwingCanvasPainters extends Tracer{
 	private ImageProviderAwt newImager(final ProvidingCache cache,
 			final int width,final int height,final Image back){
 		Class<SwingCanvasPainters>scp=SwingCanvasPainters.class;
-		return new ImageProviderAwt(cache,false?scp:this,
+		return new ImageProviderAwt(cache,true?scp:this,
 				scp.getSimpleName()+".newImages",width,height){
 			boolean backPainted=back!=null;
 			@Override
@@ -126,7 +126,7 @@ final class SwingCanvasPainters extends Tracer{
 		if(origin==null)throw new IllegalStateException("Null origin in "+Debug.info(this));
 		else plot.translate(origin.x(),origin.y()*ySign);
 		g2.transform(plot);
-		g2.setRenderingHint(KEY_ANTIALIASING,VALUE_ANTIALIAS_ON);
+		if(true)g2.setRenderingHint(KEY_ANTIALIASING,VALUE_ANTIALIAS_ON);
 	  if(back)backPainter.paintInGraphics(g2.create());
 	  if(view){
 			if(false)trace(".prepareAndPaint: viewPainters=",viewPainters.length);
@@ -138,9 +138,9 @@ final class SwingCanvasPainters extends Tracer{
 	  if(motion&&motionPainters!=null)
 		  for(Painter each:motionPainters)each.paintInGraphics(g2.create());
 	}
-	private void scaleWithWait(Graphics2D g2,final JPanel pane,int width,int height){
+	private void scaleWithWait_(Graphics2D g2,final JPanel pane,int width,int height){
 		if(scaleWaiter!=null)scaleWaiter.stop();
-		g2.drawImage(false?immediate
+		g2.drawImage(true?immediate
 				:immediate.getScaledInstance(width,height,Image.SCALE_FAST),0,0,null);
 		(scaleWaiter=new Timer(500,new ActionListener(){
 			@Override

@@ -1,5 +1,5 @@
 package facets.core.superficial;
-import facets.core.superficial.Notifying.Impact;
+
 /**
 Application element that may have an attached facet. 
 <p>{@link Facetable} captures the concept of an

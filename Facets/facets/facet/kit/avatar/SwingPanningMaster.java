@@ -1,5 +1,5 @@
 package facets.facet.kit.avatar;
-import static facets.core.superficial.app.SViewer.*;
+import static facets.core.app.SViewer.*;
 import facets.facet.AreaFacets;
 import facets.util.Debug;
 import facets.util.StringFlags;

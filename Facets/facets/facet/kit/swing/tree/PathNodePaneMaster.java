@@ -1,7 +1,7 @@
 package facets.facet.kit.swing.tree;
 import static facets.util.tree.DataConstants.*;
+import facets.core.app.SViewer;
 import facets.core.app.TreeView;
-import facets.core.superficial.app.SViewer;
 import facets.facet.kit.swing.KitSwing;
 import facets.facet.kit.swing.ViewerMaster;
 import facets.util.Debug;

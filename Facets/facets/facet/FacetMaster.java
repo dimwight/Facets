@@ -1,12 +1,12 @@
 package facets.facet;
 import facets.core.app.MenuFacets;
 import facets.core.app.ViewerContenter;
+import facets.core.app.ViewerTarget;
 import facets.core.superficial.Notifying;
 import facets.core.superficial.STarget;
 import facets.core.superficial.STargeter;
 import facets.core.superficial.TargetCore;
 import facets.core.superficial.Notifying.Impact;
-import facets.core.superficial.app.ViewerTarget;
 import facets.util.Tracer;
 /**
 Integrates a custom widget assembly with the facet builder API. 

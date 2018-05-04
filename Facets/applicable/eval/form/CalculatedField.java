@@ -9,6 +9,9 @@ import applicable.eval.Value;
 import applicable.treecode.TreeCodeContext;
 import applicable.treecode.TreeCodeType;
 import applicable.treecode.TreeCoded;
+/**
+{@link EvalField} that has no input.
+ */
 public final class CalculatedField extends EvalField{
 	final public static TreeCodeType<CalculatedField>type=new TreeCodeType(
 			CalculatedField.class.getSimpleName()){
@@ -21,8 +24,8 @@ public final class CalculatedField extends EvalField{
 		super(source,type,context);
 	}
 	@Override
-	public Value[]doEvaluation(){
-		ItemList<Value>values=newValues();
+	protected Value[]doEvaluation(){
+		ItemList<Value>values=newValueItems();
 		for(TreeCoded eval:codeds)
 			if(eval instanceof IfValue)continue;
 			else values.addItems(eval instanceof Value?asValues((Value)eval)

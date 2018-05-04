@@ -18,8 +18,12 @@ import facets.core.app.FeatureHost;
 import facets.core.app.HideableHost;
 import facets.core.app.HtmlView;
 import facets.core.app.HtmlView.InputView;
+import facets.core.app.SContentAreaTargeter.ContentArea;
+import facets.core.app.SContenter;
 import facets.core.app.ListView;
 import facets.core.app.PagedContenter;
+import facets.core.app.SAreaTarget;
+import facets.core.app.SView;
 import facets.core.app.StatefulViewable;
 import facets.core.app.StatefulViewable.Clipper;
 import facets.core.app.StatefulViewable.ClipperSource;
@@ -28,6 +32,7 @@ import facets.core.app.TextTreeView;
 import facets.core.app.TextView;
 import facets.core.app.TextView.FontFamily;
 import facets.core.app.TreeView;
+import facets.core.app.ViewerTarget;
 import facets.core.app.avatar.AvatarView;
 import facets.core.app.avatar.ZoomPanView;
 import facets.core.superficial.Notifying.Impact;
@@ -36,10 +41,6 @@ import facets.core.superficial.SNumeric;
 import facets.core.superficial.SNumeric.Coupler;
 import facets.core.superficial.STarget;
 import facets.core.superficial.app.SSurface.WindowAppSurface;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.SView;
-import facets.core.superficial.app.ViewerTarget;
-import facets.core.superficial.app.SContentAreaTargeter.ContentArea;
 import facets.facet.AreaFacets;
 import facets.facet.AreaFacets.PaneLinking;
 import facets.facet.FacetFactory;
@@ -62,6 +63,7 @@ import facets.facet.kit.avatar.SwingPainterSource;
 import facets.facet.kit.swing.PaneTabs.Pane;
 import facets.facet.kit.swing.Spacer.Filler;
 import facets.facet.kit.swing.tree.PathListPaneMaster;
+import facets.facet.kit.swing.tree.PathTreeDnDMaster;
 import facets.facet.kit.swing.tree.PathTreePaneMaster;
 import facets.util.Debug;
 import facets.util.IndexingIterator;
@@ -488,8 +490,11 @@ final public class KitSwing extends KitCore{
 				rubric.setText(decoration.rubric);
 				STarget target=item.facet().target();
 				if(target instanceof ContentArea){
-					Dimension size=((PagedContenter)((ContentArea)target).contenter).contentAreaSize();
-					pane.firePropertyChange(Dimensioned.PROPERTY,size.width,size.height<<8);
+					SContenter contenter=((ContentArea)target).contenter;
+					if(contenter instanceof PagedContenter){
+						Dimension size=((PagedContenter)contenter).contentAreaSize();
+						pane.firePropertyChange(Dimensioned.PROPERTY,size.width,size.height<<8);
+					}
 				}
 			}
 		};
@@ -650,7 +655,8 @@ final public class KitSwing extends KitCore{
 			:view instanceof TextTreeView?new HtmlTreePaneMaster()
 			:view instanceof ListView?new PathListPaneMaster()
 			:view instanceof TreeView?
-					new PathTreePaneMaster(hints.includeFlag(HINT_EXTRAS_PANE))
+					false?new PathTreePaneMaster(hints.includeFlag(HINT_EXTRAS_PANE))
+							:new PathTreeDnDMaster()
 		  :view instanceof TableView?new TablePaneMaster(stateNode,vam,this)
 		  :view instanceof AvatarView?SwingPainterSource.planeMaster(facet,
 		  		view instanceof ZoomPanView,hints)

@@ -2,6 +2,8 @@ package applicable.eval;
 import static facets.util.tree.TypedNode.*;
 import facets.util.tree.TypedNode;
 import facets.util.tree.TypedNode;
+import applicable.eval.form.EvalField;
+import applicable.eval.form.TickInput;
 import applicable.treecode.TreeCodeContext;
 import applicable.treecode.TreeCodeType;
 import applicable.treecode.TreeCoded;
@@ -17,15 +19,16 @@ public final class ValueOf extends EvalCoded{
 		super(source,type,context);
 	}
 	@Override
-	public Value[]doEvaluation(){
+	protected Value[]doEvaluation(){
 		if(!label.text.equals(UNTITLED))
-			return context.getLabelled(label).evaluate();
-		StringBuffer text=new StringBuffer();
+			return ((EvalField)context.getLabelled(label)).evaluate();
+		StringBuilder text=new StringBuilder();
 		for(TreeCoded c:codeds){
 			Value value=c instanceof Value?(Value)c:
 					((EvalCoded)c).evaluate()[0];
-			text.append(value.asText());
+			String asText=value.asText();
+			if(!asText.equals(UNTITLED))text.append(asText);
 		}
-		return asValues(Value.newContentValue(text.toString()));
+		return asValues(Value.newValue(text.toString()));
 	}
 }

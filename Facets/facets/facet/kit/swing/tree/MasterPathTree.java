@@ -2,6 +2,7 @@ package facets.facet.kit.swing.tree;
 import facets.util.Debug;
 import facets.util.OffsetPath;
 import facets.util.Titled;
+import facets.util.Tracer;
 import facets.util.Util;
 import facets.util.app.ProvidingCache;
 import facets.util.app.ProvidingCache.ItemProvider;
@@ -17,11 +18,13 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 final class MasterPathTree extends OffsetPathTree{
-	private final boolean debug=false;
+	final PathTreePaneMaster master;
 	private final Map<String,OffsetPath[]>pathStore=new HashMap();
+	@Override
 	protected void putOffsets(OffsetPath[]offsets){
 		pathStore.put(nowKey(),offsets);
 	}
+	@Override
 	protected OffsetPath[]getOffsets(){
 		return pathStore.get(nowKey());
 	}
@@ -29,40 +32,42 @@ final class MasterPathTree extends OffsetPathTree{
 		TypedNode root=(TypedNode)getModel().getRoot();
 		return root.type()+"|"+root.title();
 	}
-	MasterPathTree(TreeModel model){
-		super(model);
+	MasterPathTree(PathTreePaneMaster master,boolean multiples){
+		super(master.model);
+		this.master=master;
 		setShowsRootHandles(true);
-		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		getSelectionModel().setSelectionMode(
+				multiples?TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION
+						:TreeSelectionModel.SINGLE_TREE_SELECTION);
 	}
 	public String convertValueToText(Object value,boolean selected,
 			boolean expanded,boolean leaf,int row,boolean hasFocus){
 		return super.convertValueToText(value instanceof Titled?((Titled)value).title():value,
 				selected,expanded,leaf,row,hasFocus);
 	}
-	public OffsetPath newEventOffsetPath(TreePath path){
+	public OffsetPath newOffsetPath(TreePath path){
 		Object last=path.getLastPathComponent();
 		TreePath nodePath=last instanceof TypedNode?path:path.getParentPath();
 		TypedNode lastNode=(TypedNode)nodePath.getLastPathComponent(),
 			ancestry[]=Nodes.ancestry(lastNode);
 		NodePath ancestryPath=(NodePath)new NodePath(ancestry
 				).procrusted(ancestry[0],path.getPathComponent(0));
-		if(debug)Util.printOut("MasterPathTree.newEventOffsetPath: nodePath==path=",
-				nodePath==path);
+		t.trace(".newEventOffsetPath: nodePath==path=",nodePath==path);
 		if(nodePath==path)return ancestryPath;
 		int rowAt=getRowForPath(nodePath)+1,valueAt=getRowForPath(path),pathAt=-1;
 		for(;rowAt<=valueAt;rowAt++){
 			TreePath rowPath=getPathForRow(rowAt);
 			boolean underNodePath=nodePath.equals(rowPath.getParentPath()),
 				isValue=rowPath.getLastPathComponent()instanceof StringBuilder;
-			if(debug)Util.printOut("MasterPathTree.newEventOffsetPath: underNodePath="+underNodePath+
+			t.trace(".newOffsetPath: underNodePath="+underNodePath+
 					" isValue="+isValue);
 			if(underNodePath&&isValue)pathAt++;
 		}
-		if(debug)Util.printOut("MasterPathTree.~newEventOffsetPath: pathAt="+pathAt
-				+" valueAt="+valueAt+" rowAt="+rowAt);
+		t.trace(".~newOffsetPath: pathAt="+pathAt+" valueAt="+valueAt
+				+" rowAt="+rowAt);
 		return ancestryPath.valueAtChecked(pathAt);
 	}
-	public void setOffsetPath(OffsetPath offsets){
+	public void addOffsetPath(OffsetPath offsets){
 		TreePath nodePath=new TreePath(offsets.members(getModel().getRoot()));
 		int pathValueAt=((NodePath)offsets).valueAt();
 		if(pathValueAt>=0){
@@ -72,18 +77,19 @@ final class MasterPathTree extends OffsetPathTree{
 				TreePath rowPath=getPathForRow(rowAt);
 				boolean underNodePath=nodePath.equals(rowPath.getParentPath()),
 					isValue=rowPath.getLastPathComponent()instanceof StringBuilder;
-				if(debug)Util.printOut("MasterPathTree.setOffsetPath: underNodePath="+
+				t.trace(".setOffsetPath: underNodePath="+
 						underNodePath+" isValue="+isValue);
 				if(underNodePath&&isValue)valueAt++;
 			}
 			catch(Exception e){
+				t.trace(".setOffsetPath: e=",e);
 				return;
 			}
-			if(debug)Util.printOut("MasterPathTree.~setOffsetPath: pathAt="+pathValueAt
+			t.trace(".~setOffsetPath: pathAt="+pathValueAt
 					+" valueAt="+valueAt+" rowAt="+rowAt);
 			nodePath=getPathForRow(rowAt-1);
 		}
-		setSelectionPath(nodePath);
+		addSelectionPath(nodePath);
 		if(isShowing())scrollPathToVisible(nodePath);
 	}
 }

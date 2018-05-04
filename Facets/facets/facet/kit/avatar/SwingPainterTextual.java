@@ -26,7 +26,7 @@ import java.awt.font.LineMetrics;
 import java.awt.geom.Rectangle2D;
 final class SwingPainterTextual extends Tracer implements PickPainter,PdfPainter{
 	private static final ProvidingCache fonts=new ProvidingCache(20,null);
-	private final SwingPdfCode pd=new SwingPdfCode(this);
+	private final SwingPdfCode pd=new SwingPdfCode(this,true);
 	private final Textual m;
 	private final PlaneCanvas plane;
 	private final Component swing;

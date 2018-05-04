@@ -1,14 +1,12 @@
 package facets.core.app;
-import facets.core.superficial.FacetedTarget;
+import facets.core.app.SContentAreaTargeter.ContentArea;
 import facets.core.superficial.Notifying;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.SFrameTarget;
 import facets.core.superficial.SIndexing;
 import facets.core.superficial.STarget;
 import facets.core.superficial.STargeter;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.SContentAreaTargeter;
-import facets.core.superficial.app.SContentAreaTargeter.ContentArea;
+import facets.core.superficial.app.FacetedTarget;
 import facets.util.Debug;
 /**
 Heads a content area tree for use in a dialog page. 

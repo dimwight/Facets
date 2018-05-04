@@ -2,6 +2,7 @@ package applicable.textart;
 
 import static facets.core.app.avatar.PlaneViewWorks.*;
 import facets.core.app.PathSelection;
+import facets.core.app.SViewer;
 import facets.core.app.avatar.AvatarContent;
 import facets.core.app.avatar.AvatarPolicies;
 import facets.core.app.avatar.AvatarPolicy;
@@ -13,7 +14,6 @@ import facets.core.app.avatar.PlaneViewWorks;
 import facets.core.superficial.SIndexing;
 import facets.core.superficial.SToggling;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.SViewer;
 import facets.facet.FacetFactory;
 import facets.util.ArrayPath;
 import facets.util.ItemList;

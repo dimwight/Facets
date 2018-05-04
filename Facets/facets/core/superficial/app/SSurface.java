@@ -1,9 +1,10 @@
 package facets.core.superficial.app;
+import facets.core.app.AreaTargeter;
+import facets.core.app.SContentAreaTargeter;
 import facets.core.superficial.Notifiable;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.STargeter;
 import facets.core.superficial.app.SHost.FacetLayout;
-import facets.util.Titled;
 import java.awt.Rectangle;
 /**
 Exposes application content and logic via one or more {@link SContentAreaTargeter}s 

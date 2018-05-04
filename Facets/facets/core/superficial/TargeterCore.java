@@ -1,16 +1,13 @@
 package facets.core.superficial;
 import static facets.util.app.Events.*;
-import facets.core.superficial.Notifying.Impact;
-import facets.core.superficial.app.AreaTargeter;
-import facets.core.superficial.app.SContentAreaTargeter;
+import facets.core.app.AreaTargeter;
+import facets.core.app.SContentAreaTargeter;
 import facets.util.Debug;
 import facets.util.ItemList;
-import facets.util.Util;
 import facets.util.ItemList.TreeItems;
-import facets.util.app.Events;
+import facets.util.Util;
 import facets.util.tree.TypedNode;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 /**
 Implements {@link STargeter}. 

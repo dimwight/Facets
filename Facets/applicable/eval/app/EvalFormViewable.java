@@ -1,54 +1,53 @@
 package applicable.eval.app;
 import facets.core.app.HtmlView.InputView;
+import facets.core.app.NodeViewable;
+import facets.core.app.AppSpecifier;
+import facets.core.app.PathSelection;
+import facets.core.app.SView;
+import facets.core.app.SViewer;
 import facets.core.app.StatefulViewable;
 import facets.core.app.TextView;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.SView;
-import facets.core.superficial.app.SViewer;
 import facets.core.superficial.app.SelectionView;
 import facets.util.Debug;
 import facets.util.HtmlFormBuilder;
 import facets.util.HtmlFormBuilder.FormInput;
+import facets.util.OffsetPath;
+import facets.util.Strings;
+import facets.util.app.AppValues;
+import facets.util.tree.NodePath;
+import facets.util.tree.Nodes;
+import facets.util.tree.TypedNode;
 import applicable.eval.form.EvalForm;
-/**
-{@link StatefulViewable} wrapping a {@link EvalForm}. 
-<p>{@link EvalFormViewable} maintains {@link SSelection}s as appropriate for its {@link SViewer}s
-using {@link EvalForm#newInputsBuilder()} and {@link EvalForm#newPicksBuilder()}. 
- */
-public final class EvalFormViewable extends StatefulViewable{
-	HtmlFormBuilder inputs;
-	public EvalFormViewable(final EvalForm framed){
-		super(framed.title(),framed,null);
-		setSelection(new SSelection(){
-			@Override
-			public Object single(){
-				return framed.source;
-			}
-			@Override
-			public Object content(){
-				return framed;
-			}
-			@Override
-			public Object[]multiple(){
-				return new Object[]{single()};
-			}
-		});
-	}
-	@Override
-	protected void viewerSelectionEdited(SViewer viewer,Object edit,boolean interim){
-		inputs.readEdit((FormInput)edit);
-		inputs=null;
+import applicable.eval.view.ViewableForm;
+public final class EvalFormViewable extends NodeViewable{
+	private static final String STATE_OFFSETS="formOffsets";
+	private final AppSpecifier spec;
+	private final ViewableForm form;
+	public EvalFormViewable(ViewableForm form,AppSpecifier spec){
+		super(form.source,null);
+		this.form=form;
+		this.spec=spec;
+		final int[]offsets=spec.state().getInts(STATE_OFFSETS);
+		OffsetPath path=offsets.length>0?new NodePath(offsets):NodePath.empty;
+		Object definition;
+		TypedNode root=form.source;
+		try{
+			path.members(root);
+			definition=offsets.length==0?null:new PathSelection(root,path);
+		}catch(Exception e){
+			definition=Nodes.descendantTitled(root,"Miscellaneous options");
+		}
+		if(definition!=null)defineSelection(definition);
 	}
 	@Override
 	protected SSelection newViewerSelection(SViewer viewer){
-		final EvalForm form=(EvalForm)framed;
 		SView view=viewer.view();
 		if(view instanceof InputView){
-			if(true||inputs==null)inputs=form.newInputsBuilder();
 			return new SSelection(){
 				@Override
 				public Object content(){
-					return inputs.newPageContent();
+					return form.newPageContent();
 				}
 				@Override
 				public Object single(){
@@ -64,7 +63,7 @@ public final class EvalFormViewable extends StatefulViewable{
 			return new SSelection(){
 				@Override
 				public Object single(){
-					return form.newPicksBuilder().toString();
+					return form.newPicks();
 				}
 				@Override
 				public Object[]multiple(){
@@ -82,8 +81,13 @@ public final class EvalFormViewable extends StatefulViewable{
 	protected void viewerSelectionChanged(SViewer viewer,SSelection selection){
 		try{
 			super.viewerSelectionChanged(viewer,selection);
+			spec.state().put(STATE_OFFSETS,((PathSelection)selection).paths[0].offsets);
 		}catch(Exception e){
 			trace(".viewerSelectionChanged: e=",e);
 		}
+	}
+	@Override
+	protected void viewerSelectionEdited(SViewer viewer,Object edit,boolean interim){
+		form.readEdit(edit);
 	}
 }

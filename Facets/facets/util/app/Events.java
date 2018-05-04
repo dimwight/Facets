@@ -1,6 +1,5 @@
 package facets.util.app;
 import static facets.util.Debug.*;
-import facets.util.Debug;
 import facets.util.Times;
 import facets.util.Util;
 import facets.util.tree.Nodes;
@@ -62,14 +61,15 @@ public final class Events{
 			if(buildMonitor!=null)buildMonitor.update(noDetail,elapsed);
 		}
 		else if(!trace)return;
-		ValueNode filters=AppValues.stateDebug==null?DEFAULT_FILTERS:Nodes.guaranteedChild(
-				AppValues.stateDebug,KEY_FILTERS);
+		ValueNode filters=AppValues.stateDebug==null?DEFAULT_FILTERS
+				:Nodes.guaranteedChild(AppValues.stateDebug,KEY_FILTERS);
 		if(events&&filters!=null&&!filters.getBoolean(firstWord)){
 			long elapsed=Times.elapsed();
-			String time=(elapsed==0&&canRestart?"\n":"")+(elapsed>10000?elapsed/1000+"s":elapsed);
+			String time=(elapsed==0&&canRestart?"\n":"")
+					+(elapsed>10000?elapsed/1000+"s":elapsed);
 			msg=msg.replaceAll("^>(.+)","$1");
-			canRestart=false&&elapsed>0;
-			if(memCheck)memCheck(msg);
-			else Util.printOut(time+" "+msg);
+			canRestart=true&&elapsed>0;
+			if(false&&memCheck)memCheck(" "+msg);
+			else Util.printOut((false?"":(time+" "))+msg);
 		}
 	}}

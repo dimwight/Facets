@@ -23,7 +23,7 @@ public final class Debug{
 	public static String id(Object o){
 		return o==null?"null"
 				:o instanceof Identified?("#"+((Identified)o).identity())
-		:(" id="+((false?o.hashCode():System.identityHashCode(o))&0xfff));
+		:(" #"+((false?o.hashCode():System.identityHashCode(o))&0xfff));
 	}
 	/**
 		Returns basic information about an object's type and identity. 

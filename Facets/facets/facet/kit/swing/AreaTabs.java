@@ -1,9 +1,9 @@
 package facets.facet.kit.swing;
 import static facets.facet.FacetFactory.*;
 import facets.core.app.PagedContenter;
+import facets.core.app.SAreaTarget;
+import facets.core.app.SContentAreaTargeter.ContentArea;
 import facets.core.superficial.Notifying.Impact;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.SContentAreaTargeter.ContentArea;
 import facets.core.superficial.SFacet;
 import facets.facet.kit.Decoration;
 import facets.facet.kit.KWrap;

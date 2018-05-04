@@ -10,6 +10,7 @@ import java.util.Map;
 import applicable.eval.form.CalculatedField;
 import applicable.eval.form.DateStamp;
 import applicable.eval.form.EvalRecord;
+import applicable.eval.form.InputValues;
 import applicable.eval.form.NumberInput;
 import applicable.eval.form.SwitchInput;
 import applicable.eval.form.TickInput;
@@ -66,6 +67,7 @@ public class EvalTypes extends TreeCodeTypes{
 				NumberInput.type,
 				ValueMatching.type,
 				CalculatedField.type,
+				InputValues.type,
 				ValueOf.type,
 				DateStamp.type,
 				TableEvaluation.type,

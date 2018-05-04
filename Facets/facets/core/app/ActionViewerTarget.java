@@ -1,16 +1,10 @@
 package facets.core.app;
-import facets.core.superficial.FacetedTarget;
 import facets.core.superficial.SFrameTarget;
 import facets.core.superficial.SIndexing;
 import facets.core.superficial.STarget;
 import facets.core.superficial.STrigger;
 import facets.core.superficial.TargetCore;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.SView;
 import facets.core.superficial.app.SelectionView;
-import facets.core.superficial.app.ViewableAction;
-import facets.core.superficial.app.ViewableFrame;
-import facets.core.superficial.app.ViewerTarget;
 import facets.util.Debug;
 import java.util.HashMap;
 import java.util.Map;

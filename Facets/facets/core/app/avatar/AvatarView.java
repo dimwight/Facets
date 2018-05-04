@@ -1,6 +1,6 @@
 package facets.core.app.avatar;
-import facets.core.superficial.app.SView;
-import facets.core.superficial.app.SViewer;
+import facets.core.app.SView;
+import facets.core.app.SViewer;
 /**
 Policy for a viewer that uses custom avatars. 
 <p>{@link AvatarView} defines 

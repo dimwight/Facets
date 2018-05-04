@@ -1,8 +1,8 @@
 package facets.core.app;
-import static facets.core.superficial.app.AreaTargeter.*;
+import static facets.core.app.AreaTargeter.*;
 import static facets.util.app.Events.*;
 import facets.core.app.AppSurface.ContentStyle;
-import facets.core.superficial.FacetedTarget;
+import facets.core.app.SContentAreaTargeter.ContentArea;
 import facets.core.superficial.Notice;
 import facets.core.superficial.Notifying;
 import facets.core.superficial.Notifying.Impact;
@@ -11,16 +11,13 @@ import facets.core.superficial.SFrameTarget;
 import facets.core.superficial.SIndexing;
 import facets.core.superficial.SIndexing.Coupler;
 import facets.core.superficial.STarget;
-import facets.core.superficial.app.AreaTargeter;
+import facets.core.superficial.app.FacetedTarget;
 import facets.core.superficial.app.IndexingTarget;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.SContentAreaTargeter;
-import facets.core.superficial.app.SContenter;
-import facets.core.superficial.app.SContentAreaTargeter.ContentArea;
 import facets.core.superficial.app.SHost.FacetLayout;
 import facets.util.Debug;
 import facets.util.ItemList;
 import facets.util.Objects;
+import facets.util.Times;
 import facets.util.Tracer;
 import facets.util.TypesKey;
 import facets.util.app.WatchableOperation;
@@ -225,24 +222,36 @@ final class AppAreas extends Tracer{
 		public void doSimpleOperation(){
 			traceEvent(">Laying out surface "+Debug.info(app)+" contents="+contents.size());
 		  AppContenter first=contents.get(0),activeContent=first;
+		  //Find the active content unnecessarily?
 			if(first instanceof ViewerContenter){
 				SFrameTarget frame=activeContentFrame();
 				for(AppContenter content:contents)
 					if(((ViewerContenter)content).contentFrame()==frame)
 						activeContent=content;
 			}
-		  SContentAreaTargeter activeArea=(SContentAreaTargeter)targeter.areaAt(AREA_ACTIVE),
-				useArea=activeContent.useActiveFeatures(activeArea)?activeArea
+		  SContentAreaTargeter activeArea=
+		  		(SContentAreaTargeter)targeter.areaAt(AREA_ACTIVE),
+				useArea=false&&activeContent.useActiveFeatures(activeArea)?activeArea
+						//Always this one!
 					:(SContentAreaTargeter)targeter.areaAt(AREA_CONTENT);
+		  //And this one!
 		  SContenter useContent=((ContentArea)useArea.target()).contenter;
+		  //Assert apparent redundancy?
+		  if(false&&useContent!=activeContent)throw new IllegalStateException(
+					"useContent "+Debug.info(useContent)+" different from "+Debug.info(activeContent)
+					+ " in "+this);
 		  useContent.areaRetargeted(useArea);
 		  app.appRetargeted();
 		  featuresKey=activeContent.featuresKey(useArea);
-			traceEvent(">Getting layout for" +Debug.info(useArea)+" featuresKey="+featuresKey);
+			traceEvent(">Getting layout for " +Debug.info(useArea)+" featuresKey="+featuresKey);
 		  layout=layouts.get(featuresKey);
 		  FeatureHost host=(FeatureHost)app.host();
-			if(layout==null)layouts.put(featuresKey,layout=host.newLayout(appFacet,
-					((AppContenter)useContent).newContentFeatures(useArea)));
+			if(layout==null){
+				layout=host.newLayout(appFacet,
+						((AppContenter)useContent).newContentFeatures(useArea));
+				//false saves 50ms, uses a bit of memory but triggers bug! 
+				if(true)layouts.put(featuresKey,layout);
+			}
 			traceEvent(">Passing layout " +Debug.info(layout)+" of "+layouts.size()
 					+" to host " +Debug.info(host));
 			host.setLayout(layout);

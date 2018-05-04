@@ -1,5 +1,4 @@
 package facets.util;
-import static facets.util.Regex.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;

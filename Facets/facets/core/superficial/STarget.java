@@ -1,6 +1,5 @@
 package facets.core.superficial;
-import facets.core.superficial.Notifying.Impact;
-import facets.util.Titled;
+
 /**
 Superfical target. 
 <p>{@link STarget} represents an application element to one or more 

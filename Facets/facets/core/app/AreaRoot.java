@@ -1,13 +1,9 @@
 package facets.core.app;
 import static facets.util.Debug.*;
-import facets.core.superficial.FacetedTarget;
 import facets.core.superficial.SIndexing;
 import facets.core.superficial.STarget;
+import facets.core.superficial.app.FacetedTarget;
 import facets.core.superficial.app.IndexingTarget;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.SView;
-import facets.core.superficial.app.SViewer;
-import facets.core.superficial.app.ViewerTarget;
 import facets.util.Debug;
 import facets.util.ItemList;
 import facets.util.OffsetPath;

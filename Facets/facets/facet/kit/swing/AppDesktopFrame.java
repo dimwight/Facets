@@ -61,6 +61,11 @@ final class AppDesktopFrame extends JInternalFrame implements BusySettable{
 		else isMaximum=on;
 		trace("~trySetMaximum: "+on+" ");
 	}
+	@Override
+	public void repaint(){
+		updateTitle();
+		super.repaint();
+	}
 	void trySetSelected(){
 		try{
 			trace("trySetSelected");
@@ -72,6 +77,7 @@ final class AppDesktopFrame extends JInternalFrame implements BusySettable{
 		}
 	}
 	void updateTitle(){
+		if(content==null)return;
 		setFrameIcon(content.windowIcon());
 		setTitle(content.windowTitle());
 	}

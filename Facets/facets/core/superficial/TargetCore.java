@@ -1,6 +1,5 @@
 package facets.core.superficial;
 import static facets.util.app.Events.*;
-import facets.core.superficial.app.ViewerTarget;
 import facets.util.Debug;
 import facets.util.ItemList;
 import facets.util.Objects;

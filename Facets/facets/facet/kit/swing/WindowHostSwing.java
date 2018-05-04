@@ -168,6 +168,7 @@ final class WindowHostSwing extends AppWindowHost{
 		return new HostBounds(nature,stateApp){
 			@Override
 			protected Rectangle windowBounds(){
+				if(false)trace(".windowBounds: frame=",frame.getMaximizedBounds().height);
 				Rectangle bounds=frame.getBounds();
 				return frame.isVisible()?bounds:new Rectangle();
 			}

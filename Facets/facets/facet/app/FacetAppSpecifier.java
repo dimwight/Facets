@@ -16,13 +16,13 @@ import facets.core.app.HtmlView;
 import facets.core.app.PagedActions;
 import facets.core.app.PagedContenter;
 import facets.core.app.PagedSurface;
+import facets.core.app.SContentAreaTargeter;
 import facets.core.app.TreeView;
 import facets.core.app.ViewerContenter;
 import facets.core.app.AppSurface.ContentStyle;
 import facets.core.app.Dialogs.Response;
 import facets.core.app.Dialogs.Surfacer;
 import facets.core.app.avatar.PainterMaster.Textual;
-import facets.core.superficial.app.SContentAreaTargeter;
 import facets.core.superficial.app.SHost;
 import facets.core.superficial.app.SSurface;
 import facets.facet.FacetFactory;
@@ -235,6 +235,7 @@ public abstract class FacetAppSpecifier extends AppSpecifier{
 			NATURE_DEBUG+"="+true,
 			NATURE_RUN_WATCHED+"="+!Debug.natureDebug,
 		},new Object[]{
+			NATURE_PREFERENCES+"=true",
 			NATURE_ICON_STORE_PATH+"=_image/icon_",
 			NATURE_DEBUG+"="+true,
 			HostBounds.NATURE_SIZE_MIN+"=400,200",

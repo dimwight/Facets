@@ -1,12 +1,9 @@
 package facets.core.app;
+import facets.core.app.SContentAreaTargeter.ContentArea;
 import facets.core.superficial.SIndexing;
 import facets.core.superficial.STarget;
 import facets.core.superficial.Notifying.Impact;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.SView;
 import facets.core.superficial.app.SelectingFrame;
-import facets.core.superficial.app.ViewerTarget;
-import facets.core.superficial.app.SContentAreaTargeter.ContentArea;
 public abstract class NestedView extends FacetHostable implements SView{
 	private final String title;
 	public NestedView(String title){

@@ -1,7 +1,7 @@
 package facets.core.app;
 import facets.core.app.ViewableStates.Change;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.ViewableFrame;
+import facets.util.Debug;
 import facets.util.Objects;
 import facets.util.Stateful;
 import facets.util.tree.NodePath;
@@ -29,6 +29,7 @@ abstract class StatefulViewableCore extends ViewableFrame{
 	</ol>
 	 */
 	public void setFramedState(final Object stateSpec,boolean interim){
+		traceDebug(".setFramedState: selection=",selection());
 		Stateful[]selections=newSelectionArray(selection()),
 			edits=newSelectionArray(new SSelection(){
 				@Override
@@ -97,14 +98,15 @@ abstract class StatefulViewableCore extends ViewableFrame{
 	}
 	final public static Stateful[]newSelectionArray(SSelection selection){
 		Object[]multiple=selection.multiple();
-		if(multiple.length>1)throw new RuntimeException("Not implemented for "+selection);
-		NodePath path=(NodePath)((PathSelection)selection).paths[0];
-		int valueAt=path.valueAt();
-		if(valueAt>=0){
-			TypedNode parent=(TypedNode)((Stateful)multiple[0]);
-			Object[]content=parent.contents();
-			multiple[0]=new NodeUndoableEdit.ValueCarrier(parent,
-					content[NodeUndoableEdit.contentAt(content,parent,valueAt)]);
+		if(selection instanceof PathSelection)for(int at=0;at<multiple.length;at++){
+			NodePath path=(NodePath)((PathSelection)selection).paths[at];
+			int valueAt=path.valueAt();
+			if(valueAt>=0){
+				TypedNode parent=(TypedNode)((Stateful)multiple[at]);
+				Object[]content=parent.contents();
+				multiple[at]=new NodePathEdit.ValueCarrier(parent,
+						content[NodePathEdit.contentAt(content,parent,valueAt)]);
+			}
 		}
 		return Objects.newTyped(Stateful.class,multiple);
 	}

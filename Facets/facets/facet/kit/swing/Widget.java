@@ -1,5 +1,5 @@
 package facets.facet.kit.swing;
-import facets.core.superficial.app.SurfaceStyle;
+import facets.core.app.SurfaceStyle;
 import facets.facet.FacetFactory;
 import facets.facet.SwingPanelFacet;
 import facets.facet.kit.Decoration;

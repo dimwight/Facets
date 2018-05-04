@@ -1,10 +1,10 @@
 package facets.facet.kit.avatar;
+import facets.core.app.SViewer;
 import facets.core.app.avatar.AvatarContent;
 import facets.core.app.avatar.AvatarView;
 import facets.core.app.avatar.DragPolicy;
 import facets.core.app.avatar.PainterSource;
 import facets.core.app.avatar.DragPolicy.Constraints;
-import facets.core.superficial.app.SViewer;
 import facets.util.Debug;
 import facets.util.geom.Point;
 import facets.util.geom.Vector;

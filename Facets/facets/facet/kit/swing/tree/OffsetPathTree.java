@@ -1,6 +1,8 @@
 package facets.facet.kit.swing.tree;
 import facets.util.Debug;
+import facets.util.Objects;
 import facets.util.OffsetPath;
+import facets.util.Tracer;
 import facets.util.Util;
 import facets.util.tree.TypedNode;
 import java.awt.Insets;
@@ -10,7 +12,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JTree;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-public class OffsetPathTree extends JTree{
+public abstract class OffsetPathTree extends JTree{
+	protected final Tracer t=Tracer.newTopped(getClass().getSimpleName(),false);
 	private static class ModelPath extends OffsetPath{
 		private final TreeModel model;
 		ModelPath(TreeModel model,Object[]members){
@@ -48,8 +51,22 @@ public class OffsetPathTree extends JTree{
 	final public OffsetPath newTreeOffsetPath(int[]offsets){
 		return new ModelPath(getModel(),offsets);
 	}
-	public OffsetPath newEventOffsetPath(TreePath path){
+	public OffsetPath newOffsetPath(TreePath path){
 		return new ModelPath(getModel(),path.getPath());
+	}
+	private OffsetPath[]offsets;
+	public OffsetPathTree(TreeModel model){
+		super(model);
+		setFont(new JMenuBar().getFont());
+	}
+	final void storeAndClearExpansionPaths(){
+		Enumeration expanded=getExpandedDescendants(new TreePath(getModel().getRoot()));
+		final TreePath[]trees=expanded==null?new TreePath[]{}:
+	    (TreePath[])Collections.list(expanded).toArray(new TreePath[]{});
+		OffsetPath[]offsets=false&&trees==null?null:newOffsetPaths(trees);
+		t.trace(".storeExpansionPaths: offsets=",offsets);
+		putOffsets(offsets);
+		removeSelectionPaths(getSelectionPaths());
 	}
 	private OffsetPath[]newOffsetPaths(TreePath[]trees){
 		OffsetPath[]offsets=new OffsetPath[trees.length];
@@ -64,28 +81,18 @@ public class OffsetPathTree extends JTree{
 		}
 		return offsets;
 	}
-	private OffsetPath[]offsets;
-	public OffsetPathTree(TreeModel model){
-		super(model);
-		setFont(new JMenuBar().getFont());
-	}
-	final void storeExpansionPaths(){
-		Enumeration expanded=getExpandedDescendants(new TreePath(getModel().getRoot()));
-		final TreePath[]trees=expanded==null?new TreePath[]{}:
-	    (TreePath[])Collections.list(expanded).toArray(new TreePath[]{});
-		OffsetPath[]offsets=trees==null?null:newOffsetPaths(trees);
-		if(false)Util.printOut("OffsetPathTree.storeExpansionPaths: offsets=",offsets);
-		putOffsets(offsets);
-	}
 	final void restoreExpansionPaths(){
 		OffsetPath[]offsets=getOffsets();
-		if(false)Util.printOut("OffsetPathTree.restoreExpansionPaths: offsets=",offsets);
-	  if(offsets!=null)for(OffsetPath o:offsets)try{
-		  	expandPath(new TreePath(o.members(getModel().getRoot())));
+		if(offsets==null)return;
+		t.trace(".restoreExpansionPaths: offsets=",offsets);
+		Object root=getModel().getRoot();
+		OffsetPath failed=null;
+	  for(OffsetPath o:offsets)
+	  	if(o.offsets.length>2)try{
+				expandPath(new TreePath((failed=o).members(root)));
 		  }
 		  catch(Exception e){
-		  	if(true)Util.printOut("PathTree.restoreExpansionPaths: ",Debug.info(this));
-		  	return;
+		  	if(false)Util.printOut("OffsetPathTree.restoreExpansionPaths: failed=",failed);
 		  }
 	}
 	@Override
@@ -95,12 +102,8 @@ public class OffsetPathTree extends JTree{
 	public void setOffsetPath(OffsetPath offsets){
 		setSelectionPath(new TreePath(offsets.members(getModel().getRoot())));
 	}
-	protected void putOffsets(OffsetPath[]offsets){
-		this.offsets=offsets;
-	}
-	protected OffsetPath[]getOffsets(){
-		return offsets;
-	}
+	protected abstract OffsetPath[]getOffsets();
+	protected abstract void putOffsets(OffsetPath[]offsets);
 	final void expandOrCollapse(TreePath path,int level,boolean expand){
 		Object last=path.getLastPathComponent();
 		if(!(last instanceof TypedNode))return;

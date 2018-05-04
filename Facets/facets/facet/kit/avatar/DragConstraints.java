@@ -1,5 +1,5 @@
 package facets.facet.kit.avatar;
-import facets.core.superficial.app.SViewer;
+import facets.core.app.SViewer;
 import facets.util.Debug;
 import facets.util.geom.Angle;
 import facets.util.geom.Point;

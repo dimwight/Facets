@@ -16,7 +16,7 @@ import java.util.Map;
 /**
 FrameTargeter for an {@link IndexingTarget}.   
 <p>{@link IndexingTargeter} defines much important behaviour used by 
-	{@link facets.core.superficial.app.AreaTargeter}. In particular, it ensures 
+	{@link facets.core.app.AreaTargeter}. In particular, it ensures 
 	that at each retargeting an appropriate targeter is either created or 
 	(more importantly) retrieved for retargeting to its target's indexed child; 
 	the criterion used being the {@link Class} of the targeter returned by the 

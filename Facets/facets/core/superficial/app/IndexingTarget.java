@@ -1,19 +1,18 @@
 package facets.core.superficial.app;
-import facets.core.superficial.FacetedTarget;
+import facets.core.app.SViewer;
 import facets.core.superficial.SIndexing;
 import facets.core.superficial.STarget;
 import facets.core.superficial.STargeter;
 import facets.core.superficial.TargetCore;
 import facets.util.Debug;
 import facets.util.ItemList;
-import facets.util.Util;
 import facets.util.tree.TypedNode;
 import java.util.Arrays;
 import java.util.List;
 /**
 {@link STarget} with indexing of {@link STarget} children. 
 <p>{@link IndexingTarget} defines key behaviour needed by 
-{@link facets.core.superficial.app.SAreaTarget}, based on an 
+{@link facets.core.app.SAreaTarget}, based on an 
 {@link SIndexing} of {@link facets.core.superficial.STarget} children. 
  */
 public abstract class IndexingTarget extends TargetCore{

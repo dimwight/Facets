@@ -1,10 +1,10 @@
 package facets.facet.kit.swing;
 import static facets.facet.FacetFactory.*;
+import facets.core.app.SurfaceStyle;
 import facets.core.superficial.SNumeric;
 import facets.core.superficial.STarget;
 import facets.core.superficial.STextual;
 import facets.core.superficial.STextual.Update;
-import facets.core.superficial.app.SurfaceStyle;
 import facets.facet.FacetFactory;
 import facets.facet.SwingPanelFacet;
 import facets.facet.FacetFactory.SuggestionsCoupler;

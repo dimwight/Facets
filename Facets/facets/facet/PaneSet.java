@@ -1,11 +1,11 @@
 package facets.facet;
 import static facets.facet.AreaFacets.*;
 import static facets.util.Debug.*;
+import facets.core.app.SAreaTarget;
 import facets.core.app.TypeKeyable;
 import facets.core.superficial.Facetable;
-import facets.core.superficial.FacetedTarget;
 import facets.core.superficial.Notifying.Impact;
-import facets.core.superficial.app.SAreaTarget;
+import facets.core.superficial.app.FacetedTarget;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.STarget;
 import facets.core.superficial.SToggling;

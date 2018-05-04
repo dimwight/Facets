@@ -1,8 +1,8 @@
 package facets.facet.kit.avatar;
+import facets.core.app.ViewerTarget;
 import facets.core.app.avatar.PlaneView;
 import facets.core.app.avatar.ZoomPanView;
 import facets.core.superficial.Notifying.Impact;
-import facets.core.superficial.app.ViewerTarget;
 import facets.facet.kit.KViewer;
 import facets.facet.kit.KitFacet;
 import facets.util.Debug;

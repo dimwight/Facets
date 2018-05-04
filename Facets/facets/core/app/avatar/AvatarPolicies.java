@@ -1,10 +1,10 @@
 package facets.core.app.avatar;
+import facets.core.app.SViewer;
+import facets.core.app.ViewableFrame;
 import facets.core.app.avatar.AvatarContent.Applicable;
 import facets.core.superficial.SFrameTarget;
 import facets.core.superficial.STarget;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.SViewer;
-import facets.core.superficial.app.ViewableFrame;
 import facets.util.Debug;
 import facets.util.Objects;
 import facets.util.Tracer;

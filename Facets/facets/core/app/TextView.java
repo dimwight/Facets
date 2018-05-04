@@ -1,7 +1,6 @@
 package facets.core.app;
 import static facets.core.app.TextView.FontFamily.*;
 import facets.core.app.TextView.FontFamily;
-import facets.core.superficial.app.SView;
 import facets.core.superficial.app.SelectionView;
 import javax.swing.text.View;
 /**

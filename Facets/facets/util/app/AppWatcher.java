@@ -79,7 +79,7 @@ public abstract class AppWatcher extends Tracer{
 	private boolean passingException,blocking;
 	private Exception exception;
 	private Object returnable;
-	public static final String LIVE="1/1/18";
+	public static final String LIVE="1/7/18";
 	final public void pushCursor(BusyCursor cursor){
 		if(cursor==null)throw new IllegalArgumentException(
 				"Null cursor in "+Debug.info(this));

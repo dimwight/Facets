@@ -4,6 +4,7 @@ import facets.core.superficial.STarget;
 import facets.core.superficial.STextual;
 import facets.core.superficial.STrigger;
 import facets.core.superficial.Notifying.Impact;
+import facets.core.superficial.STextual.Coupler;
 import facets.core.superficial.STextual.Update;
 import facets.facet.FacetFactory.SuggestionsCoupler;
 import facets.facet.kit.KField;
@@ -23,8 +24,9 @@ final class TextualField extends SimpleMaster{
   @Override
   protected void notifyingSingle(STarget target,Object msg){
   	super.notifyingSingle(target,msg);
-  	if(msg==Update.Commit)
-  		((SuggestionsCoupler)((STextual)target).coupler).commitTrigger().fire();
+  	Coupler coupler=((STextual)target).coupler;
+  	if(msg==Update.Commit&&coupler instanceof SuggestionsCoupler)
+  		((SuggestionsCoupler)coupler).commitTrigger().fire();
   }
   @Override
   public void attachedToFacet(){

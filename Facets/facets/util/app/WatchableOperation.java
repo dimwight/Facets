@@ -1,7 +1,6 @@
 package facets.util.app;
-import facets.util.Debug;
-import facets.util.Util;
-	/**
+
+/**
 	Wrapper for code to be monitored by {@link AppWatcher}. 
 	 */
 	public abstract class WatchableOperation<T>{

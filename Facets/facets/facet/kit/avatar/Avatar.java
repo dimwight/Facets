@@ -1,5 +1,7 @@
 package facets.facet.kit.avatar;
 import static facets.util.Objects.*;
+import facets.core.app.SView;
+import facets.core.app.SViewer;
 import facets.core.app.avatar.AvatarContent;
 import facets.core.app.avatar.AvatarPolicy;
 import facets.core.app.avatar.AvatarView;
@@ -8,8 +10,6 @@ import facets.core.app.avatar.PainterSource;
 import facets.core.app.avatar.PickPainter;
 import facets.core.app.avatar.Pickable;
 import facets.core.app.avatar.Painter.Style;
-import facets.core.superficial.app.SView;
-import facets.core.superficial.app.SViewer;
 import facets.util.Debug;
 import facets.util.Objects;
 import facets.util.Tracer;

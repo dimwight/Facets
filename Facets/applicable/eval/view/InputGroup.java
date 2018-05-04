@@ -1,13 +1,13 @@
 package applicable.eval.view;
 import facets.util.tree.TypedNode;
+import applicable.eval.EvalCoded;
 import applicable.eval.EvalContext;
 import applicable.eval.IfValue;
 import applicable.eval.Value;
-import applicable.eval.form.InputField;
 import applicable.treecode.TreeCodeContext;
 import applicable.treecode.TreeCodeType;
 import applicable.treecode.TreeCoded;
-public final class InputGroup extends InputField{
+public final class InputGroup extends EvalCoded{
 	final public static TreeCodeType<InputGroup>type=new TreeCodeType(
 			InputGroup.class.getSimpleName()){
 		@Override

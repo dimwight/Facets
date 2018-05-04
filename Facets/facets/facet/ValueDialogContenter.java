@@ -1,11 +1,11 @@
 package facets.facet;
 import facets.core.app.AppConstants;
 import facets.core.app.PagedSurface;
+import facets.core.app.SContentAreaTargeter;
 import facets.core.app.ValueContent;
 import facets.core.superficial.Notice;
 import facets.core.superficial.Notifying;
 import facets.core.superficial.STarget;
-import facets.core.superficial.app.SContentAreaTargeter;
 import facets.core.superficial.app.SSurface;
 import facets.facet.app.FacetPagedContenter;
 import facets.util.Util;

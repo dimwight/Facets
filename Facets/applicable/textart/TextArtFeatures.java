@@ -3,14 +3,14 @@ package applicable.textart;
 import static applicable.textart.TextArtConstants.*;
 import facets.core.app.MenuFacets;
 import facets.core.app.MountFacet;
+import facets.core.app.SAreaTarget;
+import facets.core.app.SContentAreaTargeter;
+import facets.core.app.ViewableFrame;
+import facets.core.app.ViewerTarget;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.SIndexing;
 import facets.core.superficial.STargeter;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.SContentAreaTargeter;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.ViewableFrame;
-import facets.core.superficial.app.ViewerTarget;
 import facets.facet.AppFacetsBuilder;
 import facets.facet.AreaFacets;
 import facets.facet.FacetFactory;
@@ -220,7 +220,7 @@ public class TextArtFeatures extends FacetFactory{
 				triggerButtons(states, HINT_GRID + HINT_BARE), 
 				BREAK, 
 				triggerButtons(selectionCore, HINT_NONE), 
-				textualField(text, 15, HINT_BARE), 
+				textualField(text, 20, HINT_BARE), 
 				BREAK, 
 				indexingDropdownList(views, HINT_NONE), 
 				BREAK, 

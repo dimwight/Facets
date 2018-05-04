@@ -1,14 +1,14 @@
 package facets.facet.kit.swing;
-import static facets.core.superficial.app.SViewer.*;
+import static facets.core.app.SViewer.*;
 import static javax.swing.SwingUtilities.*;
 import static javax.swing.text.StyleConstants.*;
 import facets.core.app.HtmlContent;
 import facets.core.app.HtmlView;
+import facets.core.app.ViewerTarget;
 import facets.core.app.HtmlContent.HtmlSelected;
 import facets.core.app.HtmlView.SmartView;
 import facets.core.superficial.Notifying.Impact;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.ViewerTarget;
 import facets.util.Debug;
 import facets.util.StringFlags;
 import facets.util.Times;

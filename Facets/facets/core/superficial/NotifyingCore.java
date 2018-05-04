@@ -1,19 +1,11 @@
 package facets.core.superficial;
 import static facets.util.app.Events.*;
-import facets.core.superficial.Notifying.Impact;
 import facets.util.Debug;
 import facets.util.Identified;
 import facets.util.Stateful;
 import facets.util.Tracer;
 import facets.util.Util;
-import facets.util.app.Events;
 import facets.util.tree.TypedNode;
-
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 /**
 Core implementation of key interfaces. 
 <p>{@link NotifyingCore} is the shared superclass of both the {@link STarget} and
@@ -25,12 +17,12 @@ abstract class NotifyingCore extends Tracer implements Notifying,Identified{
 	private TypedNode newContentNode(String title,final Object...passed){
 		return new TypedNode(Object.class,"Graph",title
 				.substring(0,Math.min(title.length(),50)).replaceAll("\\s+"," ")){
-			private Object[]contents=passed;
+			private Object[]content=passed;
 			public Object[]contents(){
-				if(contents.length>0)return contents;
+				if(content.length>0)return content;
 			  final TypedNode children[]=newDebugChildren();
 			  for(int i=0;i<children.length;i++)children[i].setParent(this);
-				return contents=children;
+				return content=children;
 			}
 			@Override
 			public boolean stateEquals(Stateful s){

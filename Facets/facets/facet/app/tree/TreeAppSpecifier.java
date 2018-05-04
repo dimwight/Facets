@@ -1,4 +1,5 @@
 package facets.facet.app.tree;
+import static facets.core.app.ActionViewerTarget.Action.*;
 import static facets.facet.app.FacetPreferences.*;
 import static facets.facet.app.tree.TreeTargets.*;
 import static facets.util.tree.DataConstants.*;
@@ -10,8 +11,15 @@ import facets.core.app.ListView;
 import facets.core.app.MenuFacets;
 import facets.core.app.NodeViewable;
 import facets.core.app.PagedContenter;
+import facets.core.app.SAreaTarget;
+import facets.core.app.SContentAreaTargeter;
+import facets.core.app.SContenter;
+import facets.core.app.SView;
+import facets.core.app.SViewer;
 import facets.core.app.TableView;
 import facets.core.app.TreeView;
+import facets.core.app.ViewableAction;
+import facets.core.app.ViewableFrame;
 import facets.core.app.ViewerContenter;
 import facets.core.app.AppSurface.ContentStyle;
 import facets.core.app.FeatureHost.LayoutFeatures;
@@ -20,14 +28,10 @@ import facets.core.superficial.SFrameTarget;
 import facets.core.superficial.SIndexing;
 import facets.core.superficial.STarget;
 import facets.core.superficial.STargeter;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.SContentAreaTargeter;
-import facets.core.superficial.app.SContenter;
 import facets.core.superficial.app.SHost;
 import facets.core.superficial.app.SSurface;
-import facets.core.superficial.app.SView;
-import facets.core.superficial.app.ViewableFrame;
 import facets.core.superficial.app.SHost.FacetLayout;
+import facets.core.superficial.app.SSelection;
 import facets.facet.FacetFactory;
 import facets.facet.app.FacetAppSpecifier;
 import facets.facet.app.FacetAppSurface;
@@ -40,6 +44,7 @@ import facets.util.tree.Nodes;
 import facets.util.tree.TypedNode;
 import facets.util.tree.XmlPolicy;
 import facets.util.tree.XmlSpecifier;
+import java.io.File;
 /**
 {@link FacetAppSpecifier} for simple applications with {@link DataNode} content. 
 <p>{@link TreeAppSpecifier} exemplifies practical use of the superclass with
@@ -83,8 +88,7 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	Locks superclass implementation. 
 	 */
 	@Override
-	protected
-	final AppActions newActions(ActionAppSurface app){
+	protected final AppActions newActions(ActionAppSurface app){
 		return super.newActions(app);
 	}
 	@Override
@@ -147,7 +151,8 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	may be changed by passing {@link #ARG_TREE_SIZE}=<code>width</code> 
 	 */
 	protected Object getInternalContentSource(){
-		return Nodes.newTestTree("Test",nature().getOrPutInt(ARG_TREE_SIZE,false?-1:3));
+		return false?new File("Test.xml")
+				:Nodes.newTestTree("Test",nature().getOrPutInt(ARG_TREE_SIZE,false?-1:3));
 	}
 	/**
 	Enables redefinition of {@link SView}s supplying viewer policy. 
@@ -157,20 +162,31 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	 */
 	protected SView[]newContentViews(NodeViewable viewable){
 		final String rootTitle=((TypedNode)viewable.framed).title();
-		final boolean liveViews=canEditContent();
-		SView view=new TreeView("View"){
-			public boolean hideRoot(){
-				return true||rootTitle.endsWith(TYPE_XML);
-			}
-			public boolean isLive(){
-				return liveViews;
-			}
-		},
-		basic=new TreeView("Basic"){
+		final boolean liveViews=canEditContent(),multiples=true;
+		SView basic=new TreeView(multiples?"Single":"Basic"){
 			@Override
 			public String contentIconKey(Object content){
 				return null;
 			}
+			@Override
+			public boolean isLive(){
+				return liveViews;
+			}
+			@Override
+			public boolean allowMultipleSelection(){
+				return false;
+			}
+		},
+		view=new TreeView(multiples?"Multiple":"View"){
+			@Override
+			public boolean allowMultipleSelection(){
+				return true;
+			}
+			@Override
+			public boolean hideRoot(){
+				return false&&rootTitle.endsWith(TYPE_XML);
+			}
+			@Override
 			public boolean isLive(){
 				return liveViews;
 			}
@@ -201,13 +217,26 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	 */
 	protected SFacet[]newTreeMenuItems(FacetFactory ff,STargeter[]treeLinks,
 			STargeter[]contentLinks){
+		if(false){
+			trace(".newTreeMenuItems: treeLinks=",treeLinks);
+			trace(".newTreeMenuItems: contentLinks=",contentLinks);
+		}
 		String hint=FacetFactory.HINT_NONE;
-		return canCreateContent()?new SFacet[]{
+		return canCreateContent()&&treeLinks.length>1?new SFacet[]{
 			ff.triggerMenuItems(treeLinks[TARGET_TYPE],hint),
 			ff.triggerMenu(treeLinks[TARGET_ENCODE],hint),
 		}
-		:new SFacet[]{
-				ff.triggerMenuItems(treeLinks[TARGET_SEARCH],hint),
-			};
+		:new SFacet[]{};
+	}
+	protected ViewableAction[]viewerActions(SView view){
+		ViewableAction[]all={COPY,CUT,PASTE,PASTE_INTO,DELETE,MODIFY,UNDO,REDO};
+		return view.isLive()?all:new ViewableAction[]{COPY};
+	}
+	protected boolean usesTreeTargets(){
+		return true;
+	}
+	public boolean viewerSelectionChanged(NodeViewable viewable,SViewer viewer,
+			SSelection selection){
+		return false;
 	}
 }

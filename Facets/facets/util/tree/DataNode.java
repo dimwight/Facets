@@ -1,7 +1,6 @@
 package facets.util.tree;
 import static facets.util.tree.Nodes.*;
 import facets.util.Debug;
-import facets.util.Doubles;
 import facets.util.IndexingIterator;
 import facets.util.Objects;
 import facets.util.Stateful;
@@ -9,8 +8,6 @@ import facets.util.Strings;
 import facets.util.Util;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 /**
 Mutable, persistable {@link TypedNode}. 

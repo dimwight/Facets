@@ -4,7 +4,6 @@ import facets.util.Debug;
 import facets.util.Times;
 import facets.util.Tracer;
 import facets.util.Util;
-import facets.util.app.BusyCursor.BusySettable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
@@ -45,7 +44,7 @@ public abstract class BusyCursor extends Tracer{
 	}
 	final void checkBusyState(boolean busy){
 		if(busyThen==busy)return;
-		if(busyThen&&!busy)traceEvent(">Cursor not busy");
+		if(busyThen&&!busy)traceEvent("Cursor not busy");
 		busyThen=busy;
 		final int call=calls++;
 		trace(newCallMsg(call,"checkBusyState",busy));

@@ -253,7 +253,7 @@ public class ProvidingCache extends Tracer{
 			return false;
 		}
 		protected long buildByteCount(){
-			throw new RuntimeException("Not implemented in "+Debug.info(this));
+			return 0;
 		}
 		protected long finalByteCount(T item){
 			return buildByteCount();

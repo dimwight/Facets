@@ -1,11 +1,11 @@
 package facets.facet;
 import static facets.facet.FacetFactory.*;
+import facets.core.app.SAreaTarget;
 import facets.core.app.TypeKeyable;
+import facets.core.app.ViewerTarget;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.STarget;
 import facets.core.superficial.STargeter;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.ViewerTarget;
 import facets.facet.FacetMaster.Viewer;
 import facets.facet.kit.swing.ViewerMaster;
 import facets.util.StringFlags;

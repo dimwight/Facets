@@ -2,7 +2,6 @@ package facets.core.app;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.STarget;
 import facets.core.superficial.TargetCoupler;
-import facets.core.superficial.app.SView;
 /**
 Can respond to requests from surface facets. 
 <p>{@link SurfaceServices} defines useful functionality 

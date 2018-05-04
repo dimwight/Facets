@@ -5,6 +5,7 @@ import static facets.util.Util.*;
 import facets.core.app.AppConstants;
 import facets.core.app.FeatureHost;
 import facets.core.app.HideableHost;
+import facets.core.app.SView;
 import facets.core.app.Dialogs.ExceptionTexts;
 import facets.core.app.StatefulViewable.ClipperSource;
 import facets.core.superficial.Notice;
@@ -15,7 +16,6 @@ import facets.core.superficial.STextual;
 import facets.core.superficial.Notifying.Impact;
 import facets.core.superficial.STextual.Coupler;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.SView;
 import facets.facet.AreaFacets.PaneLinking;
 import facets.facet.ViewerAreaMaster;
 import facets.facet.app.FacetAppSurface;
@@ -147,7 +147,7 @@ public abstract class KitCore extends Tracer implements Toolkit{
 				Map<String,Object>iconStore=disables?disable:this.icons;
 				if(url!=null)iconStore.put(key,newDecorationIcon(url));
 				else if(true&&!disables)
-					printOut("Kit.readDecorationValues : no icon for key="+key+" icon="+icon);
+					printOut("Kit.readDecorationValues : no icon for key="+key+" icon="+iconResource);
 			}
 		}
 	}

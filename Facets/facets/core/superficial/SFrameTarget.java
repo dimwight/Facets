@@ -1,14 +1,9 @@
 package facets.core.superficial;
-import facets.core.superficial.app.SView;
 import facets.util.Debug;
 import facets.util.ItemList;
-import facets.util.OffsetPath;
-import facets.util.Stateful;
 import facets.util.Titled;
 import facets.util.Util;
 import facets.util.tree.TypedNode;
-
-import java.io.Serializable;
 /**
 Extends {@link TargetCore} by framing 
   application content to be exposed directly to facets. 

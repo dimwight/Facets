@@ -4,8 +4,6 @@ import static facets.util.Bytes.*;
 import static facets.util.Objects.*;
 import static facets.util.Regex.*;
 import static facets.util.tree.TypedNode.*;
-import facets.util.ByteStrings;
-import facets.util.Bytes;
 import facets.util.Debug;
 import facets.util.ItemList;
 import facets.util.Objects;
@@ -14,7 +12,6 @@ import facets.util.Tracer;
 import facets.util.Util;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -70,7 +67,7 @@ public final class Nodes{
 		TypedNode<byte[]>bytes=newPacked(node);
 		String encoded=encodeBytes(bytes.values()[0],breakAt);
 		if(encoded==null)return null;
-		if(false)Util.printOut("Nodes.encode: "+encoded.length()+"\n"+encoded.replaceAll("\\s*",""));
+		if(true)Util.printOut("Nodes.encode: "+encoded.length()+"\n"+encoded.replaceAll("\\s*",""));
 		node.setContents(encoded.split("\n"));
 		return node;
 	}

@@ -1,9 +1,9 @@
 package facets.facet;
+import facets.core.app.SAreaTarget;
 import facets.core.superficial.Notifying;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.STarget;
 import facets.core.superficial.Notifying.Impact;
-import facets.core.superficial.app.SAreaTarget;
 import facets.facet.kit.*;
 import facets.util.Debug;
 import facets.util.Objects;

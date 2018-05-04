@@ -1,6 +1,6 @@
 package facets.facet;
+import facets.core.app.ViewerTarget;
 import facets.core.superficial.Notifying.Impact;
-import facets.core.superficial.app.ViewerTarget;
 import facets.facet.kit.KitFacet;
 import facets.facet.kit.swing.ViewerMaster;
 

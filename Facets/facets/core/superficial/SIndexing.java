@@ -1,16 +1,10 @@
 package facets.core.superficial;
 import facets.util.Debug;
 import facets.util.ItemList;
-import facets.util.Objects;
-import facets.util.Times;
 import facets.util.Titled;
-import facets.util.Tracer;
-import facets.util.Util;
 import facets.util.tree.TypedNode;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 /**
 {@link STarget} representing one or more indices into a list of items. 
 <p>{@link SIndexing} represents a list of items to be exposed 

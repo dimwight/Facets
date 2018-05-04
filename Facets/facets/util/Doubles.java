@@ -1,7 +1,6 @@
 package facets.util;
 import static facets.util.Util.*;
 import static java.lang.Math.*;
-import java.awt.Color;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 /**
@@ -67,9 +66,9 @@ public final class Doubles{
 	public static double hypotenuse(double a,double b){
 		return sqrt(a*a+b*b);
 	}
-	public static double[]fromFloats(float[]in){
-		double[]out=new double[in.length];
-		for(int i=0;i<out.length;i++)out[i]=in[i];
+	public static double[]fromFloats(float[]nums){
+		double[]out=new double[nums.length];
+		for(int i=0;i<out.length;i++)out[i]=nums[i];
 		return out;
 	}
 	private final double vals[];
@@ -100,9 +99,9 @@ public final class Doubles{
 		System.arraycopy(back,0,join,front.length,back.length);
 		return join;
 	}
-	private static int[]asInts_(double[]in){
-		int[]out=new int[in.length];
-		for(int i=0;i<out.length;i++)out[i]=(int)rint(in[i]);
+	private static int[]asInts_(double[]nums){
+		int[]out=new int[nums.length];
+		for(int i=0;i<out.length;i++)out[i]=(int)rint(nums[i]);
 		return out;
 	}
 	private static boolean equal_(double a,double b,double tolerance){

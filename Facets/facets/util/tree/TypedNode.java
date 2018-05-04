@@ -20,6 +20,7 @@ and {@link #values()} of the parameter type.
 are implemented as convenience stubs, some invalid. 
 */
 public abstract class TypedNode<V>extends StatefulCore implements Identified{
+	final protected static boolean shortStrings=System.getProperty("nodeShortStrings")!=null;
 	final private static long serialVersionUID=-6701419803219131053L;
 	final public static TypedNode NULL_NODE=new TypedNode(Object.class,"Null","Empty"){};
 	/** For use when no other value is appropriate for return by {@link #title()}. */
@@ -52,8 +53,9 @@ public abstract class TypedNode<V>extends StatefulCore implements Identified{
 	public String toString(){
 		TypedNode[]children=children();
 		String title=title();
-		return (Debug.natureDebug?(Debug.id(this)+" "):"")+type+" "+(title==UNTITLED?"":title)+
-			(this instanceof ValueNode?"":" children="
+		return (Debug.natureDebug?(Debug.id(this)+" "):"")+type+" "+
+				(title==UNTITLED?"":title)+
+			(shortStrings||this instanceof ValueNode?"":" children="
 					+(false?Util.arrayPrintString(children):""+children.length));
 	}
 	/**

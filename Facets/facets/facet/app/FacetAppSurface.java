@@ -12,6 +12,7 @@ import facets.core.app.ActionAppSurface;
 import facets.core.app.AppSpecifier;
 import facets.core.app.AppSurface;
 import facets.core.app.AppWindowHost;
+import facets.core.app.AreaTargeter;
 import facets.core.app.Dialogs;
 import facets.core.app.FeatureHost;
 import facets.core.app.MenuFacets;
@@ -19,11 +20,12 @@ import facets.core.app.MountFacet;
 import facets.core.app.PagedActionDefaults;
 import facets.core.app.PagedActions;
 import facets.core.app.PagedContenter;
+import facets.core.app.SAreaTarget;
+import facets.core.app.SContentAreaTargeter;
 import facets.core.app.SurfaceServices;
 import facets.core.app.ViewerContenter;
 import facets.core.app.Dialogs.Surfacer;
 import facets.core.app.FeatureHost.LayoutFeatures;
-import facets.core.superficial.FacetedTarget;
 import facets.core.superficial.Notice;
 import facets.core.superficial.Notifying;
 import facets.core.superficial.SFacet;
@@ -34,9 +36,7 @@ import facets.core.superficial.STextual;
 import facets.core.superficial.TargeterCore;
 import facets.core.superficial.Notifying.Impact;
 import facets.core.superficial.STextual.Coupler;
-import facets.core.superficial.app.AreaTargeter;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.SContentAreaTargeter;
+import facets.core.superficial.app.FacetedTarget;
 import facets.core.superficial.app.SHost;
 import facets.core.superficial.app.SSurface;
 import facets.core.superficial.app.SHost.FacetLayout;
@@ -403,8 +403,7 @@ public abstract class FacetAppSurface extends ActionAppSurface implements Surfac
 		throw new RuntimeException("Not implemented in "+Debug.info(this));
 	}
 	final public void setLayoutTargetsLive(boolean live){
-		if(true)throw new RuntimeException("Not implemented in "+Debug.info(this));
-	  surfaceTargeter().elements()[TARGETS_LAYOUT].target().setLive(live);
+	  if(false)surfaceTargeter().elements()[TARGETS_LAYOUT].target().setLive(live);
 	}
 	/**
 	Implements abstract method. 

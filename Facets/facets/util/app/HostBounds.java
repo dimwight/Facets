@@ -1,6 +1,5 @@
 package facets.util.app;
 import static java.lang.Math.*;
-import facets.util.Debug;
 import facets.util.Tracer;
 import facets.util.tree.ValueNode;
 import java.awt.Dimension;
@@ -51,8 +50,9 @@ public abstract class HostBounds extends Tracer{
 	 */
 	final public int[]storableWindowBounds(){
 		Rectangle bounds=windowBounds();
-		Dimension size=bounds.getSize();
-		if(size.width>=screenSize().width)return null;
+		Dimension size=bounds.getSize(),screenSize=screenSize();
+		if(false)trace(".storableWindowBounds: size="+size.height+" screenSize="+screenSize.height);
+		if(size.height+40>=screenSize.height)return null;
 	  bounds=new Rectangle(bounds.getLocation(),minAdjustedSize(size.width,size.height));
 		return new int[]{bounds.x,bounds.y,bounds.width,bounds.height};
 	}

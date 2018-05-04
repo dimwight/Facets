@@ -1,5 +1,5 @@
 package facets.core.superficial;
-import facets.util.Titled;
+
 /** 
 Superficial targeter. 
 *<p>A {@link STargeter} mediates between a target, its exposing facet(s) and 

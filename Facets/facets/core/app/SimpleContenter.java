@@ -1,12 +1,8 @@
 package facets.core.app;
+import facets.core.app.SContentAreaTargeter.ContentArea;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.SFrameTarget;
 import facets.core.superficial.STarget;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.SContentAreaTargeter;
-import facets.core.superficial.app.SContenter;
-import facets.core.superficial.app.ViewableFrame;
-import facets.core.superficial.app.SContentAreaTargeter.ContentArea;
 import facets.util.Debug;
 import facets.util.Tracer;
 import facets.util.Util;

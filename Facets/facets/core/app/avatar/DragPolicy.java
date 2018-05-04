@@ -1,7 +1,7 @@
 package facets.core.app.avatar;
+import facets.core.app.SViewer;
 import facets.core.app.avatar.AvatarContent.State;
 import facets.core.app.avatar.DragPolicy.Constraints;
-import facets.core.superficial.app.SViewer;
 import facets.util.Debug;
 import facets.util.Stateful;
 import facets.util.geom.Point;

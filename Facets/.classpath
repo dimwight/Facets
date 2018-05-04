@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="*|_doc/|_image/" kind="src" path=""/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/jdk7/jre/lib/plugin.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/PDFTools"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/PDFBuild"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry excluding="FacetsJar/|_doc/|_image/|launch/" kind="src" path=""/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path=""/>
 </classpath>

@@ -2,9 +2,7 @@ package facets.core.superficial;
 import facets.util.Debug;
 import facets.util.ItemList;
 import facets.util.Tracer;
-import facets.util.Util;
 import facets.util.tree.TypedNode;
-import java.util.Collection;
 /**
 {@link STarget} representing a textual value. 
 <p> {@link STextual} represents a text value to be 

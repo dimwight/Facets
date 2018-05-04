@@ -1,6 +1,5 @@
 package facets.core.app;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.SViewer;
 import facets.core.superficial.app.SelectionView;
 import facets.util.ArrayPath;
 import facets.util.Debug;

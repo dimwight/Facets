@@ -1,11 +1,5 @@
 package facets.core.superficial;
-import facets.core.superficial.Notifying.Impact;
-import facets.util.Debug;
-import facets.util.Identified;
-import facets.util.Util;
-import facets.util.tree.TypedNode;
 
-import java.io.Serializable;
 /**
 Potential element of the Facets notification tree. 
 <p>{@link Notifying} is the root of the Facets type hierarchy 

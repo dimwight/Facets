@@ -1,13 +1,13 @@
 package facets.facet.kit.avatar;
 import static facets.facet.FacetFactory.*;
 import static java.awt.event.MouseEvent.*;
+import facets.core.app.SAreaTarget;
 import facets.core.app.StatefulViewable;
+import facets.core.app.ViewerTarget;
 import facets.core.app.avatar.AvatarView;
 import facets.core.app.avatar.Painter;
 import facets.core.app.avatar.PainterSource;
 import facets.core.superficial.Notifying.Impact;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.ViewerTarget;
 import facets.facet.kit.avatar.AvatarCanvas.CanvasHost;
 import facets.facet.kit.swing.ClipperSwing;
 import facets.facet.kit.swing.KitSwing;

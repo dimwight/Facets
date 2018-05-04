@@ -1,7 +1,6 @@
 package facets.core.app;
 import static facets.util.tree.Nodes.*;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.SViewer;
 import facets.util.Debug;
 import facets.util.OffsetPath;
 import facets.util.Util;

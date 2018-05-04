@@ -6,6 +6,7 @@ import facets.core.superficial.STarget;
 import facets.core.superficial.STargeter;
 import facets.core.superficial.TargetCore;
 import facets.core.superficial.TargeterCore;
+import facets.core.superficial.Notifying.Impact;
 import facets.util.Debug;
 import facets.util.ItemList;
 import facets.util.tree.TypedNode;

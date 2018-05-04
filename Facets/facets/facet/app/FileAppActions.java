@@ -7,6 +7,7 @@ import facets.core.app.AppConstants;
 import facets.core.app.AppContenter;
 import facets.core.app.AppSpecifier;
 import facets.core.app.Dialogs;
+import facets.core.app.SAreaTarget;
 import facets.core.app.ViewerContenter;
 import facets.core.superficial.SIndexing;
 import facets.core.superficial.STarget;
@@ -14,7 +15,6 @@ import facets.core.superficial.STrigger;
 import facets.core.superficial.TargetCore;
 import facets.core.superficial.Notifying.Impact;
 import facets.core.superficial.SIndexing.Coupler;
-import facets.core.superficial.app.SAreaTarget;
 import facets.core.superficial.app.SHost;
 import facets.util.Debug;
 import facets.util.FileSpecifier;
@@ -189,15 +189,11 @@ public class FileAppActions extends FacetAppActions{
 	}
 	private void fileSaveAs(){
 		ViewerContenter content=(ViewerContenter)app.findActiveContent();
-		if(dummy){
-			dummySaveMsg(content);
-			return;
-		}
 		Object sink=content.sink();
 		Dialogs dialogs=app.dialogs();
 		FileSpecifier[]specifiers=content.sinkFileSpecifiers();
 		File saveFile=sink instanceof File?(File)sink
-				:specifiers[specifiers.length-1].specifiedFile(sink);
+				:specifiers[false?specifiers.length-1:0].specifiedFile(sink);
 		while((saveFile=dialogs.saveFile(saveFile,specifiers))!=null){
 			boolean badSink=false;
 			for(ViewerContenter c:app.findViewerContents()){
@@ -220,14 +216,7 @@ public class FileAppActions extends FacetAppActions{
 		content.setSink(saveFile);
 		fileSave(content);
 	}
-	private void dummySaveMsg(ViewerContenter content){
-		app.dialogs().infoMessage("Dummy Save",content.title()+" would be saved here.");
-	}
 	private void fileSave(ViewerContenter content){
-		if(dummy){
-			dummySaveMsg(content);
-			return;
-		}
 		Object sink=content.sink();
 		if(!(sink instanceof File&&content.setSink(sink))){
 			fileSaveAs();
@@ -236,7 +225,8 @@ public class FileAppActions extends FacetAppActions{
 		File sinkFile=(File)sink;
 		SHost host=app.host();
 		Dialogs dialogs=app.dialogs();
-		try{
+		if(dummy)dummySaveMsg(content);
+		else try{
 			content.saveToSink(sinkFile);
 			values.updateRecentFiles(sinkFile);
 			if(false)dialogs.infoMessage("File saved","Saved as "+sinkFile.getAbsolutePath());
@@ -260,8 +250,12 @@ public class FileAppActions extends FacetAppActions{
 				"This will close $appTitle")==Ok)
 			app.attemptClose();
 	}
+	private void dummySaveMsg(ViewerContenter content){
+		app.dialogs().infoMessage("Dummy Save",
+				content.title()+" would be saved as "+content.sink());
+	}
 	@Override
-	final protected boolean contentIsRemovable(String dialogTitle,AppContenter content){
+	protected boolean contentIsRemovable(String dialogTitle,AppContenter content){
 		ViewerContenter vc=(ViewerContenter)content;
 		if(!app.spec.canSaveContent()||!vc.hasChanged())return true;
 		switch(app.dialogs().warningYesNoCancel(dialogTitle,

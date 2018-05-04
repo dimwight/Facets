@@ -6,25 +6,25 @@ import facets.core.app.AppSurface;
 import facets.core.app.AreaRoot;
 import facets.core.app.NodeViewable;
 import facets.core.app.PathSelection;
+import facets.core.app.SAreaTarget;
+import facets.core.app.SContentAreaTargeter;
+import facets.core.app.SView;
+import facets.core.app.SViewer;
 import facets.core.app.ValueEdit;
+import facets.core.app.ViewableAction;
+import facets.core.app.ViewableFrame;
 import facets.core.app.ViewerContenter;
+import facets.core.app.ViewerTarget;
 import facets.core.app.FeatureHost.LayoutFeatures;
-import facets.core.superficial.FacetedTarget;
 import facets.core.superficial.Notice;
 import facets.core.superficial.SFrameTarget;
 import facets.core.superficial.STarget;
 import facets.core.superficial.STrigger;
 import facets.core.superficial.TargetCore;
 import facets.core.superficial.Notifying.Impact;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.SContentAreaTargeter;
+import facets.core.superficial.app.FacetedTarget;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.SView;
-import facets.core.superficial.app.SViewer;
 import facets.core.superficial.app.SelectionView;
-import facets.core.superficial.app.ViewableAction;
-import facets.core.superficial.app.ViewableFrame;
-import facets.core.superficial.app.ViewerTarget;
 import facets.facet.AreaFacets;
 import facets.facet.app.FacetAppSpecifier;
 import facets.facet.app.FacetAppSurface;
@@ -44,6 +44,7 @@ import facets.util.tree.XmlSpecifier;
 import facets.util.tree.Nodes.TreeRoot;
 import java.io.File;
 import java.io.IOException;
+import java.util.function.BiConsumer;
 /**
 {@link ViewerContenter} that manages content for {@link TreeAppSpecifier}. 
 <p>Effectively a package-private class; 
@@ -55,11 +56,10 @@ public final class TreeAppContenter extends ViewerContenter{
 	/** Index into return of {@link #lazyContentAreaElements(SAreaTarget)}. */
 	public static final int TARGETS_PANE=0,TARGETS_CONTENT=1;
 	public static final String STATE_OFFSETS="selectionOffsets";
-	private final static ViewableAction[]EDIT_ACTIONS=
-		{COPY,CUT,PASTE,PASTE_INTO,DELETE,MODIFY,UNDO,REDO};
 	private final FacetAppSurface app;
 	private final TreeAppSpecifier treeSpec;
 	private Object stateStamp=null;
+	private NodeViewable viewable;
 	TreeAppContenter(Object source,FacetAppSurface app){
 		super(source);
 		this.app=app;
@@ -132,10 +132,10 @@ public final class TreeAppContenter extends ViewerContenter{
 				+ "\nfile="+name);
 		app.notify(new Notice(frame,Impact.DEFAULT));
 	}
-	private static DataNode newSourceNode(Object source){
+	private DataNode newSourceNode(Object source){
 			DataNode node=(DataNode)source;
-			if(true)source=Nodes.decode(new DataNode(node.type(),node.title(),new Object[]{
-	"789CB592B16FD35010C6AF6E0C2D0594A4430181E411446553582AA513658964CAE0829032BD2497E0EAC5CF3C9F43E880D4A50C2C508A18A9501744A884F8039860428058BA22982BB121C400F7628BA6C008CBE9FCFC7DF7BBBBF7FA3B60A71AA66AFE92E80A37546E803A14325C16758995ADF7E3FD607BA76A01F46200B0120DC75AA28194B82985D2258DE85E1132C505D5C4E9B193EF5E5DFCF6D2C8351CFD4378419030BAA9EDB5CB0F9F9C0E2C18A9C15843458411250493591B9E1451DBBB545FC206557A7F232EDE8CB1692A3DFEF17AE643CDE64A852A5861D3877DB1D05C8DE0B89FD93C63F38CCDFB65ABF85020FE20280F1103D261D4E67FE35D33D1E240501A12CC4B9124A6A323C31D0524085BA99C571AE79E97BEBF19F53E5B60F96027243A318F3554A2CAB3B65133C4A690245E875BB0BF17F35E4B831B30223717953F6D6C7E5DB93DCB6BAA823DE889D9C55DDD42DAA9A35EED3F3831B1FEF14E7E4923CF086C33E419CEEF33BE60D6DEDD63CC26DDF8B239BB5C79717E60E45790AF3F93E4EBBFFBF6EAA362724AEEBE00D371160F32E0690E9BE1FC9E399C30A16842393571924D05824381EAA043D82347450E374537D434C161BAC617E328ED6017CDF981964AB523C30893DF48FD9C7496F3B5FF4ADACA49E7385F8FFF19E5277EB2127D6C030000\r\n"}));
+			if(true)source=Nodes.decode(new ValueNode(node.type(),node.title(),new Object[]{
+	"789CAD523D681451101E37B772A7467249202A0A5B2A865DA34DE052199B8335161B45B8EADDDDDCB9E1DDEEFA76F63C530869626123A2581A248D70047F11B1B0D24A546CD28AD6013B110B9DB7B797DCA9659A61DE7BDF37DF3733AFBB0566A260AAE22E89B6B0FDD0F650F942FACBA22AB1B4F1A9D0F536B7CA064027020093A0E0852DB4083B142B38D21035A4D84EC897362944FB9290092E84759CCE1FFFF8F6FCCF379AAAE0F03FC0738284C64D6DDEB978FFD149CF803D15C8D7C28030A09860A267C99122683A17AA4B58A352E77F8A8BD723ACEB4A0F7FBF9BF95C31B952AE0C865F77616F2414572338EAF6688EA6399AE66CD34A2EE4880F04E3038A1E293F68F25BA1AD3B5A4C01C501C0BC1471AC1D1D1A74E491206C24723E5438F7A4F8EBFD88F3CD00C3053326D18AB8AD811265EEB5898A454CF249E255B801F94EC4732DA6DBD0203B038D7F5D5BFFB1727396C7540633F5C4DA633BB885A45545B5DABD776CFFDD2FB7FA0B7B4560EA264F71FE94E5737AECED2162AFD3B5EFEBB3CBA567675322FF886CFC3D4836FEDB1F2E3F188B4FC87E7123D68E47D238CAE71799D80CE71BFAF2800E451D26121D27F9214730BAFD85AC30B0D8145D0BA7090ED2155E8C152A0BDBA8EFF735C24459D20F30FE4BE965A6749AF3C7BBAB34F4C387555F67AA67387FDE1FE66E6BFE01079F200692030000"}));
 			return new DataNode("Created",node.title(),new Object[]{source});
 		}
 	@Override
@@ -156,7 +156,7 @@ public final class TreeAppContenter extends ViewerContenter{
 			}
 			if(tree==null)throw new IllegalStateException("Bad file type in "+file);
 		}
-		else tree=newSourceNode(source);
+		else tree=true?(DataNode)source:newSourceNode(source);
 		final ValueNode state=app.spec.state();
 		NodeViewable viewable=new NodeViewable(tree,app.ff.statefulClipperSource(false)){
 			@Override
@@ -165,16 +165,18 @@ public final class TreeAppContenter extends ViewerContenter{
 			}
 			@Override
 			public ViewableAction[]viewerActions(SView view){
-				return view.isLive()?EDIT_ACTIONS:new ViewableAction[]{};
+				return treeSpecifier().viewerActions(view);
 			}
 			@Override
 			protected void viewerSelectionChanged(SViewer viewer,SSelection selection){
-				super.viewerSelectionChanged(viewer,selection);
+				if(!treeSpec.viewerSelectionChanged(this,viewer,selection))
+					super.viewerSelectionChanged(viewer,selection);
 				putSelectionState(state,STATE_OFFSETS);
 			}
 			@Override
 			protected STarget[]lazyElements(){
-				return new TreeTargets(app,this).appTargets();
+				return !treeSpecifier().usesTreeTargets()?super.lazyElements() 
+						:new TreeTargets(app,this).appTargets();
 			}
 			@Override
 			public boolean editSelection(){
@@ -187,11 +189,14 @@ public final class TreeAppContenter extends ViewerContenter{
 			}
 		};
 		viewable.readSelectionState(state,STATE_OFFSETS);
-		return viewable;
+		return this.viewable=viewable;
 	}
 	@Override
 	public void wasAdded(){
 		if(false&&Debug.natureDebug)
 			((STrigger)contentFrame().elements()[TARGET_SEARCH].elements()[0]).fire();
+	}
+	private TreeAppSpecifier treeSpecifier(){
+		return (TreeAppSpecifier)app.spec;
 	}
 }

@@ -1,6 +1,5 @@
 package facets.util;
 import static facets.util.Regex.*;
-import static java.lang.Math.*;
 import facets.core.app.TextView;
 public abstract class HtmlFormBuilder extends HtmlBuilder{
 	public static final class FormInput{

@@ -15,4 +15,12 @@ public final class NumberInput extends InputField{
 	private NumberInput(TypedNode source,EvalContext context){
 		super(source,type,context);
 	}
+	@Override
+	public void updateValue(String text){
+		try {
+			super.updateValue(Integer.valueOf(text).toString());
+		} catch (Exception e) {
+			System.out.println(e);
+		};
+	}
 }

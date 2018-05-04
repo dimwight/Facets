@@ -1,13 +1,9 @@
 package facets.core.superficial;
 import facets.util.Debug;
-import facets.util.IndexingIterator;
 import facets.util.ItemList;
 import facets.util.Titled;
 import facets.util.Tracer;
 import facets.util.tree.TypedNode;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
 /**
 {@link STarget} representing a Boolean value. 
 <p>{@link SToggling} represents a Boolean value to 

@@ -1,5 +1,4 @@
 package facets.util;
-import static facets.util.ByteStrings.*;
 import static facets.util.Debug.*;
 import static java.lang.System.*;
 import facets.util.app.Events;

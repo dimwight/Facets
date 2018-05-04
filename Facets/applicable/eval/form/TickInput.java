@@ -3,13 +3,19 @@ import facets.util.Debug;
 import facets.util.IndexingIterator;
 import facets.util.ItemList;
 import facets.util.Objects;
+import facets.util.tree.DataNode;
 import facets.util.tree.TypedNode;
 import facets.util.tree.ValueNode;
 import java.text.Format;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import applicable.eval.EvalContext;
 import applicable.eval.Value;
+import applicable.eval.Values;
 import applicable.field.BooleanField;
 import applicable.field.OptionField;
 import applicable.field.ValueField;
@@ -24,45 +30,62 @@ public final class TickInput extends InputField{
 			return new TickInput(code,(EvalContext)context);
 		};
 	};
+	public final class CheckInput extends InputField{
+		CheckInput(TypedNode source,EvalContext context){
+			super(source,type,context);
+		}
+		@Override
+		protected Value[]doEvaluation(){
+			for(Value value:TickInput.this.evaluate())
+				if(value.equals(Value.newValue(title())))return asValues(Value.TRUE);
+			return asValues(Value.FALSE);
+		}
+		@Override
+		public void updateValue(String text){
+			Boolean checked=Boolean.valueOf(text);
+			Set<Value>values=new HashSet(Arrays.asList(TickInput.this.evaluate()));
+			for(Value input:TickInput.this.inputs())
+				if(input.asText().equals(this.label.text)){
+					values.remove(input);
+					if(checked)values.add(Value.newValue(input.asCode()));
+					TickInput.this.updateValues(values);
+				}
+		}
+	}	
+	private void updateValues(Set<Value>values){
+		values.remove(Value.NONE);
+		if(values.isEmpty())values.add(Value.NONE.copyValue());
+		codeds[0]=((Values)codeds[0]).updated(values);
+	}
 	private TickInput(TypedNode source,EvalContext context){
 		super(source,type,context);
+		debug=false&&label.text.equals("Alternative 240");
+	}
+	@Override
+	public TypedNode newRecordCode(){
+		TypedNode code=super.newRecordCode();
+		code.setChildren(((TypedNode)codeds[0].source.copyState()).children());
+		return code;
+	}
+	@Override
+	public void updateValueState(TypedNode c){
+		codeds[0].source.setChildren(((TypedNode)c.copyState()).children());
+		codeds[0]=Values.type.newCoded(codeds[0].source,context);
+	}
+	@Override
+	public EvalField[]formFields(){
+		Value[]inputs=inputs();
+		final EvalField[]formFields=new EvalField[inputs.length];
+		for(int i=0;i<formFields.length;i++)
+			formFields[i]=new CheckInput(inputs[i].source,context);
+		return formFields;
 	}
 	@Override
 	protected Value[]doEvaluation(){
-		ItemList<Value>values=newValues();
-		for(TreeCoded c:codeds)
-			if(c instanceof Value)values.add((Value)c);
-		return values.items();
-	}
-	@Override
-	public ValueField[]newFormFields(final String keyTitle,final boolean showCodes){
-		final Map<String,String>codes=new HashMap(),texts=new HashMap();
-		final String[]items=Objects.toString(inputs()
-				).replaceAll("Value \\.\\.\\.=",""
-				).replaceAll("#[^,]+,?","").split(",");
-		final ItemList<ValueField>fields=new ItemList(ValueField.class);
-		new IndexingIterator<String>(items){
-		protected void itemIterated(String option,int at){
-			String splits[]=option.split(" ",2),code=splits[0],
-					text=splits[splits.length>1&&!showCodes?1:0];
-				texts.put(code,text);
-				codes.put(text,code);
-				items[at]=text;
-				fields.add(new BooleanField(keyTitle+text) {
-					public void putInputValue(ValueNode values,String text){
-						values.put(valueKey(),Boolean.valueOf(text));
-					};
-				});
-		}}.iterate();
-		return fields.items();
+		return ((Values)codeds[0]).evaluate();
 	}
 	@Override
 	public void updateValue(String text){
-		String pair[]=text.split("="),key=pair[0],value=pair[1].toUpperCase();
-		Value[]inputs=inputs();
-		for(int i=0;i<inputs.length;i++){
-			if(key.equals(inputs[i].asText()))
-				codeds[i].source.setValues(new String[]{value});
-		}
+		throw new RuntimeException("Not implemented in "+this);
 	}
 }

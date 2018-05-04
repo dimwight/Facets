@@ -15,16 +15,18 @@ public final class IfValue extends EvalCoded{
 	};
 	private IfValue(TypedNode source,EvalContext context){
 		super(source,type,context);
+		debug=false&&label.text.equals("Alternative 240");
 	}
 	@Override
-	public Value[]doEvaluation(){
+	protected Value[]doEvaluation(){
 		Value[]asFalse=new Value[]{FALSE},
 				asTrue=new Value[]{TRUE};
 		if(false&&codeds.length==0)return asTrue;
-		Value check=getSingleFieldValue(label);
-		for(TreeCoded eval:codeds)
-				if(eval.equals(check))return asTrue;
-		if(false)trace(".doEvaluation: value=",check);
+		Value[]checks=context.getLabelled(label).evaluate();
+		if(debug)trace(".doEvaluation: checks=",checks);
+		for(TreeCoded c:codeds)
+			for(Value check:checks)if(c.equals(check))return asTrue;
+		if(debug)trace(".doEvaluation: not found checks=",checks);
 		return asFalse;
 	}
 }

@@ -3,7 +3,7 @@ import static facets.facet.FacetFactory.*;
 import static facets.facet.kit.swing.KitSwing.*;
 import static facets.facet.kit.swing.KitSwing.LaF.*;
 import facets.core.app.AppConstants;
-import facets.core.superficial.app.SurfaceStyle;
+import facets.core.app.SurfaceStyle;
 import facets.facet.kit.Decoration;
 import facets.facet.kit.KWidget;
 import facets.facet.kit.KWrap;

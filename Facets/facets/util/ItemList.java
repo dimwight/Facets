@@ -1,12 +1,9 @@
 package facets.util;
-import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 /**
 An array-friendly {@link List}.  
 <p>{@link ItemList} extends {@link ArrayList} with methods that encapsulate

@@ -1,7 +1,6 @@
 package facets.core.app;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.STargeter;
-import facets.core.superficial.app.ViewerTarget;
 import facets.util.Debug;
 /**
 Creates {@link SFacet}s for a top-level menu. 

@@ -1,10 +1,10 @@
 package facets.facet.kit.swing.tree;
 import facets.core.app.ListView;
 import facets.core.app.PathSelection;
+import facets.core.app.SViewer;
 import facets.core.app.TreeView;
+import facets.core.app.ViewerTarget;
 import facets.core.superficial.Notifying.Impact;
-import facets.core.superficial.app.SViewer;
-import facets.core.superficial.app.ViewerTarget;
 import facets.util.Debug;
 import facets.util.OffsetPath;
 import facets.util.tree.NodePath;

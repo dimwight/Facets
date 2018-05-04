@@ -1,9 +1,9 @@
 package facets.facet.kit.swing;
 import facets.core.app.HtmlView;
 import facets.core.app.TreeView;
+import facets.core.app.ViewerTarget;
 import facets.core.superficial.Notifying.Impact;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.ViewerTarget;
 import facets.facet.SwingViewerMaster;
 import facets.util.Debug;
 import facets.util.Tracer;

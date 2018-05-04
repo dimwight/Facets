@@ -6,22 +6,22 @@ import facets.core.app.ActionViewerTarget;
 import facets.core.app.AreaRoot;
 import facets.core.app.Dialogs;
 import facets.core.app.FeatureHost;
+import facets.core.app.SAreaTarget;
+import facets.core.app.SContentAreaTargeter;
 import facets.core.app.SurfaceServices;
+import facets.core.app.ViewableAction;
+import facets.core.app.ViewableFrame;
 import facets.core.app.ViewerContenter;
+import facets.core.app.ViewerTarget;
 import facets.core.app.AppSurface.ContentStyle;
 import facets.core.app.FeatureHost.LayoutFeatures;
 import facets.core.app.avatar.AvatarPolicies;
-import facets.core.superficial.FacetedTarget;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.SFrameTarget;
 import facets.core.superficial.SIndexing;
 import facets.core.superficial.STarget;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.SContentAreaTargeter;
+import facets.core.superficial.app.FacetedTarget;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.ViewableAction;
-import facets.core.superficial.app.ViewableFrame;
-import facets.core.superficial.app.ViewerTarget;
 import facets.facet.AreaFacets;
 import facets.facet.ViewerAreaMaster;
 import facets.facet.app.FacetAppSurface;
@@ -88,7 +88,7 @@ public final class TextArtContenter extends ViewerContenter {
 
 	/**
 	Re-implements framework method. 
-	@see facets.core.app.ViewerContenter#lazyContentAreaElements(facets.core.superficial.app.SAreaTarget)
+	@see facets.core.app.ViewerContenter#lazyContentAreaElements(facets.core.app.SAreaTarget)
 	 */
 	@Override
 	public STarget[] lazyContentAreaElements(SAreaTarget area) {
@@ -100,7 +100,7 @@ public final class TextArtContenter extends ViewerContenter {
 	/**
 	Implements abstract framework method. 
 	@see facets.core.app.ViewerContenter#newContentViewers(
-	facets.core.superficial.app.ViewableFrame)
+	facets.core.app.ViewableFrame)
 	 */
 	@Override
 	protected FacetedTarget[] newContentViewers(ViewableFrame viewable) {
@@ -184,7 +184,7 @@ public final class TextArtContenter extends ViewerContenter {
 
 	/**
 	Implements interface method. 
-	@see facets.core.app.ViewerContenter#alignContentAreas(facets.core.superficial.app.SAreaTarget, facets.core.superficial.app.SAreaTarget)
+	@see facets.core.app.ViewerContenter#alignContentAreas(facets.core.app.SAreaTarget, facets.core.app.SAreaTarget)
 	 */
 	public void alignContentAreas(final SAreaTarget existing, final SAreaTarget added) {
 		
@@ -249,7 +249,7 @@ public final class TextArtContenter extends ViewerContenter {
 	}
 	/**
 	 Re-implements framework method. 
-	 @see facets.core.superficial.app.SContenter#areaRetargeted(SContentAreaTargeter)
+	 @see facets.core.app.SContenter#areaRetargeted(SContentAreaTargeter)
 	 */
 	@Override
 	public void areaRetargeted(SContentAreaTargeter area) {

@@ -1,6 +1,5 @@
 package facets.core.app;
 import facets.core.app.Dialogs.Response;
-import facets.core.superficial.app.SContenter;
 import facets.core.superficial.app.SSurface.WindowAppSurface;
 import facets.facet.kit.DialogHost;
 import facets.util.Debug;

@@ -1,12 +1,12 @@
 package facets.facet;
 import static facets.core.app.AppConstants.*;
 import facets.core.app.AppActions;
+import facets.core.app.AreaTargeter;
 import facets.core.app.MenuFacets;
+import facets.core.app.SContentAreaTargeter;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.STargeter;
 import facets.core.superficial.STrigger;
-import facets.core.superficial.app.AreaTargeter;
-import facets.core.superficial.app.SContentAreaTargeter;
 import facets.facet.app.FacetAppActions;
 import facets.facet.app.FacetAppSpecifier;
 import facets.facet.app.FileAppActions;

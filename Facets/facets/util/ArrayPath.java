@@ -1,5 +1,5 @@
 package facets.util;
-import java.util.Arrays;
+
 /**
 {@link OffsetPath} for array-based content. 
  */

@@ -1,7 +1,6 @@
 package facets.util.tree;
 import static facets.util.Util.*;
 import static facets.util.tree.DataConstants.*;
-import static facets.util.tree.TypedNode.*;
 import facets.util.Strings;
 import facets.util.Tracer;
 class TestTree extends Tracer{

@@ -80,7 +80,9 @@ class DragLinks extends Tracer{
 				Transferable t=support.getTransferable();
 				Dimension got;
 				try{
-					got=(Dimension)t.getTransferData(t.getTransferDataFlavors()[0]);
+					Object data=t.getTransferData(t.getTransferDataFlavors()[0]);
+					if(!(data instanceof Dimension))return false;
+					got=(Dimension)data;
 				}catch(Exception e){
 					throw new RuntimeException(e);
 				}

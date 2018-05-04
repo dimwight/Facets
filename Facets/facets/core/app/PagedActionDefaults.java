@@ -3,7 +3,6 @@ import static facets.core.app.AppConstants.*;
 import facets.core.app.Dialogs.Response;
 import facets.core.superficial.STrigger;
 import facets.core.superficial.STrigger.Coupler;
-import facets.core.superficial.app.SContenter;
 /**
 Convenience extension of {@link PagedActions}. 
 <p>{@link PagedActionDefaults} extends its superclass by defining a range

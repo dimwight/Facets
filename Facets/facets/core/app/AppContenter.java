@@ -1,8 +1,5 @@
 package facets.core.app;
 import facets.core.app.FeatureHost.LayoutFeatures;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.SContentAreaTargeter;
-import facets.core.superficial.app.SContenter;
 import facets.core.superficial.app.SHost;
 import facets.util.TypesKey;
 /**
@@ -12,6 +9,10 @@ implemented by any {@link SContenter} supplying content for
 an {@link AppSurface}. 
  */
 public interface AppContenter extends SContenter{
+	/** 
+	@param active
+	@return always <code>false</code>!
+	 */
 	boolean useActiveFeatures(SContentAreaTargeter active);
 	/**
 	Return a layout of facets that expose the content. 

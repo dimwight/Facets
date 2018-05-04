@@ -1,7 +1,5 @@
 package facets.core.superficial;
 import facets.util.Debug;
-import facets.util.Times;
-import facets.util.Tracer;
 /**
 {@link STarget} representing an application process. 
 <p>{@link STrigger} represents an application process  

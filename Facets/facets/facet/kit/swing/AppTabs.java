@@ -3,7 +3,7 @@ import static facets.core.app.AppActions.*;
 import static facets.facet.kit.Toolkit.*;
 import static javax.swing.BorderFactory.*;
 import facets.core.superficial.Notifying.Impact;
-import facets.core.superficial.app.SAreaTarget;
+import facets.core.app.SAreaTarget;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.SNumeric;
 import facets.core.superficial.STargeter;

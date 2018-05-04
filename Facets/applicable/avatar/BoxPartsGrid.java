@@ -1,7 +1,7 @@
 package applicable.avatar;
+import static facets.core.app.SViewer.*;
 import static facets.core.app.avatar.AvatarView.Direction.*;
 import static facets.core.app.avatar.Painter.Style.*;
-import static facets.core.superficial.app.SViewer.*;
 import static facets.util.shade.Shades.*;
 import facets.core.app.avatar.AvatarPart;
 import facets.core.app.avatar.Painter;

@@ -1,16 +1,10 @@
 package facets.core.app;
 import static facets.util.Debug.*;
 import static facets.util.app.Events.*;
-import facets.core.superficial.FacetedTarget;
 import facets.core.superficial.SFrameTarget;
 import facets.core.superficial.STarget;
-import facets.core.superficial.app.SAreaTarget;
-import facets.core.superficial.app.SContentAreaTargeter;
-import facets.core.superficial.app.SContenter;
+import facets.core.superficial.app.FacetedTarget;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.ViewableAction;
-import facets.core.superficial.app.ViewableFrame;
-import facets.core.superficial.app.ViewerTarget;
 import facets.util.Debug;
 import facets.util.FileSpecifier;
 import facets.util.Objects;
@@ -183,9 +177,9 @@ public abstract class ViewerContenter extends Tracer implements AppContenter{
 	<p>Called by {@link #newContentArea(boolean)} with the {@link ViewableFrame} 
 	returned by {@link #newContentViewable(Object)}. 
 	 <p>The {@link FacetedTarget}s returned must comprise either 
-	 <ul><li>a single {@link facets.core.superficial.app.ViewerTarget}, or
+	 <ul><li>a single {@link facets.core.app.ViewerTarget}, or
 	 <li> any number of {@link SAreaTarget}s defining an arrangement of 
-	 {@link facets.core.superficial.app.ViewerTarget}s. 
+	 {@link facets.core.app.ViewerTarget}s. 
 	</ul>
 	<p>Default implementation is an invalid stub;
 	 {@link ActionViewerTarget#newViewerAreas(ViewableFrame, STarget[])} 
@@ -193,7 +187,7 @@ public abstract class ViewerContenter extends Tracer implements AppContenter{
 	 where viewers share the same {@link ViewableAction}[].
 	 @param viewable was returned by {@link #newContentViewable(Object)}
 	 and should be returned as the <code>viewable</code> of all 
-	 {@link facets.core.superficial.app.ViewerTarget}s 
+	 {@link facets.core.app.ViewerTarget}s 
 	 constructed in this method.    
 	 */
 	protected FacetedTarget[]newContentViewers(ViewableFrame viewable){

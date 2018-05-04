@@ -81,21 +81,23 @@ final class FileChooser extends JFileChooser{
 				||!lastOpened.getParentFile().equals(getCurrentDirectory())))
 			activeSpec=appSpecs[nature.getOrPutInt(KEY_AT,0)];
 		else{
-			final String ALL="All file types",
+			final String AllTypes="All file types *.*",
 					_toFirstDot="^([^.]+)\\.",_toLastDot=".+\\.([^.]+)",
 					toMatch=(saving?proposed:lastOpened).getName();
 			List<FileSpecifier>matched=new ArrayList();
-			for(FileSpecifier spec:appSpecs)
-				if(!spec.rubric.equals(ALL)
-						&&(toMatch.replaceAll(_toFirstDot,"").matches(spec.extension))
-							||toMatch.replaceAll(_toLastDot,"$1").matches(spec.extension))
+			for(FileSpecifier spec:appSpecs){
+				if(spec.rubric.equals(AllTypes))continue;
+				String extension=spec.extension;
+				if(toMatch.replaceAll(_toFirstDot,"").matches(extension)
+					||toMatch.replaceAll(_toLastDot,"$1").matches(extension))
 					activeSpec=spec;
 				else matched.add(spec);
-			t.trace(".getFile: activeSpec=",activeSpec);
+			}
 			if(activeSpec==null)activeSpec=matched.remove(0);
 			matched.add(activeSpec);
 			matchSpecs=matched.toArray(new FileSpecifier[]{});
 		}
+		t.trace(".getFile: activeSpec=",activeSpec);
 		for(FileSpecifier spec:matchSpecs!=null?matchSpecs:appSpecs)
 			if(spec!=activeSpec)setSpecifierFilter(spec);
 		setSpecifierFilter(activeSpec);

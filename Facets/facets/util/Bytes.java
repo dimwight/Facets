@@ -1,5 +1,4 @@
 package facets.util;
-import static facets.util.Debug.*;
 import static facets.util.Util.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

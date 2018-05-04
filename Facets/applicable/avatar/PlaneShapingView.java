@@ -1,4 +1,5 @@
 package applicable.avatar;
+import facets.core.app.SViewer;
 import facets.core.app.avatar.AvatarContent;
 import facets.core.app.avatar.AvatarContent.Applicable;
 import facets.core.app.avatar.AvatarPolicies;
@@ -10,7 +11,6 @@ import facets.core.app.avatar.PainterSource;
 import facets.core.app.avatar.PlaneView;
 import facets.core.app.avatar.PlaneViewWorks;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.SViewer;
 import facets.core.superficial.app.SelectionView;
 import facets.util.geom.Point;
 import facets.util.geom.Vector;

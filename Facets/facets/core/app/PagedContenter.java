@@ -3,8 +3,6 @@ import facets.core.app.Dialogs.Response;
 import facets.core.superficial.Notifying;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.STargeter;
-import facets.core.superficial.app.SContentAreaTargeter;
-import facets.core.superficial.app.SContenter;
 import java.awt.Dimension;
 /**
 {@link SContenter} for use in a {@link PagedSurface}. 

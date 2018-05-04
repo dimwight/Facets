@@ -1,8 +1,8 @@
 package facets.facet.kit.swing;
+import facets.core.app.SViewer;
+import facets.core.app.ViewerTarget;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.STarget;
-import facets.core.superficial.app.SViewer;
-import facets.core.superficial.app.ViewerTarget;
 import facets.facet.FacetFactory;
 import facets.facet.FacetMaster;
 import facets.util.Debug;

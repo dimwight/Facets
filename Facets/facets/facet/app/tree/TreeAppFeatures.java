@@ -1,16 +1,16 @@
 package facets.facet.app.tree;
 import static facets.facet.app.FileAppActions.*;
 import static facets.facet.app.tree.TreeTargets.*;
+import facets.core.app.AreaTargeter;
 import facets.core.app.FeatureHost;
 import facets.core.app.MenuFacets;
+import facets.core.app.SContentAreaTargeter;
 import facets.core.app.SurfaceServices;
 import facets.core.app.ViewerContenter;
+import facets.core.app.ViewerTarget;
 import facets.core.superficial.Notice;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.STargeter;
-import facets.core.superficial.app.AreaTargeter;
-import facets.core.superficial.app.SContentAreaTargeter;
-import facets.core.superficial.app.ViewerTarget;
 import facets.facet.FacetFactory;
 import facets.facet.app.FacetAppSpecifier;
 import facets.facet.app.FacetAppSurface;
@@ -54,7 +54,7 @@ final public class TreeAppFeatures extends FacetFactory{
 			facets.addItems(editTools);
 		}
 		STargeter[]search=area.content().elements()[TARGET_SEARCH].elements();
-		facets.addItems(new SFacet[]{
+		if(search.length>0)facets.addItems(new SFacet[]{
 				spacerWide(10),
 				textualField(search[0],10,HINT_NONE),
 				spacerWide(5),
@@ -96,7 +96,7 @@ final public class TreeAppFeatures extends FacetFactory{
 			menus[MENU_APP],
 			menus[MENU_EDIT],
 			menus[MENU_PANE],
-			new MenuFacets(tree,TreeTargets.TITLE_MENU){
+			treeItems.length==0?null:new MenuFacets(tree,TreeTargets.TITLE_MENU){
 				@Override
 				public SFacet[]getFacets(){
 					return treeItems;

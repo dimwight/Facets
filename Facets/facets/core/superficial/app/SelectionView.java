@@ -1,4 +1,7 @@
 package facets.core.superficial.app;
+import facets.core.app.SView;
+import facets.core.app.SViewer;
+import facets.core.app.ViewableFrame;
 import facets.util.StatefulCore;
 /**
 {@link SSelection}-aware {@link SView} implementation. 

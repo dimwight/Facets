@@ -2,6 +2,8 @@ package applicable.textart;
 
 import static applicable.textart.TextArtConstants.*;
 import facets.core.app.NodeViewable;
+import facets.core.app.SView;
+import facets.core.app.ViewableAction;
 import facets.core.app.avatar.AvatarPolicies;
 import facets.core.app.avatar.PlaneView;
 import facets.core.app.avatar.PlaneViewWorks;
@@ -10,8 +12,6 @@ import facets.core.superficial.SIndexing;
 import facets.core.superficial.STarget;
 import facets.core.superficial.SToggling;
 import facets.core.superficial.SToggling.Coupler;
-import facets.core.superficial.app.SView;
-import facets.core.superficial.app.ViewableAction;
 import facets.util.Debug;
 import facets.util.Util;
 import facets.util.geom.Vector;

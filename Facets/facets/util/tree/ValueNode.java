@@ -47,7 +47,7 @@ public class ValueNode extends DataNode{
 	}
 	public String toString(){
 		Object[]values=false?children():values();
-		return super.toString()+(false?""
+		return super.toString()+(shortStrings?""
 				:true&&parent()==null?(" descendants="+Nodes.descendants(this).length)
 				:(true?(" children="+children().length+" values="+values.length)
 						:(values.length==0?" No values":" ["+

@@ -1,7 +1,7 @@
 package facets.facet.kit.swing.tree;
 import static facets.util.tree.TypedNode.*;
+import facets.core.app.SViewer;
 import facets.core.app.TreeView;
-import facets.core.superficial.app.SViewer;
 import facets.util.Debug;
 import facets.util.Tracer;
 import facets.util.tree.DataNode;
@@ -82,5 +82,4 @@ public abstract class DatatreeModel extends Tracer implements TreeModel{
 		for(TreeModelListener l:listeners){
 			l.treeStructureChanged(new TreeModelEvent(this,new TreePath(root)));
 		}
-		
 	}}

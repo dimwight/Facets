@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import applicable.eval.EvalTypes;
+import applicable.eval.view.ViewableForm;
 import applicable.eval.view.TableEvaluation;
 import applicable.eval.view.ViewEvaluation;
 import applicable.treecode.TreeCodeType;
@@ -33,7 +34,7 @@ public final class EvalForms extends EvalTypes{
 		}
 		TypedNode code=doc.children()[0];
 		EvalForms forms=new EvalForms(code);
-		EvalForm form=new EvalForm(code,forms);
+		EvalForm form=new ViewableForm(code,null,null);
 		TreeCodeType type=picks?TableEvaluation.type:ViewEvaluation.type;
 		EvalFormConsumer consumer=(EvalFormConsumer)type.newCoded(
 				Nodes.child(code,type.name),form);
@@ -57,10 +58,11 @@ public final class EvalForms extends EvalTypes{
 	updated from the decoded {@link EvalRecord}
 	 */
 	private EvalForm newRecordForm(EvalRecord record){
-		EvalForm form=forms.get(record.stamp);
-		if(form==null)throw new IllegalStateException("Null form in "+Debug.info(this));
-		form.updateRecord(record);
-		return form;
+//		EvalForm form=forms.get(record.stamp);
+//		if(form==null)throw new IllegalStateException("Null form in "+Debug.info(this));
+		throw new RuntimeException("Not implemented in "+this);
+//		form.updateRecord();
+//		return form;
 	}
 	/**
 	Generates encoded text of a {@link EvalForm}'s current {@link EvalRecord}. 
@@ -68,7 +70,8 @@ public final class EvalForms extends EvalTypes{
 	@return text suitable for passing to {@link #newDecodedRecord(String)}
 	 */
 	public String newEncodedRecord(EvalForm form){
-		forms.put(form.stamp,form);
+		if(true)throw new RuntimeException("Not implemented in "+this);
+//		forms.put(form.stamp,form);
 		return Nodes.encode((DataNode)form.active.source,0).values()[0];
 	}
 	/**

@@ -2,11 +2,8 @@ package facets.util.tree;
 import static facets.util.Regex.*;
 import static facets.util.tree.TypedNode.*;
 import facets.util.Debug;
-import facets.util.FileSpecifier;
 import facets.util.Objects;
-import facets.util.Strings;
 import facets.util.Tracer;
-import facets.util.tree.Nodes.TreeRoot;
 import org.w3c.dom.Document;
 /**
 Defines document and other policy for an {@link XmlDocRoot}, in 

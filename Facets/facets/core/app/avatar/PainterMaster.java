@@ -17,6 +17,10 @@ public abstract class PainterMaster{
 		this.values=values;
 	}
 	@Override
+	public String toString(){
+		return values!=null?values.title():"Untitled PainterMaster";
+	}
+	@Override
 	final public int hashCode(){
 		return hash!=null?hash:Arrays.hashCode(Objects.join(Object.class,
 			new Object[]{values==null?"No values":false?values:Nodes.valuesAsLine(values,0)},
@@ -45,7 +49,7 @@ public abstract class PainterMaster{
 			return Objects.join(Object.class,hashables,lazySubHashables());
 		}
 		protected Object[]lazySubHashables(){
-			throw new RuntimeException("Not implemented in "+Debug.info(this));
+			return new Object[]{};
 		}
 		public Shade getFill(){
 			return fill;

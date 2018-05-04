@@ -40,7 +40,7 @@ public final class NodeList extends TitledList<TypedNode>{
 	must call as appropriate. 
 	 */
 	public void updateParent(){
-		if(hasMixedContents(parent))throw new IllegalArgumentException(
+		if(false&&hasMixedContents(parent))throw new IllegalArgumentException(
 				"Mixed contents in parent="+parent);
 		parent.setChildren(toArray(new TypedNode[]{}));
 		titled.clear();

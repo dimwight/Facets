@@ -1,9 +1,38 @@
 # Changelog for Facets
+##9.25
+demo>apps, SwingCanvasPainters, SwingPainterOutlined, PlaneTest, 
+ImageProviderAwt, SwingPainterSource, SliderPanel, FacetAppSpecifier, 
+Events, BusyCursor, HostBounds, WindowHostSwing, PainterMaster, 
+Util, Debug, SwingPdfCode, SwingPainterTextual, TextualField, 
+NodeList, Vector, PathTreePaneMaster,SvgPath,SvgShape, 
+apps.svg
+##9.24
+OffsetPathTree, 
+TreeAppFeatures, 
+NodeViewable, 
+PathTreePaneMaster, 
+TmxView, 
+TreeAppSpecifier, 
+TreeAppContenter
+##9.23
+OffsetPathTree
+##9.22
+PathTreeDnDMaster,NodePathEdit
+##9.21
+NodeEdit,OffsetPathTree
+##9.20
+PathTreePaneMaster, FileChooser etc 
+##9.18
+NodeUndoableEdit, ValueEdit etc
+##9.16-17
+applicable.eval,AppAreas,FileAppActions,AppDesktopFrame,FileChooser
+SpikeApp etc; demo.idiom
+##9.14-15
+AppAreas!
+##9.13
+AreaRoot etc
 ##9.12
-core, facet, util
-##9.12
-kit,_src
-KitCore
+kit,_src,KitCore
 ##9.11
 src
 chapters.txt

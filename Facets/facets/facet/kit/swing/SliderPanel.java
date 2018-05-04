@@ -7,6 +7,7 @@ import facets.facet.FacetFactory;
 import facets.facet.kit.*;
 import facets.util.Debug;
 import facets.util.StringFlags;
+import facets.util.Tracer;
 import facets.util.Util;
 
 import java.awt.Color;
@@ -22,8 +23,10 @@ import javax.swing.BoundedRangeModel;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 final class SliderPanel extends Widget implements KTargetable{
+	static Tracer t=Tracer.newTopped(SliderPanel.class.getSimpleName(),true);
   private static final class SwingSlider extends JSlider{
 		private final int sliderWidth;
 		private SwingSlider(BoundedRangeModel brm,int sliderWidth){
@@ -34,7 +37,10 @@ final class SliderPanel extends Widget implements KTargetable{
 			return new Dimension(sliderWidth,super.getPreferredSize().height);
 		}
     protected void paintComponent(Graphics g){
-    	if(true)super.paintComponent(g);
+    	if(false&&getModel().getValueIsAdjusting())return;
+    	Runnable doRun=()->super.paintComponent(g);
+    	if(false)SwingUtilities.invokeLater(doRun);
+    	else if(true)doRun.run();
 			else if(ui!=null){
 				Graphics scratchGraphics=g.create();
 				setForeground(Color.LIGHT_GRAY);
@@ -46,7 +52,7 @@ final class SliderPanel extends Widget implements KTargetable{
 			}
 		}
 		protected void processKeyEvent(KeyEvent e){
-		  getModel().setValueIsAdjusting(false);
+		  if(true)getModel().setValueIsAdjusting(false);
 		  super.processKeyEvent(e);
 		}
 	}

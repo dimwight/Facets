@@ -8,7 +8,6 @@ import facets.core.superficial.SIndexing;
 import facets.core.superficial.SNumeric;
 import facets.core.superficial.STarget;
 import facets.core.superficial.STarget.Targeted;
-import facets.core.superficial.app.SAreaTarget;
 import facets.core.superficial.STargeter;
 import facets.core.superficial.SToggling;
 import facets.core.superficial.STrigger;

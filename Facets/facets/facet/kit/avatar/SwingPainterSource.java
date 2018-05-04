@@ -94,6 +94,10 @@ final public class SwingPainterSource extends PainterSource{
 			public Scaling scaling(){
 				return Scaling.OUTLINE;
 			}
+			@Override
+			public String toString(){
+				return "Bar "+" "+r;
+			}
 		};
 		return mastered(master);
 	}
@@ -210,12 +214,34 @@ final public class SwingPainterSource extends PainterSource{
 		t.setToTranslation(x,y);
 		return t;
 	}
+  /**
+   * Sets this transform to a shearing transformation.
+   * The matrix representing this transform becomes:
+   * <pre>
+   *          [   1   shx   0   ]
+   *          [  shy   1    0   ]
+   *          [   0    0    1   ]
+   * </pre>
+   * @param shx the multiplier by which coordinates are shifted in the
+   * direction of the positive X axis as a factor of their Y coordinate
+   * @param shy the multiplier by which coordinates are shifted in the
+   * direction of the positive Y axis as a factor of their X coordinate
+   * @since 1.2
+   */
+	public Transform transformShear(double shx,double shy){
+		SwingTransform t=new SwingTransform();
+		t.setToShear(shx,shy);
+		return t;
+	}
 	public Transform transformTurn(double radians, double atX, double atY){
 		SwingTransform t=new SwingTransform();
 		t.setToRotation(radians,atX,atY);
 		return t;
 	}
-	public void applyTransforms(Transform[]transforms,boolean concatenate,Painter...painters){
+	public void applyTransforms(Transform[]transforms,boolean concatenate,
+			Painter...painters){
+		if(transforms==null||transforms.length==0)throw new IllegalArgumentException(
+				"Null or empty transforms in "+this);
 		Transform transform=transforms[0];
 		for(int i=1;i<transforms.length;i++)
 			((AffineTransform)transform).concatenate((AffineTransform)transforms[i]);

@@ -2,7 +2,7 @@ package facets.facet.kit.swing;
 import static facets.facet.FacetFactory.*;
 import static facets.facet.kit.swing.KitSwing.*;
 import static java.lang.Math.*;
-import facets.core.superficial.app.SurfaceStyle;
+import facets.core.app.SurfaceStyle;
 import facets.facet.FacetFactory;
 import facets.facet.SwingPanelFacet;
 import facets.facet.kit.*;

@@ -17,32 +17,30 @@ public final class ValueMatching extends EvalCoded{
 	};
 	private ValueMatching(TypedNode source,EvalContext context){
 		super(source,type,context);
+		debug=false&&label.text.equals("Mobility combo");
 	}
 	@Override
-	public Value[]doEvaluation(){
+	protected Value[]doEvaluation(){
 		InputField field=(InputField)context.getLabelled(label);
-		if(false)trace(".doEvaluation: codeds=",codeds);
 		if(field instanceof TickInput){
-			Values values=(Values)codeds[0];
-			Value[]inputs=field.inputs();
-			for(int i=0;i<inputs.length;i++)
-				if(inputs[i].asText().equals(values.label.text)){
-					return asValues((Value)values.codeds[field.evaluate()[i].asText(
-							).equalsIgnoreCase(Value.TRUE.asText())?1:0]);
-				}
-			throw new RuntimeException("Not implemented in "+this);
+			EvalCoded values=(EvalCoded)codeds[0];
+			Value[]options=values.evaluate();
+			for(Value v:field.evaluate())
+				if(v.label.equals(values.label))
+					return asValues(options[1]);
+			return asValues(options[0]);
 		}
+		if(debug)trace(".doEvaluation: field=",field);
 		int fieldAt=field.valueIndex();
+		if(debug)trace(".doEvaluation: fieldAt=",fieldAt);
 		if(codeds.length==1){
 			TreeCoded single=codeds[0];
-			if(single instanceof Values)
-				return asValues(((Values)single).evaluate()[fieldAt]);
-			else if(single instanceof ValueMatching)
-				return asValues(((ValueMatching)single).evaluate()[fieldAt]);
-			else throw new RuntimeException("Not implemented for "+this);
+			if(single instanceof Values||single instanceof ValueMatching)
+				return asValues(((EvalCoded)single).evaluate()[fieldAt]);
+			else throw new RuntimeException("Not implemented for "+single);
 		}else{
 			TreeCoded coded=codeds[fieldAt];
-			return coded  instanceof Value?asValues((Value)coded)
+			return coded instanceof Value?asValues((Value)coded)
 					:((EvalCoded)coded).evaluate();
 		}
 	}

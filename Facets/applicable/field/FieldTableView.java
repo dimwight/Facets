@@ -1,11 +1,11 @@
 package applicable.field;
 import facets.core.app.NodeViewable;
+import facets.core.app.SViewer;
 import facets.core.app.TableView;
+import facets.core.app.ViewerTarget;
 import facets.core.superficial.SIndexing;
 import facets.core.superficial.STarget;
 import facets.core.superficial.SToggling;
-import facets.core.superficial.app.SViewer;
-import facets.core.superficial.app.ViewerTarget;
 import facets.util.Debug;
 import facets.util.Objects;
 import facets.util.Stateful;

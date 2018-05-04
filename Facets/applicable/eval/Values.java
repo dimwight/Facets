@@ -1,15 +1,18 @@
 package applicable.eval;
-import static applicable.eval.Value.*;
 import facets.util.ItemList;
 import facets.util.tree.TypedNode;
-import facets.util.tree.TypedNode;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import applicable.treecode.TreeCodeContext;
 import applicable.treecode.TreeCodeType;
 import applicable.treecode.TreeCoded;
 /**
-{@link EvalCoded} that just evaluates to its contained {@link Value}s. 
+{@link EvalCoded} that evaluates to a {@link Value}[]. 
+ */
+/**
+. 
+<p>{@link Values}
  */
 final public class Values extends EvalCoded{
 	final public static TreeCodeType<Values>type=new TreeCodeType(
@@ -19,19 +22,29 @@ final public class Values extends EvalCoded{
 			return new Values(code,(EvalContext)context);
 		};
 	};
-	protected Values(TypedNode source,EvalContext context){
+	private Values(TypedNode source,EvalContext context){
 		super(source,type,context);
-		boolean singles=false;
 	}
+	/**
+	Assembles a {@link Value}[] from its contained
+	<ul>
+<li>{@link Value}s
+<li>{@link EvalCoded}s
+</ul>
+	 */
 	@Override
-	public Value[]doEvaluation(){
-		ItemList<Value>values=newValues();
-		for(TreeCoded eval:codeds)
-			if(eval instanceof Values)throw new RuntimeException(
-					"Not implemented for " +Values.type.name+" in "+this);
-			else if(eval instanceof Value)values.add((Value)eval);
-			else if(eval instanceof EvalCoded)
-				values.addItems(((EvalCoded)eval).evaluate());
+	protected Value[]doEvaluation(){
+		ItemList<Value>values=newValueItems();
+		for(TreeCoded coded:codeds)
+			if(coded instanceof Value)values.add((Value)coded);
+			else throw new RuntimeException(
+						"Not implemented for " +coded+" in "+this);
 		return values.items();
+	}
+	public Values updated(Collection<Value>values){
+		List<TypedNode>update=new ArrayList();
+		for(Value v:values)update.add(v.copyValue().source);
+		source.setChildren(update.toArray(new TypedNode[]{}));
+		return new Values(source,context);
 	}	
 }

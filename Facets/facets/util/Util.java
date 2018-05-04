@@ -95,10 +95,10 @@ public final class Util{
 		if(src.equals(dest))throw new IllegalArgumentException(
 				"Src=dest="+src);
 		else dest.createNewFile();
-	  FileChannel in=new FileInputStream(src).getChannel(),
-			out=new FileOutputStream(dest).getChannel();
-		in.transferTo(0,in.size(),out);
-		in.close();out.close();
+	  FileChannel srcIn=new FileInputStream(src).getChannel(),
+			srcOut=new FileOutputStream(dest).getChannel();
+		srcIn.transferTo(0,srcIn.size(),srcOut);
+		srcIn.close();srcOut.close();
 	}
 	public static void moveFile(File then,File toDir)throws IOException{
 		if(!toDir.isDirectory())throw new IllegalArgumentException(
@@ -239,9 +239,12 @@ public final class Util{
 		return Character.isDigit(string.charAt(string.length()-1));
 	}
 	private static String shortName(String className){
-		int semiColon=className.lastIndexOf(';'),stop=semiColon>0?semiColon
-				:className.length();
-		return false?className:className.substring(className.lastIndexOf('.')+1,
+		int semiColon=className.lastIndexOf(';'),
+				dollar=className.lastIndexOf('$'),
+				start=true?className.lastIndexOf("."):dollar>0?dollar+1:0,
+				stop=semiColon>0?semiColon:className.length();
+		return false?className:className.substring(
+				Math.max(className.lastIndexOf('.')+1,start),
 				stop);
 	}
 	public static String shortTypeNameKey(Object o){

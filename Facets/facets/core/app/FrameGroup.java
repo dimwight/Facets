@@ -41,8 +41,9 @@ final public class FrameGroup extends SFrameTarget{
 	 Re-implementation to return a private {@link facets.core.app.FrameGroup.FrameTargeter}. 
 	 */
 	public STargeter newTargeter() {
-		return true?new FrameTargeter((Class)framed)
-			:new TargeterCore((Class)framed);
+		Class type=framed.getClass();
+		return true?new FrameTargeter(type)
+			:new TargeterCore(type);
 	}
   public void facetNotified(boolean interim){
 		Object[]framed=new Object[frames.length];

@@ -1,5 +1,7 @@
 package facets.util.tree;
 import static facets.util.Debug.*;
+import static facets.util.Strings.*;
+import static java.util.Arrays.*;
 import facets.util.Debug;
 import facets.util.OffsetPath;
 import facets.util.Strings;
@@ -22,7 +24,7 @@ public final class NodePath extends OffsetPath{
   	super(offsets);
 	}
 	protected Object[]newMembers(Object root,int[]offsets){
-	  if(false)return newContentMembers(root,offsets);
+	  if(false)return newContentMembers_(root,offsets);
 	  int valueAt=valueAt();
 		TypedNode[]nodeMembers=new TypedNode[offsets.length-(valueAt>=0?2:0)];
 	  if(false&&valueAt>=0)
@@ -36,7 +38,7 @@ public final class NodePath extends OffsetPath{
 				[offsets[i]];
 	  return nodeMembers;
 	}
-	private Object[]newContentMembers(Object root,int[]offsets){
+	private Object[]newContentMembers_(Object root,int[]offsets){
 		int valueAt=valueAt();
 	  Object[]members=new Object[offsets.length];
 	  if(false&&valueAt>=0)
@@ -110,8 +112,8 @@ public final class NodePath extends OffsetPath{
 		if(false)trace(".valueAtChecked: ",this);
 		boolean thisAt=this.valueAt()>=0;
 		if(valueAt<0)return !thisAt?this
-				:new NodePath(Arrays.copyOf(offsets,offsets.length-2));
-		int offsetsNow[]=Arrays.copyOf(offsets,offsets.length+(thisAt?0:2)),
+				:new NodePath(copyOf(offsets,offsets.length-2));
+		int offsetsNow[]=copyOf(offsets,offsets.length+(thisAt?0:2)),
 			count=offsetsNow.length;
 		offsetsNow[count-2]=-1;
 		offsetsNow[count-1]=valueAt;
@@ -122,5 +124,33 @@ public final class NodePath extends OffsetPath{
 	@Override
 	public String toString(){
 		return Debug.info(this)+" offsets=["+Strings.intsString(offsets)+"] valueAt="+valueAt();
+	}
+	public boolean isParent(OffsetPath that){
+		if(isSibling(that))return false;
+		int[]these=this.offsets,those=that.offsets;
+		int count=these.length;
+		if(count>2&&these[count-2]==-1)return false;
+		these=parentOffsets(this.offsets);those=parentOffsets(that.offsets);
+		if(these.length>those.length)return false;
+		if(false)trace(".: these="+intsString(these)+" those=",intsString(those));
+		for(int i=0;i<these.length;i++){
+			int theseNext=these[i],thoseNext=those[i];
+			if(theseNext!=thoseNext)return false;
+		}
+		return true;
+	}
+	public boolean isSibling(OffsetPath that){
+		int[]these=parentOffsets(this.offsets),those=parentOffsets(that.offsets);
+		if(false)trace(".: these="+intsString(these)+" those=",intsString(those));
+		if(these.length!=those.length)return false;
+		for(int i=0;i<these.length;i++){
+			int theseNext=these[i],thoseNext=those[i];
+			if(theseNext!=thoseNext)return false;
+		}
+		return true;
+	}
+	private int[]parentOffsets(int[]all){
+		int count=all.length;
+		return copyOf(all,count-(count>2&&all[count-2]==-1?2:false?1:0));
 	}
 }

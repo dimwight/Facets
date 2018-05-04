@@ -23,6 +23,10 @@ public abstract class ValueEdit extends Tracer{
 		pairKey=pair==null||pair.length==1?null:pair[0];
 		proposal=valueLine==null?node.title():pairKey==null?valueLine:pair[1];
 	}
+	@Override
+	protected void traceOutput(String msg){
+		if(false)super.traceOutput(msg);
+	}
 	public final boolean dialogEdit(){
 		String title=valueLine==null?"Change item title":"Set Value",
 			rubricTail=valueLine==null?"title":pairKey==null?"value"
@@ -35,9 +39,12 @@ public abstract class ValueEdit extends Tracer{
 			if(!empty||acceptEmptyTitle())node.setTitle(empty?TypedNode.UNTITLED:input);
 		}
 		else if(pairKey==null){
+			trace(".dialogEdit: pathAt=",pathAt);
 			int valueAt=pathAt;
-			for(Object item:node.contents())
-				if(item instanceof TypedNode)valueAt++;
+			Object[]contents=node.contents();
+			for(int i=0;i<contents.length;i++)
+				if(contents[i]instanceof TypedNode&&i<=valueAt)valueAt++;
+			trace(".dialogEdit: valueAt=",valueAt);
 			node.putAt(valueAt,input);
 		}
 		else{

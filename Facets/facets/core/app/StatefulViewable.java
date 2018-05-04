@@ -1,8 +1,5 @@
 package facets.core.app;
 import static facets.core.app.ActionViewerTarget.Action.*;
-import facets.core.superficial.app.SViewer;
-import facets.core.superficial.app.ViewableAction;
-import facets.core.superficial.app.ViewableFrame;
 import facets.util.Debug;
 import facets.util.Stateful;
 import facets.util.tree.TypedNode;
@@ -44,7 +41,6 @@ public abstract class StatefulViewable<S extends Stateful>
 		 */
 		Stateful[]newStatefuls();
 	}
-	final static boolean undoableEdits=System.getProperty("undoableEdits")!=null;
 	protected final Clipper clipper;
 	private S copyFramed;
 	protected final S copyFramed(){
@@ -62,7 +58,7 @@ public abstract class StatefulViewable<S extends Stateful>
 		super(title,content);
 		clipper=clipperSource==null?null:clipperSource.newClipper(this);
 	}
-	public final void copyStatefulSelection(){
+	public void copyStatefulSelection(){
 		if(clipper==null)throw new IllegalStateException("Null clipper in "+Debug.info(this));
 		clipper.copySelection();
 	}
@@ -80,14 +76,14 @@ public abstract class StatefulViewable<S extends Stateful>
 	default returns a debug string. 
 	@param selected are the currently selected content 
 	 */
-	public String newStatefulsText(S[]selected){
+	final public String newStatefulsText(S[]selected){
 		return Debug.info(selected);
 	}
 	/**
 	Does the text passed seem to represent suitable content? 
-	<p>Used to determine the live state of the viewer 'Paste' target; default
-	return <code>false</code>.
+	<p>Used to determine the live state of the viewer 'Paste' target. 
 	@param text is currently on the system clipboard
+	@return by default <code>false</code> 
 	 */
 	public boolean textSeemsPastable(String text){
 		return false;
@@ -115,22 +111,20 @@ public abstract class StatefulViewable<S extends Stateful>
 		if(action==PASTE||action==PASTE_INTO)
 			insertStatefuls(action==PASTE_INTO,newPasteStatefuls());
 		else if(action==CUT||action==DELETE)deleteSelection(action==CUT);
-		else if(action==MODIFY){
-			editing&=editSelection();//modifySelection?
-			if(undoableEdits){
-				Stateful modifiedState=((Stateful)framed).copyState();
-				restoreAfterEditAction();
-				setModifyState(modifiedState);
-				updateAfterEditAction();
-			}
-		}
+		else if(action==MODIFY)editing&=maybeModify();
 		else if(action==UNDO)states.undo();
 		else if(action==REDO)states.redo();
 		if(!editing)return;
 		if(stateIsValid())updateAfterEditAction();
 		else restoreAfterEditAction();
 	}
-	protected void setModifyState(Stateful state){
+	protected boolean maybeModify(){
+		return editSelection();
+	}
+	protected void restoreAfterEditAction(){
+		((Stateful)framed).setState(copyFramed);
+	}
+	protected void setModifiedState(Stateful state){
 		((Stateful)framed).setState(state);
 	}
 	final public void updateAfterEditAction(){
@@ -140,10 +134,6 @@ public abstract class StatefulViewable<S extends Stateful>
 	protected final void copyFramedState(){
 		S src=(S)framed;
 		copyFramed=clipper==null?src:(S)src.copyState();
-	}
-	protected void restoreAfterEditAction(){
-		if(!undoableEdits)trace(".restoreAfterEditAction");
-		((S)framed).setState(copyFramed);
 	}
 	protected boolean stateIsValid(){
 		return true;

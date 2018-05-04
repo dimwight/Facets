@@ -1,7 +1,6 @@
 package facets.core.app;
 import static facets.util.tree.Nodes.*;
 import static facets.util.tree.TypedNode.*;
-import facets.core.superficial.app.SViewer;
 import facets.core.superficial.app.SelectionView;
 import facets.util.Debug;
 import facets.util.ItemList;
@@ -24,7 +23,7 @@ public class TreeView extends SelectionView{
 	public TreeView(String title){
 		super(title);
 	}
-	final public boolean allowMultipleSelection(){
+	public boolean allowMultipleSelection(){
 		return false;
 	}
 	/**

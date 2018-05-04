@@ -1,7 +1,7 @@
 package facets.core.app.avatar;
 import facets.core.app.PathSelection;
+import facets.core.app.SViewer;
 import facets.core.superficial.app.SSelection;
-import facets.core.superficial.app.SViewer;
 import facets.core.superficial.app.SelectionView;
 import facets.util.Debug;
 /**
