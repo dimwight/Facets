@@ -1,4 +1,6 @@
 # Changelog for Facets
+##9.26+
+DateField,TablePaneMaster,TmxView,TmxUnit
 ##9.26
 TreeTextContenter,TreeTextSpecifier,
 TreeTextViewable,TmxView,

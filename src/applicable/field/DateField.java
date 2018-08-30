@@ -10,19 +10,19 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 public class DateField extends ValueField<Date>{
-	public static final DateFormat DATES_DAY=DateFormat.getDateInstance(DateFormat.SHORT),
-	 DATES_MONTH=new SimpleDateFormat("MM/yyyy");
+	public static final DateFormat STYLE_FULL=DateFormat.getDateInstance(DateFormat.SHORT),
+	 STYLE_MM_YYYY=new SimpleDateFormat("MM/yyyy"),STYLE_MM_YY=new SimpleDateFormat("MM/yy");
 	public static final String NULL_DATE_TEXT="01/01/1000";
 	public static Date nullDate;
 	static{
 		try{
-			nullDate=DATES_DAY.parse(NULL_DATE_TEXT);
+			nullDate=STYLE_FULL.parse(NULL_DATE_TEXT);
 		}catch(ParseException e){
 			throw new RuntimeException(e);
 		}
 	}
 	public static boolean dateIsToday(Date date){
-		return DATES_DAY.format(date).equals(DATES_DAY.format(new Date()));
+		return STYLE_FULL.format(date).equals(STYLE_FULL.format(new Date()));
 	}
 	public DateField(String title){
 		super(title);
@@ -31,7 +31,7 @@ public class DateField extends ValueField<Date>{
 		if(text.trim().equals(""))return nullDate;
 		Date date=new Date();
 		DateFormat[]formats=new DateFormat[]{
-			DATES_DAY,
+			STYLE_FULL,
 			new SimpleDateFormat("dd/MM"),
 		};
 		int at=0;
@@ -62,7 +62,7 @@ public class DateField extends ValueField<Date>{
 	}
 	@Override
 	public Format format(){
-		return DATES_DAY;
+		return STYLE_FULL;
 	}
 	@Override
 	protected Date newNullValue(ValueNode values){
@@ -78,6 +78,6 @@ public class DateField extends ValueField<Date>{
 	}
 	@Override
 	protected String formatInputValue(Date value){
-		return DATES_DAY.format(value);
+		return STYLE_FULL.format(value);
 	}
 }

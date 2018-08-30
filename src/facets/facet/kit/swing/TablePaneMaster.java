@@ -7,6 +7,7 @@ import static javax.swing.SortOrder.*;
 import static javax.swing.SwingConstants.*;
 import facets.core.app.AppConstants;
 import facets.core.app.PathSelection;
+import facets.core.app.StatefulViewable;
 import facets.core.app.TableView;
 import facets.core.app.TextView;
 import facets.core.app.ViewerTarget;
@@ -407,7 +408,7 @@ final class TablePaneMaster extends ViewerMaster{
 	}
 	@Override
 	protected void traceOutput(String msg){
-		if(false)Util.printOut(Debug.info(false?base:this)+msg);
+		if(true)Util.printOut(Debug.info(false?base:this)+msg);
 	}
 	private final TableModel model=new AbstractTableModel(){
     public Class getColumnClass(int col){
@@ -475,7 +476,16 @@ final class TablePaneMaster extends ViewerMaster{
 	}
 	protected JComponent newAvatarPane(){
 		content=(ValueProxy[])viewerTarget().selection().content();
-	  return new SmartTable(this);
+	  SmartTable table=new SmartTable(this);
+	  table.addMouseListener(new MouseAdapter(){
+	  	@Override
+	  	public void mouseClicked(MouseEvent e){
+	  		if(e.getClickCount()!=2)return;
+  			int shift=e.getModifiersEx()&MouseEvent.SHIFT_DOWN_MASK;
+				viewerTarget().actionTriggers[shift>0?1:0].fire();
+	  	}
+		});
+		return table;
 	}
 	@Override
 	protected void disposeAvatarPane(){}
