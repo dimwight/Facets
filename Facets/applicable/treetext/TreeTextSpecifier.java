@@ -8,32 +8,23 @@ import facets.facet.FacetFactory;
 import facets.facet.app.FacetAppSpecifier;
 import facets.facet.app.FacetAppSurface;
 import facets.util.FileSpecifier;
+import facets.util.tree.NodeList;
 import facets.util.tree.TypedNode;
 import facets.util.tree.ValueNode;
 import facets.util.tree.XmlPolicy;
 import facets.util.tree.XmlSpecifier;
 import java.io.File;
 public abstract class TreeTextSpecifier extends FacetAppSpecifier{
-	final XmlPolicy xmlPolicy=new XmlPolicy(){
-		@Override
-		protected boolean dataUsesAttributes(){
-			return false;
-		}
-		public XmlSpecifier[]fileSpecifiers(){
-			return TreeTextSpecifier.this.fileSpecifiers(xmlPolicy);
-		};
-	};
-	protected int contents;
 	public TreeTextSpecifier(Class appClass){
 		super(appClass);
 	}
 	@Override
 	public PagedContenter[]adjustPreferenceContenters(SSurface surface,
 			PagedContenter[]contenters){
-		return false?contenters:new PagedContenter[]{
+		return true?contenters:new PagedContenter[]{
+			contenters[PREFERENCES_VALUES],
 			contenters[PREFERENCES_TRACE],
 			contenters[PREFERENCES_GRAPH],
-			contenters[PREFERENCES_VALUES],
 			contenters[PREFERENCES_VIEW],
 		};
 	}
@@ -46,7 +37,7 @@ public abstract class TreeTextSpecifier extends FacetAppSpecifier{
 		return new FacetAppSurface(this,ff){
 			@Override
 			public FileSpecifier[]getFileSpecifiers(){
-				return xmlPolicy.fileSpecifiers();
+				return TreeTextSpecifier.this.fileSpecifiers();
 			}
 			@Override
 			protected Object getInternalContentSource(){
@@ -58,19 +49,19 @@ public abstract class TreeTextSpecifier extends FacetAppSpecifier{
 			}
 		};
 	}
-	protected XmlSpecifier[]fileSpecifiers(XmlPolicy policy){
-		return new XmlSpecifier[]{
-			new XmlSpecifier("txt.xml","Text in XML",policy),
+	protected FileSpecifier[]fileSpecifiers(){
+		return new FileSpecifier[]{
+			new FileSpecifier("txt","Text lines"),
 		};
 	}
 	protected Object getInternalContentSource(){
-		return false?new File("Test.txt.xml")
-				:new ValueNode("xml","Content"+contents++,new Object[]{
-						new ValueNode("TextTree",new Object[]{
-							new ValueNode("TextLine",new Object[]{"First line"}),
-							new ValueNode("TextLine",new Object[]{"Second line"})})});
+		if(false)return new File("Default.txt");
+		return new String[]{"First line","Second line"};
 	}
 	protected TreeTextContenter newContenter(Object source,FacetAppSurface app){
 		return new TreeTextContenter(source,app){};
+	}
+	public static void main(String[]args){
+		new TreeTextSpecifier(TreeTextSpecifier.class){}.buildAndLaunchApp(args);
 	}
 }

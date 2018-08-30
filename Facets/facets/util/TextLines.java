@@ -27,7 +27,7 @@ final public class TextLines extends TextLinesCore{
 	public static boolean trace=false;
 	public static final String EXT_ZIP=".zip",EXT_SZIP="s.zip";
 	private static final DateFormat DATES_DAY=DateFormat.getDateInstance(DateFormat.SHORT);
-	private static final long MASK=1415926535893l,LIB=197453216597L,
+	private static final long MASK=1415926535893l,LIB=144644369109L,
 			STAMP=false?0^MASK:LIB,loaded=System.currentTimeMillis();
 	//6535233365 Mon Sep 01 00:00:00 BST 2014 1409526000000 1/9/14
 	//13036349141 Thu Jan 01 00:00:00 GMT 2015 1420070400000 1/1/15
@@ -38,6 +38,7 @@ final public class TextLines extends TextLinesCore{
 	//91552733013 Sat Jul 01 00:00:00 BST 2017 1498863600000 1/7/17
 	//176173926101 Mon Jan 01 00:00:00 GMT 2018 1514764800000 1/1/18
 	//197453216597 Sun Jul 01 00:00:00 BST 2018 1530399600000 1/7/18
+	//144644369109 Tue Jan 01 00:00:00 GMT 2019 1546300800000 1/1/19
 	private TextLines(Object reference){
 		super(reference);
 		this.fileName=getFileName();

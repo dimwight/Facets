@@ -22,7 +22,7 @@ import java.util.Arrays;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 final class SwingCanvasPainters extends Tracer{
-	private static final boolean optimise=true,timing=false;
+	private static final boolean optimise=true,timing=true;
 	private final static PdfCanvas pdf=false?null:new PdfCanvas();
 	private final ProvidingCache localCache=
 			System.getProperty("SwingCanvasPaintersLocalCache")==null?null:
@@ -36,8 +36,8 @@ final class SwingCanvasPainters extends Tracer{
 	private Painter motionPainters[],viewPainters[],backPainter;
 	private Dimension sizeThen;
 	private Image immediate,codeBack;
-	private Timer scaleWaiter;
 	private Object viewIdThen;
+	private Timer scaleWaiter_;
 	SwingCanvasPainters(SwingAvatarMaster master){
 		this.master=master;
 	}
@@ -139,10 +139,10 @@ final class SwingCanvasPainters extends Tracer{
 		  for(Painter each:motionPainters)each.paintInGraphics(g2.create());
 	}
 	private void scaleWithWait_(Graphics2D g2,final JPanel pane,int width,int height){
-		if(scaleWaiter!=null)scaleWaiter.stop();
+		if(scaleWaiter_!=null)scaleWaiter_.stop();
 		g2.drawImage(true?immediate
 				:immediate.getScaledInstance(width,height,Image.SCALE_FAST),0,0,null);
-		(scaleWaiter=new Timer(500,new ActionListener(){
+		(scaleWaiter_=new Timer(500,new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				pane.repaint();

@@ -32,8 +32,8 @@ final class SwingPainterOutlined extends Tracer implements PickPainter,Identifie
 	private static final float hairline=hitPen?0.8f:1;
 	private final Outlined master;
 	private final SwingPdfCode pdf=new SwingPdfCode(this,false);
-	private static int identities;
-	private final int identity=identities++;
+	private static int ids;
+	private final int id=ids++;
 	private final PlaneCanvas canvas;
 	private final int hash;
 	private Shade fill,pen;
@@ -51,7 +51,7 @@ final class SwingPainterOutlined extends Tracer implements PickPainter,Identifie
 	}
 	private void checkPaintValues(){
 		if(false&&scaleThen==scaleThen&&canvas.scale!=scaleThen)
-			throw new RuntimeException("Not implemented in "+this);
+			throw new RuntimeException("Bad scale "+this);
 		else if(penShape!=fillShape||scaleThen==canvas.scale)return;
 		scaleThen=canvas.scale;
 		Shape shape=(Shape)master.getOutline();
@@ -69,7 +69,7 @@ final class SwingPainterOutlined extends Tracer implements PickPainter,Identifie
 			penShape=hitPen&&fill==null?stroke.createStrokedShape(shape):shape;
 		}
 	}
-	final private static ProvidingCache cache=new ProvidingCache(20,null);
+	final private static ProvidingCache sprites=new ProvidingCache(20,null);
 	public void paintInGraphics(Object graphics){
 		Graphics2D g2=(Graphics2D)graphics;
 		pdf.setTransform(g2);
@@ -78,44 +78,36 @@ final class SwingPainterOutlined extends Tracer implements PickPainter,Identifie
 			if(fillShape==null)throw new IllegalStateException("No fillShape in "+this);
 			Rectangle2D bounds=fillShape.getBounds2D();
 			double wD=bounds.getWidth(),hD=bounds.getHeight(),
-					xD=bounds.getX(),yD=bounds.getY(),mD=2;
-			Class<SwingPainterOutlined>spo=SwingPainterOutlined.class;
+					xD=bounds.getX(),yD=bounds.getY(),mD=2,
+					scaleD=g2.getTransform().getScaleX();
 			Color color=new Color(fill.rgb());
-			Image image=true||wD>100?null
-					:new ItemProvider<Image>(cache,spo,spo.getSimpleName()){
+			Class spo=SwingPainterOutlined.class;
+			Image sprite=false||wD>20?null
+					:new ItemProvider<Image>(sprites,spo,spo.getSimpleName()){
 			@Override
 			protected Image newItem(){
-				int scaleI=8;
-				int mI=(int)(mD*scaleI),wI=(int)(wD*scaleI)+2*mI,hI=(int)(hD*scaleI+2*mI);
-				Image raw=newPaintableImage(wI,hI,Color.lightGray);
-				Graphics2D g2=(Graphics2D)raw.getGraphics();
+				int mI=(int)(mD*scaleD),wI=(int)(wD*scaleD)+2*mI,hI=(int)(hD*scaleD)+2*mI;
+				Image i=new BufferedImage(wI,hI,BufferedImage.TYPE_INT_ARGB);
+				Graphics2D gi=(Graphics2D)i.getGraphics();
+				gi.setRenderingHint(KEY_ANTIALIASING,VALUE_ANTIALIAS_ON);
+				gi.setColor(color.brighter());
+				gi.scale(scaleD,scaleD);
+				gi.translate(-xD+mD,-yD+mD);
+				gi.fill(fillShape);
+				if(false)trace(".newItem: ");
+				return i;
+			}}.getForValues(hash,Double.valueOf(scaleD));
+			if(sprite==null){
+				if(false)trace(".paintInGraphics: ");
 				g2.setRenderingHint(KEY_ANTIALIASING,VALUE_ANTIALIAS_ON);
 				g2.setColor(color);
-				g2.scale(scaleI,scaleI);
-				g2.translate(-xD+mD,-yD+mD);
 				g2.fill(fillShape);
-				trace(".newItem: ");
-				if(false)return raw.getScaledInstance((int)wD,(int)hD,Image.SCALE_SMOOTH);
-				else if(false)return raw;
-				Image out=newPaintableImage(wI/scaleI,hI/scaleI,Color.lightGray);
-				Graphics2D gOut=(Graphics2D)out.getGraphics();
-				gOut.setRenderingHint(KEY_ANTIALIASING,VALUE_ANTIALIAS_ON);
-				gOut.scale(1.0/scaleI,1.0/scaleI);
-				if(true){
-					gOut.setColor(color);
-					gOut.translate(-xD+mD,-yD+mD);
-					gOut.fill(fillShape);
-				}
-				else gOut.drawImage(raw,0,0,null);
-				return out;
-			}}.getForValues(master.hashCode());
-			if(image==null){
-				if(false)trace(".paintInGraphics: ");
-				g2.setColor(color);
-				g2.fill(fillShape);
-			}else{
-				g2.translate(0,0);
-				g2.drawImage(image,0,0,null);
+			}
+			else{
+				g2.translate(xD-mD,yD-mD);
+				g2.scale(1/scaleD,1/scaleD);
+				g2.setRenderingHint(KEY_ANTIALIASING,VALUE_ANTIALIAS_OFF);
+				g2.drawImage(sprite,0,0,null);
 			}
 			pdf.definePath(fillShape);
 			pdf.fillPath(color);
@@ -133,11 +125,10 @@ final class SwingPainterOutlined extends Tracer implements PickPainter,Identifie
 	}
 	public Object checkCanvasHit(Point canvasAt,double hitGap){
 		if(!master.isPickable())return null;
-		double 
-			canvasGap=canvas.unscale(hitGap),boxSize=canvasGap>0?canvasGap*2:Double.MIN_VALUE,
+		double canvasGap=canvas.unscale(hitGap),
+			boxSize=canvasGap>0?canvasGap*2:Double.MIN_VALUE,
 			boxX=canvasAt.x()-boxSize/2,
-			ySign=-1,
-			boxY=canvasAt.y()+boxSize/2*ySign;
+			ySign=-1,boxY=canvasAt.y()+boxSize/2*ySign;
 		Rectangle2D hitBox=new Rectangle2D.Double(boxX,boxY,boxSize,boxSize);
 		checkPaintValues();
 		if(!(penShape!=null&&penShape.intersects(hitBox)||
@@ -164,9 +155,7 @@ final class SwingPainterOutlined extends Tracer implements PickPainter,Identifie
 		if(false)penShape=fillShape=null;
 	}
 	public Object identity(){
-		return identity;
-	}
-	public final void setTitle(String title){
+		return id;
 	}
 	@Override
 	public PdfCode code(){

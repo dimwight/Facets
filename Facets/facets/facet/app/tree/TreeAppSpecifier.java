@@ -97,26 +97,33 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	}
 	/**
 	Final implementation. 
-	<p>The {@link FacetAppSurface} returned calls out to {@link #getInternalContentSource()} 
-	and to {@link XmlPolicy#fileSpecifiers()} via {@link #xmlPolicy()}; it creates
-	 {@link TreeAppContenter}s. 
+	<p>The {@link FacetAppSurface} returned calls out to 
+	<ul>
+	<li>{@link #getInternalContentSource()} 
+	<li>{@link XmlPolicy#fileSpecifiers()} via {@link #xmlPolicy()}
+	<li>{@link #newContenter(Object, FacetAppSurface)} which by default returns a
+	 {@link TreeAppContenter}. 
+	 <ul>
 		 */
 	@Override
 	final protected FacetAppSurface newApp(FacetFactory ff,FeatureHost host){
 		return new FacetAppSurface(this,ff){
 			@Override
 			public FileSpecifier[]getFileSpecifiers(){
-				return((TreeAppSpecifier)spec).xmlPolicy().fileSpecifiers();
+				return TreeAppSpecifier.this.xmlPolicy().fileSpecifiers();
 			}
 			@Override
 			protected Object getInternalContentSource(){
-				return((TreeAppSpecifier)spec).getInternalContentSource();
+				return TreeAppSpecifier.this.getInternalContentSource();
 			}
 			@Override
 			protected SContenter newContenter(Object source){
-				return new TreeAppContenter(source,this);
+				return TreeAppSpecifier.this.newContenter(source,this);
 			}
 		};
+	}
+	protected SContenter newContenter(Object source,FacetAppSurface app){
+		return new TreeAppContenter(source,app);
 	}
 	/**
 	Defines an {@link XmlPolicy} for the application content. 

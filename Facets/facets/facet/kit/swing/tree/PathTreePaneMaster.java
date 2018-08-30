@@ -138,8 +138,8 @@ public class PathTreePaneMaster extends PathNodePaneMaster{
 				Class classThen=null;
 				for(TreePath path:treePaths){
 					TreePath parentPath=path.getParentPath();
-					if(parentPath==null)continue;
-					Object[]parents=parentPath.getPath();
+					if(false&&parentPath==null)continue;
+					Object[]parents=parentPath==null?new Object[]{}:parentPath.getPath();
 					Class classNow=path.getLastPathComponent().getClass();
 					if(false)trace(".valueChanged: parents=",parents);
 					if(parentsThen!=null&&

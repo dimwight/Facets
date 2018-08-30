@@ -8,14 +8,15 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 public final class DirCache extends Tracer{
-	private static final boolean deleteWrites=true&&Debug.natureDebug;
+	private final boolean deleteWrites;
 	private final File dir;
 	@Override
 	protected void traceOutput(String msg){
 		if(true)super.traceOutput(msg);
 	}
-	public DirCache(File dir){
+	public DirCache(File dir,boolean deleteWrites){
 		this.dir=dir;
+		this.deleteWrites=deleteWrites;
 		String name=dir.getName();
 		if(!name.toLowerCase().equals(name))throw new IllegalArgumentException(
 				"Bad dir name="+name);
@@ -30,6 +31,7 @@ public final class DirCache extends Tracer{
 			stream.writeObject(data);
 			stream.close();
 			if(deleteWrites)file.delete();
+			trace(".put: file=",file.exists());
 		}catch(Exception e){
 			throw new RuntimeException(e);
 		}

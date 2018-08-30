@@ -1,7 +1,9 @@
 package apps;
+import static facets.facet.app.FacetPreferences.*;
 import facets.core.app.ActionViewerTarget;
 import facets.core.app.AreaRoot;
 import facets.core.app.FeatureHost;
+import facets.core.app.PagedContenter;
 import facets.core.app.SAreaTarget;
 import facets.core.app.FeatureHost.LayoutFeatures;
 import facets.core.app.SContentAreaTargeter;
@@ -25,13 +27,16 @@ import facets.core.superficial.STarget;
 import facets.core.superficial.STargeter;
 import facets.core.superficial.app.FacetedTarget;
 import facets.core.superficial.app.SSelection;
+import facets.core.superficial.app.SSurface;
 import facets.facet.AppFacetsBuilder;
 import facets.facet.AreaFacets;
 import facets.facet.FacetFactory;
 import facets.facet.app.FacetAppSpecifier;
 import facets.facet.app.FacetAppSurface;
+import facets.util.Doubles;
 import facets.util.ItemList;
 import facets.util.NumberPolicy;
+import facets.util.Objects;
 import facets.util.geom.Vector;
 import facets.util.shade.Shades;
 final class PlaneTest extends ViewerContenter{
@@ -43,14 +48,19 @@ final class PlaneTest extends ViewerContenter{
 			return new AvatarPolicy(){
 				@Override
 				public Painter[]newViewPainters(boolean selected,boolean active){
-					ItemList<Painter>all=new ItemList<>(Painter.class);
-					for(int i=0;i<4;i++)
-						all.add(p.textOutline(content.toString(),"Sans-Serif",10,false,false,
-									Shades.gray,null));
-					Painter[]painters=all.items();
-					Transform shift=p.transformAt(10,10);
-					if(true)p.applyTransforms(new Transform[]{shift},true,painters);
-					return painters;
+					ItemList<Painter>painters=new ItemList(Painter.class);
+					boolean single=false;
+					for(int stop=single?1:5,i=0;i<stop;i++){
+						Painter painter=p.textOutline(single?content.toString():(""+i%5),"Sans-Serif",
+								(single?12:(int)plane.plotShift().y)+(plane.scaleToViewer()?1:20),
+								false,false,Shades.gray,null);
+						double x=single?10:Math.random()*(plane.showWidth()-10),
+								y=single?x:Math.random()*(plane.showHeight()-10);
+						p.applyTransforms(new Transform[]{p.transformAt(x,y)},
+							true,new Painter[]{painter});
+						painters.add(painter);
+					}
+					return painters.items();
 				}
 				@Override
 				public Painter[]newPickPainters(Object hit,boolean selected){
@@ -59,12 +69,22 @@ final class PlaneTest extends ViewerContenter{
 			};
 		}
 	};
+	private final double fontHeight=12;
 	private final PlaneView plane=new PlaneViewWorks("Text",100,100,
-			new Vector(10,50),policies){
+			new Vector(0,fontHeight),policies){
+		public void setShowValues(double w,double h,Vector plot,double scale){
+			trace(".setShowValues: "+Objects.toString(Doubles.toObjects(
+					new double[]{w,h,plot.x,plot.y,scale})));
+			super.setShowValues(w,h,plot,scale);
+		}
+		@Override
+		public boolean scaleToViewer(){
+			return true;
+		}
 		@Override
 		public int ySign(){
 			return 1;
-		};
+		}
 	};
 	private PlaneTest(Object source,FacetAppSurface app){
 		super(source);
@@ -138,6 +158,7 @@ final class PlaneTest extends ViewerContenter{
 			}
 			@Override
 			public SFacet toolbar(){
+				if(true)return null;
 				ItemList<SFacet>facets=new ItemList(SFacet.class);
 				STargeter barStart=area.elements()[0];
 				facets.add(numericSliders(barStart,200,
@@ -149,12 +170,22 @@ final class PlaneTest extends ViewerContenter{
 	public static void main(String[] args){
 		new FacetAppSpecifier(PlaneTest.class){
 			@Override
+			public PagedContenter[]adjustPreferenceContenters(SSurface surface,
+					PagedContenter[]contenters){
+				return false?contenters:new PagedContenter[]{
+					contenters[PREFERENCES_TRACE],
+					contenters[PREFERENCES_GRAPH],
+//					contenters[PREFERENCES_VALUES],
+					contenters[PREFERENCES_VIEW],
+				};
+			}
+			@Override
 			public boolean isFileApp(){
 				return false;
 			}
 			public boolean canCreateContent(){
 				return false;
-			};
+			}
 			@Override
 			protected FacetAppSurface newApp(FacetFactory ff,FeatureHost host){
 				return new FacetAppSurface(this,ff){

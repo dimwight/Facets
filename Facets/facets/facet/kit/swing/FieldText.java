@@ -153,12 +153,12 @@ class FieldText extends Widget implements KField{
 	    		notifyFinalValid(Update.Commit);
 	    		break;
 	    	default:
-	    		handleFieldInput(keyCode,interim);
+	    		if(e.getKeyChar()!=KeyEvent.CHAR_UNDEFINED)
+	    			handleFieldInput(keyCode,interim);
 	    	}
 	    }
 	    public void keyTyped(KeyEvent e){
 	  		boolean ctrl=(e.getModifiers()&KeyEvent.CTRL_MASK)!=0;
-	  		if(false)trace(".keyPressed: ",e.getKeyChar());
 	    }
 	  });
 		suggester=new FieldTextSuggester(field);
@@ -194,6 +194,7 @@ class FieldText extends Widget implements KField{
 				new ActionListener(){		
 			public void actionPerformed(ActionEvent e) {
 				validateFieldText();
+				if(false)trace(".handleFieldInput: ");
 				facet().targetNotify(this,true);
 			}
 		}){
@@ -219,7 +220,7 @@ class FieldText extends Widget implements KField{
 	public void setText(String text){
 		if(text==null)throw new IllegalArgumentException(
 				"Null text in "+Debug.info(this));
-		if(notifier==null)readyField(lastSetText=text);
+		if(notifier==null||!lastSetText.equals(text))readyField(lastSetText=text);
 	}
 	private void readyField(String text){
 		field.setText(text);

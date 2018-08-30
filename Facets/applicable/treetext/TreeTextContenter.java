@@ -28,6 +28,8 @@ import facets.util.FileSpecifier;
 import facets.util.Stateful;
 import facets.util.TextLines;
 import facets.util.tree.DataNode;
+import facets.util.tree.NodeList;
+import facets.util.tree.Nodes;
 import facets.util.tree.TypedNode;
 import facets.util.tree.ValueNode;
 import facets.util.tree.XmlDocRoot;
@@ -36,11 +38,12 @@ import facets.util.tree.XmlSpecifier;
 import java.io.File;
 import java.io.IOException;
 public abstract class TreeTextContenter extends ViewerContenter{
+	private static final String TYPE_LINE="TextLine";
 	public static final int TARGETS_PANE=0,TARGETS_CONTENT=1;
 	public static final String STATE_OFFSETS="selectionOffsets";
 	public class TreeTextView extends TextView{
 		private final boolean canEdit;
-		public TreeTextView(String title, boolean canEdit){
+		public TreeTextView(String title,boolean canEdit){
 			super(title);
 			this.canEdit=canEdit;
 		}
@@ -54,40 +57,60 @@ public abstract class TreeTextContenter extends ViewerContenter{
 		}
 	}
 	protected final FacetAppSurface app;
-	private final XmlPolicy xmlPolicy;
 	private Object stateStamp=null;
 	private NodeViewable viewable;
 	public TreeTextContenter(Object source,FacetAppSurface app){
 		super(source);
 		this.app=app;
-		xmlPolicy=textTreeSpec().xmlPolicy;
 	}
 	private TreeTextSpecifier textTreeSpec(){
 		return (TreeTextSpecifier)app.spec;
 	}
+	protected static int contents;
 	@Override
 	final protected ViewableFrame newContentViewable(Object source){
+		String[]lines;
 		DataNode tree=null;
+		File file=null;
 		if(source instanceof File){
-			File file=(File)source;
-			for(FileSpecifier fileType:xmlPolicy.fileSpecifiers()){
-				if(!fileType.specifies(file))continue;
-				XmlSpecifier xml=(XmlSpecifier)fileType;
-				XmlDocRoot root=xml.newTreeRoot(xml.newRootNode(file));
-				root.readFromSource(file);
-				tree=root.tree;
-				tree.setTitle(file.getName());
-				tree.setValidType("xml");
-				stateStamp=tree.stateStamp();
-				break;
+			file=(File)source;
+			try{
+				lines=new TextLines(file).readLines();
+			}catch(IOException e){
+				throw new RuntimeException(e);
 			}
-			if(tree==null)throw new IllegalStateException("Bad file type in "+file);
 		}
-		else tree=(DataNode)source;
-		final ValueNode state=app.spec.state();
-		NodeViewable viewable=newViewable(tree);
-		viewable.readSelectionState(state,STATE_OFFSETS);
-		return this.viewable=viewable;
+		else lines=(String[])source;
+		NodeList content=new NodeList(new ValueNode("TextTree",TypedNode.UNTITLED),false);
+		for(String line:lines)
+			content.add(new ValueNode(TYPE_LINE,new Object[]{line}));
+		content.updateParent();
+		String title=file!=null?file.getName().replaceAll("\\..*","")
+				:("Content"+contents++);
+		tree=new ValueNode("xml",title,new Object[]{content.parent});
+		stateStamp=tree.stateStamp();
+		viewable=newViewable(tree);
+		viewable.readSelectionState(app.spec.state(),STATE_OFFSETS);
+		return viewable;
+	}
+	@Override
+	final public void saveToSink(Object sink)throws IOException{
+		File file=(File)sink;
+		String name=file.getName();
+		if(file.exists()&&!name.startsWith("_"))
+			new TextLines(file).copyFile("_"+name);
+		SFrameTarget frame=contentFrame();
+		DataNode tree=(DataNode)frame.framed;
+		tree.setTitle(name);
+		if(false)tree.setValidType(tree.type());
+		StringBuilder lines=new StringBuilder();
+		for(TypedNode node:Nodes.descendantsTyped(tree,TYPE_LINE))
+			lines.append(node.values()[0]+"\n");
+		new TextLines(file).writeLines(lines.toString().split("\n"));
+		stateStamp=tree.updateStateStamp();
+		if(false)trace(".setSink: area="+Debug.info(app.activeContentTargeter().target().title())
+				+ "\nfile="+name);
+		app.notify(new Notice(frame,Impact.DEFAULT));
 	}
 	@Override
 	final protected FacetedTarget[]newContentViewers(ViewableFrame viewable){
@@ -130,32 +153,16 @@ public abstract class TreeTextContenter extends ViewerContenter{
 		return(app.actions instanceof FileAppActions)&&changed;
 	}
 	@Override
-	final public FileSpecifier[]sinkFileSpecifiers(){
-		Object sink=sink();
-		String name=sink instanceof File?((File)sink).getName()
-				:((TypedNode)sink).title()+"."+((TypedNode)sink).type();
-		return FileSpecifier.filterByName(xmlPolicy.fileSpecifiers(),name);
-	}
-	@Override
 	final public boolean setSink(Object sink){
 		 return sink instanceof File&&((File)sink).getName().startsWith("_")||
 			!app.spec.canOverwriteContent()?false
 		:super.setSink(sink);
 	}
 	@Override
-	final public void saveToSink(Object sink)throws IOException{
-		File file=(File)sink;
-		String name=file.getName();
-		if(file.exists()&&!name.startsWith("_"))
-			new TextLines(file).copyFile("_"+name);
-		SFrameTarget frame=contentFrame();
-		DataNode tree=(DataNode)frame.framed;
-		tree.setTitle(name);
-		tree.setValidType(tree.type());
-		new XmlDocRoot(tree,xmlPolicy).writeToSink(file);
-		stateStamp=tree.updateStateStamp();
-		if(false)trace(".setSink: area="+Debug.info(app.activeContentTargeter().target().title())
-				+ "\nfile="+name);
-		app.notify(new Notice(frame,Impact.DEFAULT));
+	final public FileSpecifier[]sinkFileSpecifiers(){
+		Object sink=sink();
+		String name=sink instanceof File?((File)sink).getName()
+				:((TypedNode)sink).title()+"."+((TypedNode)sink).type();
+		return FileSpecifier.filterByName(textTreeSpec().fileSpecifiers(),name);
 	}
 }

@@ -5,6 +5,7 @@ import facets.core.app.PathSelection;
 import facets.core.superficial.SIndexing;
 import facets.core.superficial.STarget;
 import facets.core.superficial.STextual;
+import facets.core.superficial.SToggling;
 import facets.core.superficial.STrigger;
 import facets.core.superficial.TargetCore;
 import facets.core.superficial.STrigger.Coupler;
@@ -21,7 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 final public class TreeSearcher extends Tracer{
 	static final String INPUT_PROMPT=false?"[Type, title, value]":"";
-	public final STarget inputTextual,resultsIndexing,matchCount,targets;
+	public final STarget inputTextual,resultsIndexing,matchCount,targets,exact;
 	private final ArrayList<String>results=new ArrayList();
 	public TreeSearcher(AppValues app,final NodeViewable viewable){
 		final DataNode tree=(DataNode)viewable.framed;
@@ -31,6 +32,7 @@ final public class TreeSearcher extends Tracer{
 			public void textSet(STextual t){
 				String text=t.text();
 				if(text.equals("")||text.equals(INPUT_PROMPT))return;
+				if(((SToggling)exact).isSet())text="\\b"+text+"\\b";
 				new SearchText(tree).doSearch(text);
 			}
 			@Override
@@ -39,6 +41,13 @@ final public class TreeSearcher extends Tracer{
 					@Override
 					public void fired(STrigger t){}
 				});
+			}
+		});
+		exact=new SToggling("Exact",false,new SToggling.Coupler(){
+			@Override
+			public void stateSet(SToggling t){
+				STextual input=(STextual)inputTextual;
+				if(!input.text().equals(INPUT_PROMPT))input.coupler.textSet(input);
 			}
 		});
 		resultsIndexing=new SIndexing("Results ",new SIndexing.Coupler(){
@@ -67,7 +76,7 @@ final public class TreeSearcher extends Tracer{
 		matchCount=new STextual("Matches","",new STextual.Coupler());
 		matchCount.setLive(false);
 		targets=new TargetCore(getClass().getSimpleName(),
-				inputTextual,resultsIndexing,matchCount);
+				inputTextual,exact,resultsIndexing,matchCount);
 	}
 	private final class SearchText{
 		private final String text;
@@ -126,7 +135,9 @@ final public class TreeSearcher extends Tracer{
 				matches.setText("No matches");
 			}
 			else{
-				((SuggestionsCoupler)box.coupler).updateSuggestions(toFind,false);
+				if(false)trace(".doSearch: toFind=",toFind);
+				((SuggestionsCoupler)box.coupler).updateSuggestions(
+						toFind.replaceAll("\\\\b",""),false);
 				((SIndexing)resultsIndexing).setIndexed(results.get(0));
 				((STextual)matchCount).setText(results.size()+" matches");
 			}

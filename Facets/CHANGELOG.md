@@ -1,6 +1,16 @@
 # Changelog for Facets
 ##9.26
-
+TreeTextContenter,TreeTextSpecifier,
+TreeTextViewable,TmxView,
+NodeViewable,
+TreeAppSpecifier,TreeSearcher,TreeAppFeatures,
+PlaneTest,
+SwingCanvasPainters,SwingPainterOutlined,
+FieldText,
+PathTreePaneMaster,
+Util,
+DirCache,
+Nodes
 ##9.25
 demo>apps, SwingCanvasPainters, SwingPainterOutlined, PlaneTest, 
 ImageProviderAwt, SwingPainterSource, SliderPanel, FacetAppSpecifier, 

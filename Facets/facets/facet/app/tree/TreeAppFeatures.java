@@ -58,9 +58,10 @@ final public class TreeAppFeatures extends FacetFactory{
 				spacerWide(10),
 				textualField(search[0],10,HINT_NONE),
 				spacerWide(5),
-				indexingIteratorButtons(search[1],HINT_BARE),
+				togglingCheckboxes(search[1],HINT_BARE),
+				indexingIteratorButtons(search[2],HINT_BARE),
 				spacerWide(5),
-				textualLabel(search[2],HINT_NONE),
+				textualLabel(search[3],HINT_NONE),
 			});
 		return toolGroups(area,HINT_PANEL_MIDDLE,facets.items());
 	}

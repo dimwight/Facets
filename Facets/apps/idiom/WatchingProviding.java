@@ -227,7 +227,8 @@ public final class WatchingProviding extends IdiomPane{
 	}
 	private AppContent runTask(final AppContent task){
 		return cache!=null?new ItemProvider<AppContent>(cache,this,titleTop+"."+caching){
-			final DirCache disk=caching!=Disk?null:new DirCache(new File(AppValues.userDir(),titleTop));
+			final DirCache disk=caching!=Disk?null
+					:new DirCache(new File(AppValues.userDir(),titleTop),false);
 			@Override
 			protected String newDiskName(Object[]values){
 				return disk==null?null:Objects.toString(values,"-");

@@ -91,7 +91,10 @@ public final class Util{
 		return new DecimalFormat("0."+(DECIMALS_FX==1?"0":DECIMALS_FX==2?"00":"000")).format(val);
 	}
 	public static void copyFile(File src,File dest)throws IOException{
-		Util.printOut("Util.copyFile: ",dest.getAbsolutePath());
+		copyFile(src,dest,false);
+	}
+	public static void copyFile(File src,File dest,boolean trace)throws IOException{
+		if(trace)Util.printOut("Util.copyFile: ",dest.getAbsolutePath());
 		if(src.equals(dest))throw new IllegalArgumentException(
 				"Src=dest="+src);
 		else dest.createNewFile();

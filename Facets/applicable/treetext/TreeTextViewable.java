@@ -17,10 +17,12 @@ import facets.util.Debug;
 import facets.util.OffsetPath;
 import facets.util.tree.NodePath;
 import facets.util.tree.TypedNode;
+import facets.util.tree.ValueNode;
 import applicable.treetext.TreeTextContenter.TreeTextView;
 public abstract class TreeTextViewable extends NodeViewable{
 	private final FacetAppSurface app;
 	final TreeView debugView;
+	protected String textViewerEdit;
 	public TreeTextViewable(TypedNode tree,ClipperSource clipperSource,
 			FacetAppSurface app){
 		super(tree,clipperSource);
@@ -83,8 +85,24 @@ public abstract class TreeTextViewable extends NodeViewable{
 	}
 	protected void textViewerSelectionEdited(SViewer viewer,Object edit,
 			boolean interim){
-		throw new RuntimeException("Not implemented in "+this);
+		textViewerEdit=(String)edit;
+		maybeModify();
+		updateAfterEditAction();
+		textViewerEdit=null;
 	}
+	@Override
+	public boolean editSelection(){
+		if(textViewerEdit==null)return new ValueEdit(((PathSelection)selection())){
+			protected String getDialogInput(String title,String rubric,
+					String proposal){
+				return app.dialogs().getTextInput(title,rubric,proposal, 0);
+			}
+		}.dialogEdit();
+		((ValueNode)selection().single()).putAt(0,textViewerEdit);
+		return true;
+	}
+	@Override
+	protected void editUndoneOrRedone(){}
 	@Override
 	public ViewableAction[]viewerActions(SView view){
 		ViewableAction[]all={
@@ -125,14 +143,5 @@ public abstract class TreeTextViewable extends NodeViewable{
 	@Override
 	public String toString(){
 		return Debug.info(this);
-	}
-	@Override
-	public boolean editSelection(){
-		return new ValueEdit(((PathSelection)selection())){
-			protected String getDialogInput(String title,String rubric,
-					String proposal){
-				return app.dialogs().getTextInput(title,rubric,proposal, 0);
-			}
-		}.dialogEdit();
 	}
 }

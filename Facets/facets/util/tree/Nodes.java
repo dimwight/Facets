@@ -183,7 +183,7 @@ public final class Nodes{
 		node.setValues(values.toArray());
 	}
 	public static boolean isKeyPair(String text){
-		return contains(text,"^[\\w:]+=");
+		return contains(text,false?"^[\\w:]+=":"^[a-zA-Z\\-:]+=");
 	}
 	public static String[]splitPair(String text){
 		return text.split("=");
@@ -202,6 +202,11 @@ public final class Nodes{
 			lines.append("\n");
 		}
 		return lines.toString().trim();
+	}
+	public static TypedNode ancestor(TypedNode node,String type){
+		for(TypedNode each:ancestry(node))
+			if(each.type().equals(type))return each;
+		return null;
 	}
 	public static TypedNode[]ancestry(TypedNode node){
 		if(node.parent()==null)return new TypedNode[]{node};

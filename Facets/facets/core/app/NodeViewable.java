@@ -242,7 +242,7 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
 		if(!edited)return false;
 		Stateful state=((Stateful)framed).copyState();
 		restoreAfterEditAction();
-		doEdit(newModify(this,state), true);
+		doEdit(newModify(this,state),true);
 		if(false)updateAfterEditAction();
 		return true;
 	}
@@ -250,7 +250,7 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
 		edit.doEdit();
 		states.addEdit(new AddEdit(edit,significant){});
 	}
-	private static class AddEdit implements UndoableEdit{
+	private class AddEdit implements UndoableEdit{
 		private final boolean significant;
 		private final NodePathEdit edit;
 		AddEdit(NodePathEdit edit, boolean significant){
@@ -260,10 +260,12 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
 		@Override
 		public void undo()throws CannotUndoException{
 			edit.undoEdit();
+			NodeViewable.this.editUndoneOrRedone();
 		}
 		@Override
 		public void redo()throws CannotRedoException{
 			edit.doEdit();
+			NodeViewable.this.editUndoneOrRedone();
 		}
 		@Override
 		public String getPresentationName(){
@@ -303,6 +305,7 @@ public class NodeViewable extends StatefulViewable<TypedNode>{
 	final public TypedNode tree(){
 		return(TypedNode)framed;
 	}
+	protected void editUndoneOrRedone(){}
 	final public void readSelectionState(ValueNode state,String key){
 		setSelection(PathSelection.getOffsetSelection(framed,state,key));
 	}
