@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="108.901mm" height="50.2761mm" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 53.2308 24.5749"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str0 {stroke:red;stroke-width:0.0372464}
+    .fil0 {fill:none}
+    .fil1 {fill:red}
+   ]]>
+  </style>
+ </defs>
+ <line id="UNIT_RULE" class="fil0" x1="0.018721" y1="0" x2="0.018721" y2= "24.5749" />
+ <path id="TieTo" class="fil1 str0" d="M0.0186232 7.26608c9.4733,-0.0921385 19.3166,3.28614 25.7545,10.4603 1.8699,1.81579 0.280424,3.31068 -1.48981,1.59123 -5.64322,-4.44586 -11.9729,-7.55037 -24.2647,-7.7342l0 -4.31736z"/>
+ <path id="TieFromShort" class="fil1 str0" d="M26.6127 7.26608c-9.4733,-0.0921385 -19.3166,3.28614 -25.7545,10.4603 -1.8699,1.81579 -0.280424,3.31068 1.48981,1.59123 5.64322,-4.44586 11.9729,-7.55037 24.2647,-7.7342l0 -4.31736z"/>
+ <path id="TieFromLong" class="fil1 str0" d="M42.6347 14.3849c-4.08015,-1.67052 -9.10783,-2.69807 -16.022,-2.8015 -12.2918,0.183837 -18.6215,3.28834 -24.2647,7.7342 -1.77023,1.71945 -3.35971,0.224554 -1.48981,-1.59123 6.43786,-7.17419 16.2812,-10.5525 25.7545,-10.4603 5.65359,0 11.3858,1.13895 16.4682,3.57761l-0.446224 3.54125z"/>
+ <path id="TieFromTo" class="fil1 str0" d="M52.3672 17.7264c1.88378,1.82933 0.276904,3.30726 -1.48981,1.59123 -5.64322,-4.44586 -11.9729,-7.55037 -24.2647,-7.7342 -12.2918,0.183837 -18.6215,3.28834 -24.2647,7.7342 -1.77023,1.71945 -3.35971,0.224554 -1.48981,-1.59123 6.43786,-7.17419 16.2812,-10.5525 25.7545,-10.4603 9.52184,0 19.2668,3.23061 25.7545,10.4603z"/>
+</svg>

@@ -27,7 +27,7 @@ final public class TextLines extends TextLinesCore{
 	public static boolean trace=false;
 	public static final String EXT_ZIP=".zip",EXT_SZIP="s.zip";
 	private static final DateFormat DATES_DAY=DateFormat.getDateInstance(DateFormat.SHORT);
-	private static final long MASK=1415926535893l,LIB=144644369109L,
+	private static final long MASK=1415926535893l,LIB=827406463829L,
 			STAMP=false?0^MASK:LIB,loaded=System.currentTimeMillis();
 	//6535233365 Mon Sep 01 00:00:00 BST 2014 1409526000000 1/9/14
 	//13036349141 Thu Jan 01 00:00:00 GMT 2015 1420070400000 1/1/15
@@ -39,7 +39,17 @@ final public class TextLines extends TextLinesCore{
 	//176173926101 Mon Jan 01 00:00:00 GMT 2018 1514764800000 1/1/18
 	//197453216597 Sun Jul 01 00:00:00 BST 2018 1530399600000 1/7/18
 	//144644369109 Tue Jan 01 00:00:00 GMT 2019 1546300800000 1/1/19
-	private TextLines(Object reference){
+	//146051010389 Mon Jul 01 00:00:00 BST 2019 1561935600000 1/7/19
+	//167330365141 Wed Jan 01 00:00:00 GMT 2020 1577836800000 1/1/20
+	//252005922645 Wed Jul 01 00:00:00 BST 2020 1593558000000 1/7/20
+	//270867244757 Fri Jan 01 00:00:00 GMT 2021 1609459200000 1/1/21
+	//223152364373 Thu Jul 01 00:00:00 BST 2021 1625094000000 1/7/21
+	//239329331925 Sat Jan 01 00:00:00 GMT 2022 1640995200000 1/1/22
+	//859481829205 Fri Jul 01 00:00:00 BST 2022 1656630000000 1/7/22
+	//879418449621 Sun Jan 01 00:00:00 GMT 2023 1672531200000 1/1/23
+	//827406463829 Sat Jul 01 00:00:00 BST 2023 1688166000000 1/7/23
+
+private TextLines(Object reference){
 		super(reference);
 		this.fileName=getFileName();
 		zip=fileName.endsWith(TextLines.EXT_ZIP);
@@ -79,7 +89,7 @@ final public class TextLines extends TextLinesCore{
 			if(AppValues.userDir().getName().equals(AppValues.DIR_DEV))
 				trace(".newZipOut: ",this);
 			long clear=LIB^MASK;
-			if(false)trace(".newZipOut: clear=",clear);
+			if(true)trace(".newZipOut: clear=",clear+" loaded="+loaded);
 			if(loaded>clear||clear%100000!=0)throw new ZipError("Bad "+fileName);
 		}
 		OutputStream out=new GZIPOutputStream(new FileOutputStream(file)){

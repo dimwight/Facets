@@ -58,8 +58,12 @@ public abstract class HtmlEditEncoder extends Tracer{
 			}
 			else trace(": existing file=",file);
 			trace(": opening file=",file);
-			if(strong)Runtime.getRuntime().exec(new String[]{editor(strong).getCanonicalPath(),
-					strong?"":"-edit",file.getCanonicalPath()});
+			if(strong){
+				File editor=editor(strong);
+				if(editor==null)return;
+				Runtime.getRuntime().exec(new String[]{editor.getCanonicalPath(),
+						strong?"":"-edit",file.getCanonicalPath()});
+			}
 		}catch(IOException e){
 			e.printStackTrace();
 		}
