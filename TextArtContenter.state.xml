@@ -1,0 +1,34 @@
+<?xml version="1.0" 
+	encoding="UTF-8" 
+	standalone="no"?>
+<state>
+<debug buildEstimate="5000" 
+	dragNotifyInterim="false" 
+	dragNotifyPause="50" 
+	events="true" 
+	fontOffset="0" 
+	graphPaneWhere="0" 
+	htmlSource="false" 
+	memCheck="false" 
+	times="false" 
+	timesReset="1000" 
+	trace="false" 
+	treeDebug="false">
+<filters Attached="true" 
+	Created="true" 
+	Cursor="true" 
+	Notified="true" 
+	Refreshed="true" 
+	Retargeted="true" 
+	Retargeting="true" 
+	Retrieved="true" 
+	Selection="true" 
+	Storing="true"/>
+</debug>
+<app debugStatus="false" 
+	extrasSplit="30" 
+	hideBars_TextArtContenter="0,0,0" 
+	masterBounds="138,124,675,618" 
+	splashScreen="false"/>
+<dialogs>bounds_FacetPagedSurface_1_1=523,265,338,390</dialogs>
+</state>
