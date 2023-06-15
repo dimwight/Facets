@@ -1,14 +1,11 @@
 package facets.core.app.avatar;
+
 import facets.core.app.SViewer;
 import facets.core.app.ViewableFrame;
-import facets.core.app.avatar.AvatarContent.Applicable;
-import facets.core.superficial.SFrameTarget;
-import facets.core.superficial.STarget;
 import facets.core.superficial.app.SSelection;
 import facets.util.Debug;
-import facets.util.Objects;
 import facets.util.Tracer;
-import facets.util.shade.Shades;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,7 +49,7 @@ public abstract class AvatarPolicies extends Tracer implements Serializable{
 	}
 	/**
 	Return avatar content to be displayed by viewer. 
-	<p>Facilitates delegation by implementations of {@link ViewableFrame#newViewerSelection(SViewer)};
+	<p>Facilitates delegation by implementations of ;
 	@param viewer controlled by the {@link AvatarView} returning the receiver 
 	as {@link AvatarView#avatars()}
 	 @param viewable the current {@link ViewableFrame#selection()}

@@ -46,7 +46,7 @@ public class TextArt extends FacetAppSpecifier {
             }
 
             @Override
-            protected SContenter newContenter(Object source) {
+            public SContenter newContenter(Object source) {
                 return new TextArtContenter(source, this,
                         new TextArtFeatures.AdvanceFacets(ff),
                         null,
