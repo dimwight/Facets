@@ -1,0 +1,36 @@
+<?xml version="1.0" 
+	encoding="UTF-8" 
+	standalone="no"?>
+<state selectionOffsets="0,0,1">
+<debug buildEstimate="5000" 
+	dragNotifyInterim="false" 
+	dragNotifyPause="50" 
+	events="true" 
+	fontOffset="0" 
+	graphPaneWhere="0" 
+	htmlSource="false" 
+	memCheck="false" 
+	times="false" 
+	timesReset="1000" 
+	trace="false" 
+	treeDebug="false">
+<filters Attached="true" 
+	Created="true" 
+	Cursor="true" 
+	Notified="true" 
+	Refreshed="true" 
+	Retargeted="true" 
+	Retargeting="true" 
+	Retrieved="true" 
+	Selection="true" 
+	Storing="true"/>
+</debug>
+<app debugStatus="false" 
+	extrasSplit="30" 
+	hideBars="0,0,0" 
+	hideBars_TreeAppContenter="0,0,0" 
+	masterBounds="0,0,768,648" 
+	splashScreen="false"/>
+<areas desktopMaximum="true" 
+	desktopNoScale="false"/>
+</state>

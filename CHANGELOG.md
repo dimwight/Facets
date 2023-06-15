@@ -50,7 +50,7 @@ kit,_src,KitCore
 ##9.11
 src
 chapters.txt
-NodeUndoableEdit,TreeAppContenter,XmlView,FileAppActions,FileSpecifier,Nodes,
+NodeUndoableEdit,TreeAppContenter,apps.XmlView,FileAppActions,FileSpecifier,Nodes,
 TreeAppSpecifier,TreeTargets,TreeSearcher>
 ##9.10
 NodeUndoableEdit,BusyCursor,TreeAppContenter,_ViewerContentArea,AppAreas
