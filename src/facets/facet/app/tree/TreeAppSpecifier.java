@@ -210,6 +210,7 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	by default an empty {@link STarget}<code>[]</code>
 	 */
 	protected STarget[]newContentRootTargets(FacetAppSurface app){
+
 		return new STarget[]{};
 	}
 	/**

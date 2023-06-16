@@ -99,8 +99,14 @@ they can be any concatenation of <code>HINT_XXX</code> class constants.
  */
 public class FacetFactory extends FacetsCore implements LayoutFeatures,
 		AppServices{
-  final public static int GRAPH_NONE=0,GRAPH_APP=1,GRAPH_DIALOGS=2,
-		MENU_APP=0,MENU_EDIT=1,MENU_PANE=2,MENU_WINDOW=3,MENU_HELP=4;
+  final public static int GRAPH_NONE=0;
+	final public static int GRAPH_APP=1;
+	final public static int GRAPH_DIALOGS=2;
+	final public static int MENU_APP=0;
+	final public static int MENU_EDIT=1;
+	final public static int MENU_PANE=2;
+	final public static int MENU_WINDOW=3;
+	final public static int MENU_HELP=4;
 	public static boolean graphBuild,graphFindNow;
 	public static final String GRAPH_FIND_NONE="[Enter text to match in title]";
 	public static String findGraphValue=GRAPH_FIND_NONE;

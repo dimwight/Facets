@@ -92,7 +92,8 @@ final public class XmlView extends TreeAppSpecifier{
 	}
 	@Override
 	public ContentStyle contentStyle(){
-		return releaseReady?ContentStyle.DESKTOP:super.contentStyle();
+		return true?ContentStyle.SINGLE:
+				releaseReady?ContentStyle.DESKTOP:super.contentStyle();
 	}
 	@Override
 	public Toolkit newToolkit(){
@@ -108,7 +109,8 @@ final public class XmlView extends TreeAppSpecifier{
 		return isDemo()?false:super.isFileApp();
 	}
 	private boolean isDemo(){
-		return nature().getBoolean(ARG_NO_FILES)&&releaseReady;
+		return true||
+				nature().getBoolean(ARG_NO_FILES)&&releaseReady;
 	}
 	@Override
 	protected Object getInternalContentSource(){
