@@ -19,8 +19,8 @@ final class PathAvatars extends AvatarPolicies{
 		this.pc=pc;
 	}
 	@Override
-	public AvatarPolicy avatarPolicy(SViewer viewer,AvatarContent content,
-			final PainterSource p){
+	public AvatarPolicy viewerPolicy(SViewer viewer, AvatarContent content,
+									 final PainterSource p){
 		final Paths paths=(Paths)content;
 		if(paths==null)throw new IllegalStateException("Null paths in "+Debug.info(this));
 		return new AvatarPolicy(){

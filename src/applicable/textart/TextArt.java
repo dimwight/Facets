@@ -18,11 +18,6 @@ import facets.util.tree.Nodes;
 import facets.util.tree.TypedNode;
 import facets.util.tree.ValueNode;
 
-
-
-
-
-
 /**
  Content type for spike application.  
  <p>{@link TextArt} defines a line of text that can be drawn at a specified

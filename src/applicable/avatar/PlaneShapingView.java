@@ -1,7 +1,6 @@
 package applicable.avatar;
 import facets.core.app.SViewer;
 import facets.core.app.avatar.AvatarContent;
-import facets.core.app.avatar.AvatarContent.Applicable;
 import facets.core.app.avatar.AvatarPolicies;
 import facets.core.app.avatar.AvatarPolicy;
 import facets.core.app.avatar.AvatarView;
@@ -9,12 +8,10 @@ import facets.core.app.avatar.DragPolicy;
 import facets.core.app.avatar.Painter;
 import facets.core.app.avatar.PainterSource;
 import facets.core.app.avatar.PlaneView;
-import facets.core.app.avatar.PlaneViewWorks;
 import facets.core.superficial.app.SSelection;
 import facets.core.superficial.app.SelectionView;
-import facets.util.geom.Point;
 import facets.util.geom.Vector;
-import facets.util.tree.TypedNode;
+
 public class PlaneShapingView extends SelectionView implements PlaneView{
 	private final PlaneView plane;
 	private final double showWidth,showHeight;
@@ -36,9 +33,9 @@ public class PlaneShapingView extends SelectionView implements PlaneView{
 				return plane.getBackgroundPainter(viewer,p);
 			}
 			@Override
-			public AvatarPolicy avatarPolicy(SViewer viewer,AvatarContent content,
-					PainterSource p){
-				return plane.avatarPolicy(viewer,content,p);
+			public AvatarPolicy viewerPolicy(SViewer viewer, AvatarContent content,
+											 PainterSource p){
+				return plane.viewerPolicy(viewer,content,p);
 			}
 			@Override
 			public boolean isContentSelectable(AvatarContent content){

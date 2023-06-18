@@ -30,7 +30,7 @@ public abstract class AvatarPolicies extends Tracer implements Serializable{
 	@param content to be painted
 	@param p must be supplied by a facet builder
 	 */
-	public AvatarPolicy avatarPolicy(SViewer viewer,AvatarContent content,PainterSource p){
+	public AvatarPolicy viewerPolicy(SViewer viewer, AvatarContent content, PainterSource p){
 		throw new RuntimeException("Not implemented in "+Debug.info(this));
 	}
 	/**

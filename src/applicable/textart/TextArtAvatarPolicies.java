@@ -167,8 +167,8 @@ public class TextArtAvatarPolicies extends AvatarPolicies {
 	 @see facets.core.app.avatar.AvatarPolicies
 	 */
 	@Override
-	public AvatarPolicy avatarPolicy(SViewer viewer,final AvatarContent content, 
-			final PainterSource p) {
+	public AvatarPolicy viewerPolicy(SViewer viewer, final AvatarContent content,
+									 final PainterSource p) {
 		
 		//Define, create and return policy
 		return new AvatarPolicy() {

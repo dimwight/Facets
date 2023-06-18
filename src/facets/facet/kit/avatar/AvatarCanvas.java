@@ -10,9 +10,6 @@ import facets.core.app.avatar.Painter;
 import facets.core.app.avatar.PainterSource;
 import facets.core.app.avatar.PickPainter;
 import facets.core.app.avatar.Pickable;
-import facets.core.superficial.STextual;
-import facets.core.superficial.Notifying.Impact;
-import facets.core.superficial.STextual.Coupler;
 import facets.core.superficial.app.SSelection;
 import facets.facet.FacetFactory;
 import facets.facet.kit.KitFacet;
@@ -187,7 +184,7 @@ abstract class AvatarCanvas extends Tracer{
 		SSelection selection=viewer.selection();
 		Object[]selected=selection.multiple();
 		for(AvatarContent content:(AvatarContent[])selection.content()){
-			Avatar add=new Avatar(this,content,policies.avatarPolicy(viewer,content,painterSource));
+			Avatar add=new Avatar(this,content,policies.viewerPolicy(viewer,content,painterSource));
 			if(policies.isContentSelectable(content))avatarPickables.add(add);
 	  	for(Object s:selected)if(content==s)add.setSelected(true);
 	    if(add.isSelected())above.add(add);

@@ -43,8 +43,8 @@ final class PlaneTest extends ViewerContenter{
 	final private FacetAppSurface app;
 	private final AvatarPolicies policies=new AvatarPolicies(){
 		@Override
-		public AvatarPolicy avatarPolicy(SViewer viewer,AvatarContent content,
-				PainterSource p){
+		public AvatarPolicy viewerPolicy(SViewer viewer, AvatarContent content,
+										 PainterSource p){
 			return new AvatarPolicy(){
 				@Override
 				public Painter[]newViewPainters(boolean selected,boolean active){
