@@ -24,8 +24,8 @@ public abstract class ApplicablePolicies extends AvatarPolicies{
 	}
 	protected abstract Applicable newItemApplicable(TypedNode item);
 	@Override
-	final public AvatarPolicy avatarPolicy(SViewer viewer,AvatarContent content, 
-			PainterSource p){
+	final public AvatarPolicy viewerPolicy(SViewer viewer, AvatarContent content,
+                                           PainterSource p){
 		return((Applicable)content).getAvatarPolicy(p);
 	}
 	@Override

@@ -181,14 +181,14 @@ abstract class AvatarCanvas extends Tracer{
 		restoreDefaults(false);
 	  if(painterSource==null)painterSource=host.newPainterSource();
 		SViewer viewer=viewer();
-		AvatarPolicies view=((AvatarView)viewer.view()).avatars();
+		AvatarPolicies policies=((AvatarView)viewer.view()).avatars();
 		List<Avatar>below=new ArrayList(),above=new ArrayList();		
 		avatarPickables=new ArrayList();
 		SSelection selection=viewer.selection();
 		Object[]selected=selection.multiple();
 		for(AvatarContent content:(AvatarContent[])selection.content()){
-			Avatar add=new Avatar(this,content,view.avatarPolicy(viewer,content,painterSource));
-			if(view.isContentSelectable(content))avatarPickables.add(add);
+			Avatar add=new Avatar(this,content,policies.avatarPolicy(viewer,content,painterSource));
+			if(policies.isContentSelectable(content))avatarPickables.add(add);
 	  	for(Object s:selected)if(content==s)add.setSelected(true);
 	    if(add.isSelected())above.add(add);
 			else below.add(add);
@@ -196,7 +196,7 @@ abstract class AvatarCanvas extends Tracer{
 	  ItemList<Painter>viewList=new ItemList(Painter.class);
 		for(Avatar add:below)viewList.addItems(add.getPainters());
 		for(Avatar add:above)viewList.addItems(add.getPainters());
-	  host.setAndPaintPainters(background=view.getBackgroundPainter(viewer,painterSource),
+	  host.setAndPaintPainters(background=policies.getBackgroundPainter(viewer,painterSource),
 	  		viewPainters=viewList.items(),null);
 		if(false)Times.printElapsed("AvatarCanvas.refreshViewPainters~");
 	}
