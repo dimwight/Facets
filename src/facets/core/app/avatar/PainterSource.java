@@ -53,7 +53,7 @@ public abstract class PainterSource extends Tracer{
 	final public Painter rectangle(double x,double y,double width,double height,Shade pen){
 		return rectangle(x,y,width,height,"shadePen="+pen.title());
 	}
-	public abstract Painter bar(double x,double y,double length,double width,Shade fill,
+	public abstract Painter bar(double x,double y,double across,double down,Shade fill,
 	boolean pickable);
 	public abstract Painter textTooltip(String text,double x,double y);
 	public abstract Painter textOutline(String text,String face,int points,boolean bold,

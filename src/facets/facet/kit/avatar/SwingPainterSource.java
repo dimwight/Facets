@@ -79,10 +79,10 @@ final public class SwingPainterSource extends PainterSource{
 	
 	}
 	@Override
-	public Painter bar(double x,double y,double width,double height,Shade fill,
-			boolean pickable){
-		final Double r=new Rectangle2D.Double(x,y,width,height);
-		final Object[]hashables={x,y,width,height};
+	public Painter bar(double l, double t, double across, double down, Shade fill,
+					   boolean pickable){
+		final Double r=new Rectangle2D.Double(l,t, across, down);
+		final Object[]hashables={l,t, across, down};
 		PainterMaster master=new Outlined(fill,null,pickable){
 			@Override
 			protected Object[]lazySubHashables(){

@@ -241,14 +241,14 @@ public final class TextArt extends ValueProxy implements Fonted, AvatarContent{
 	 @param atY Y start position
 	 @param atAngle rotation of line in degrees
 	 @param shade colour of line
-	 @param fontSurface name of font
+	 @param fontFace name of font
 	 @param fontSize size of font
 	 @param fontBold contentStyle of font
 	 @param fontItalic contentStyle of font
 	 @param nodeTitle 
 	 */
 	public TextArt(String text, int atX, int atY, int atAngle,
-			Shade shade, String fontSurface, int fontSize, boolean fontBold, 
+			Shade shade, String fontFace, int fontSize, boolean fontBold,
 			boolean fontItalic, String nodeTitle) {
 		
 		//Create loaded node with instance count
@@ -258,7 +258,7 @@ public final class TextArt extends ValueProxy implements Fonted, AvatarContent{
 				KEY_X + "=" + atX,
 				KEY_Y + "=" + atY,
 				KEY_ANGLE + "=" + atAngle,
-				KEY_FONT_FACE + "=" + fontSurface,
+				KEY_FONT_FACE + "=" + fontFace,
 				KEY_FONT_SIZE + "=" + fontSize,
 				KEY_FONT_BOLD + "=" + fontBold,
 				KEY_FONT_ITALIC + "=" + fontItalic,
