@@ -83,7 +83,9 @@ abstract class AvatarCanvas extends Tracer{
 	  private void mouseDragEdited(Avatar[]dragged,Object[]edits,boolean interim){
 	    if(edits==null)return;
 	    if(edits.length!=dragged.length)
-	    	throw new IllegalArgumentException("Non-matching edits length in "+Debug.info(this));
+	    	throw new IllegalArgumentException("Non-matching edits length in "+Debug.info(this)+
+		"\ndragged=" + dragged.length + " edits=" + edits.length
+			);
 	    viewer().selectionEdited(null,edits,interim);
 	  }
 		private Drag mousePressedNewDrag(Pick pick,Point at){
