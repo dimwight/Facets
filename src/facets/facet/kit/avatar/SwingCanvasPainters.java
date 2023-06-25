@@ -22,7 +22,7 @@ import java.util.Arrays;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 final class SwingCanvasPainters extends Tracer{
-	private static final boolean optimise=true,timing=true;
+	private static final boolean optimise=true,timing=false;
 	private final static PdfCanvas pdf=false?null:new PdfCanvas();
 	private final ProvidingCache localCache=
 			System.getProperty("SwingCanvasPaintersLocalCache")==null?null:
