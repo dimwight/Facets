@@ -69,7 +69,8 @@ public abstract class TreeTextViewable extends NodeViewable{
 			return((TreeTextView)view).newViewerSelection(viewer,selection());
 		else throw new RuntimeException("Not implemented in "+this);			
 	}
-	protected void nonTreeViewerSelectionChanged(SViewer viewer,
+	protected void
+	nonTreeViewerSelectionChanged(SViewer viewer,
 			SSelection selection){
 		SView view=viewer.view();
 		if(view instanceof TreeTextView)
