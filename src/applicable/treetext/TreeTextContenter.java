@@ -1,5 +1,4 @@
 package applicable.treetext;
-import static facets.util.tree.DataConstants.*;
 import facets.core.app.ActionViewerTarget;
 import facets.core.app.AreaRoot;
 import facets.core.app.FeatureHost.LayoutFeatures;
@@ -32,9 +31,7 @@ import facets.util.tree.NodeList;
 import facets.util.tree.Nodes;
 import facets.util.tree.TypedNode;
 import facets.util.tree.ValueNode;
-import facets.util.tree.XmlDocRoot;
-import facets.util.tree.XmlPolicy;
-import facets.util.tree.XmlSpecifier;
+
 import java.io.File;
 import java.io.IOException;
 public abstract class TreeTextContenter extends ViewerContenter{
@@ -63,9 +60,7 @@ public abstract class TreeTextContenter extends ViewerContenter{
 		super(source);
 		this.app=app;
 	}
-	private TreeTextSpecifier textTreeSpec(){
-		return (TreeTextSpecifier)app.spec;
-	}
+
 	protected static int contents;
 	@Override
 	final protected ViewableFrame newContentViewable(Object source){
@@ -159,10 +154,10 @@ public abstract class TreeTextContenter extends ViewerContenter{
 		:super.setSink(sink);
 	}
 	@Override
-	final public FileSpecifier[]sinkFileSpecifiers(){
+	public FileSpecifier[]sinkFileSpecifiers(){
 		Object sink=sink();
 		String name=sink instanceof File?((File)sink).getName()
 				:((TypedNode)sink).title()+"."+((TypedNode)sink).type();
-		return FileSpecifier.filterByName(textTreeSpec().fileSpecifiers(),name);
+		return FileSpecifier.filterByName(((TreeTextSpecifier) app.spec).fileSpecifiers(),name);
 	}
 }

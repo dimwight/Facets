@@ -49,7 +49,7 @@ public abstract class TreeTextSpecifier extends FacetAppSpecifier{
 			}
 		};
 	}
-	protected FileSpecifier[]fileSpecifiers(){
+	public FileSpecifier[]fileSpecifiers(){//protected
 		return new FileSpecifier[]{
 			new FileSpecifier("txt","Text lines"),
 		};

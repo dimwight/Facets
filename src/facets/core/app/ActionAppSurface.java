@@ -282,7 +282,7 @@ public abstract class ActionAppSurface extends AppSurface{
 	@Override
 	final protected Object[]getOpeningContentSources(){
 		if(contentStyle==DESKTOP)return new Object[]{DESKTOP};
-		else if(true||!spec.hasSystemAccess())return getFixedOpeningContentSources();
+		else if(!spec.hasSystemAccess())return getFixedOpeningContentSources();
 		File file=actions.getOpeningContentSourceFile();
 		return file!=null&&file.isFile()?new Object[]{file}
 			:getFixedOpeningContentSources();

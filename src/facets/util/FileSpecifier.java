@@ -48,8 +48,8 @@ public class FileSpecifier extends Tracer{
 		or {@link String}, with appropriate extension 
 	 */
 	public String newFileName(Object source){
-		return (source instanceof Titled?
-			((Titled)source).title():(String)source)+(this==ALL?"":(dot+extension));
+		return source instanceof Titled? ((Titled)source).title()
+				:source+(this==ALL?"":(dot+extension));
 	}
 	/**
 	Does the file match the specification? 

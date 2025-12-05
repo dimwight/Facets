@@ -158,7 +158,7 @@ final class PlaneTest extends ViewerContenter{
 			}
 			@Override
 			public SFacet toolbar(){
-				if(true)return null;
+				if(false)return null;
 				ItemList<SFacet>facets=new ItemList(SFacet.class);
 				STargeter barStart=area.elements()[0];
 				facets.add(numericSliders(barStart,200,
