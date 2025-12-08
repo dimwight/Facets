@@ -18,7 +18,7 @@ import javax.swing.JRootPane;
 public class SmartOptionPane extends JOptionPane{
 	public static final Point DEFAULT_AT=new Point(-100,-100);
 	private JDialog d;
-	private Point showAt;
+	private static Point showAt;
 	private final boolean resize;
 	public SmartOptionPane(Point showAt,boolean resize){
 		if((this.showAt=showAt)==null)throw new IllegalArgumentException(

@@ -23,7 +23,7 @@ public class TextArt extends FacetAppSpecifier {
         return false ? contenters : new PagedContenter[]{
                 contenters[PREFERENCES_TRACE],
                 contenters[PREFERENCES_GRAPH],
-//					contenters[PREFERENCES_VALUES],
+				contenters[PREFERENCES_VALUES],
                 contenters[PREFERENCES_VIEW],
         };
     }
