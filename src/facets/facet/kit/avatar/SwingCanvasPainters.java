@@ -47,7 +47,7 @@ final class SwingCanvasPainters extends Tracer {
         this.backPainter = backPainter;
         this.viewPainters = viewPainters;
         this.motionPainters = motionPainters;
-        Times.times=true;
+//        Times.times=true;
     }
 
     void doPainting(Graphics2D g2) {

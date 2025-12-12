@@ -82,7 +82,8 @@ public final class TextArtContenter extends ViewerContenter {
 		ValueNode node = (ValueNode)((ContentSource) source).newContent();
 	
 		//Viewable that creates the right kind of selection frame
-		return new TextArtViewable(node, this, 
+		return new TextArtViewable(node, this,
+				true?null:
 				app.ff.statefulClipperSource(app.spec.hasSystemAccess()));
 	}
 

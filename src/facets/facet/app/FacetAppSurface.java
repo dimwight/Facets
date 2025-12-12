@@ -395,8 +395,9 @@ public abstract class FacetAppSurface extends ActionAppSurface implements Surfac
 		 */
 	@Override
 	final public SHost host(){
+		boolean getPassedHost = !spec.hasSystemAccess() && !spec.forSlave();
 		return host!=null?host:(host=isHeadless()?newHeadlessHost()
-				:!spec.hasSystemAccess()&&!spec.forSlave()?getPassedHost()
+				:false&& getPassedHost ?getPassedHost()
 						:ff.newWindowHost(this));
 	}
 	protected FeatureHost getPassedHost(){
