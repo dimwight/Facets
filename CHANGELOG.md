@@ -7,14 +7,22 @@ TreeTextViewable,TmxView,
 NodeViewable,
 TreeAppSpecifier,TreeSearcher,TreeAppFeatures,
 PlaneTest,
-SwingCanvasPainters,SwingPainterOutlined,
+
+SwingCanvasPainters,
+SwingPainterOutlined,
+
 FieldText,
 PathTreePaneMaster,
 Util,
 DirCache,
 Nodes
 ##9.25
-demo>apps, SwingCanvasPainters, SwingPainterOutlined, PlaneTest, 
+demo>apps, 
+
+SwingCanvasPainters, 
+SwingPainterOutlined, 
+
+PlaneTest, 
 ImageProviderAwt, SwingPainterSource, SliderPanel, FacetAppSpecifier, 
 Events, BusyCursor, HostBounds, WindowHostSwing, PainterMaster, 
 Util, Debug, SwingPdfCode, SwingPainterTextual, TextualField, 

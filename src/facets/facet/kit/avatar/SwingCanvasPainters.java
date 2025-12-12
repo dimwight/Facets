@@ -61,6 +61,30 @@ final class SwingCanvasPainters extends Tracer {
         if (timing) Times.printElapsed("SwingCanvasPainters.~doPainting");
     }
 
+    private void prepareAndPaint(Graphics2D g2, boolean back, boolean view, boolean motion) {
+        PlaneCanvas canvas = (PlaneCanvas) master.canvas;
+        double ySign = ((PlaneView) canvas.viewer().view()).ySign();
+        AffineTransform plot = new AffineTransform();
+        plot.scale(canvas.scale, canvas.scale * ySign);
+        if (false) trace(".prepareAndPaint: plot=", plot.getScaleX());
+        Point origin = canvas.origin;
+        if (origin == null) throw new IllegalStateException("Null origin in " + Debug.info(this));
+        else plot.translate(origin.x(), origin.y() * ySign);
+        g2.transform(plot);
+        if (true) g2.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
+        if (back) backPainter.paintInGraphics(g2.create());
+        if (view) {
+            if (false) trace(".prepareAndPaint: viewPainters=", viewPainters.length);
+            for (Painter each : viewPainters) each.paintInGraphics(g2.create());
+            pdf.tryRender(master.findCanvasPane().getSize(),
+                    AvatarPolicies.joinPainters(new Painter[]{backPainter},
+                            false ? new Painter[]{} : viewPainters));
+        }
+        if (motion && motionPainters != null) {
+            System.out.println("motionPainters = " + motionPainters[0]);
+            for (Painter each : motionPainters) each.paintInGraphics(g2.create());
+        }
+    }
     protected void traceOutput(String msg) {
         if (true) super.traceOutput(msg);
     }
@@ -127,31 +151,6 @@ final class SwingCanvasPainters extends Tracer {
                 return width * height * 4;
             }
         };
-    }
-
-    private void prepareAndPaint(Graphics2D g2, boolean back, boolean view, boolean motion) {
-        PlaneCanvas canvas = (PlaneCanvas) master.canvas;
-        double ySign = ((PlaneView) canvas.viewer().view()).ySign();
-        AffineTransform plot = new AffineTransform();
-        plot.scale(canvas.scale, canvas.scale * ySign);
-        if (false) trace(".prepareAndPaint: plot=", plot.getScaleX());
-        Point origin = canvas.origin;
-        if (origin == null) throw new IllegalStateException("Null origin in " + Debug.info(this));
-        else plot.translate(origin.x(), origin.y() * ySign);
-        g2.transform(plot);
-        if (true) g2.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
-        if (back) backPainter.paintInGraphics(g2.create());
-        if (view) {
-            if (false) trace(".prepareAndPaint: viewPainters=", viewPainters.length);
-            for (Painter each : viewPainters) each.paintInGraphics(g2.create());
-            pdf.tryRender(master.findCanvasPane().getSize(),
-                    AvatarPolicies.joinPainters(new Painter[]{backPainter},
-                            false ? new Painter[]{} : viewPainters));
-        }
-        if (motion && motionPainters != null) {
-            System.out.println("motionPainters = " + motionPainters.length);
-            for (Painter each : motionPainters) each.paintInGraphics(g2.create());
-        }
     }
 
     private void scaleWithWait_(Graphics2D g2, final JPanel pane, int width, int height) {
