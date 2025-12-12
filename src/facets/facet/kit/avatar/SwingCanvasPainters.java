@@ -22,7 +22,7 @@ import static java.awt.RenderingHints.KEY_ANTIALIASING;
 import static java.awt.RenderingHints.VALUE_ANTIALIAS_ON;
 
 final class SwingCanvasPainters extends Tracer {
-    private static final boolean optimise = false, timing = true;
+    private static final boolean optimise = false, timing = false;
     private final static PdfCanvas pdf = false ? null : new PdfCanvas();
     private final ProvidingCache localCache =
             System.getProperty("SwingCanvasPaintersLocalCache") == null ? null :
@@ -47,7 +47,7 @@ final class SwingCanvasPainters extends Tracer {
         this.backPainter = backPainter;
         this.viewPainters = viewPainters;
         this.motionPainters = motionPainters;
-//        Times.times=true;
+        Times.times=timing;
     }
 
     void doPainting(Graphics2D g2) {
@@ -81,7 +81,7 @@ final class SwingCanvasPainters extends Tracer {
                             false ? new Painter[]{} : viewPainters));
         }
         if (motion && motionPainters != null) {
-            System.out.println("motionPainters = " + motionPainters[0]);
+//            System.out.println("motionPainters = " + motionPainters[0]);
             for (Painter each : motionPainters) each.paintInGraphics(g2.create());
         }
     }

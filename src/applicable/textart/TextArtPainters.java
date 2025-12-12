@@ -124,12 +124,13 @@ final class TextArtPainters extends Tracer{
 
 	/**
 	Called from {@link TextArtDragPolicy}. 
-	@param contentStyle defines the drag type
+	@param style defines the drag type
 	 */
 	Painter[] newDragPainters (DragStyle style){
 		
 		//Do lazy evaluations?
-		if (textLo == null) textLo = newLoText();
+		if (true ||
+				textLo == null) textLo = newLoText();
 		if (style == DragStyle.TURN && turnMark == null) turnMark = newTurnMark();
 		
 		//Apply transforms
