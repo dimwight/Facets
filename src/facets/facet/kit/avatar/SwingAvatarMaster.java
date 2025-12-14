@@ -118,13 +118,13 @@ abstract class SwingAvatarMaster extends ViewerMaster implements CanvasHost {
     }
 
     protected AvatarCanvas canvas;
-    private SwingCanvasPainters painters;
+    private SwingCanvasPainters_ painters;
     private PainterSource painterSource;
     private boolean dragging;
 
     public SwingAvatarMaster(AvatarCanvas canvas) {
         (this.canvas = canvas).host = this;
-        painters = new SwingCanvasPainters(this);
+        painters = new SwingCanvasPainters_(this);
     }
 
     final public void setCanvasCursor(int cursor) {
