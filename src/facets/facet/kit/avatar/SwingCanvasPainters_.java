@@ -33,7 +33,7 @@ final class SwingCanvasPainters_ extends Tracer {
     private final SwingAvatarMaster master;
     private Painter motionPainters[], viewPainters[], backPainter;
     private Dimension sizeThen;
-    private Image immediate, codeBack;
+    private Image immediate;
     private Object viewIdThen;
     SwingCanvasPainters_(SwingAvatarMaster master) {
         this.master = master;
@@ -71,25 +71,16 @@ final class SwingCanvasPainters_ extends Tracer {
                 || immediate == null) {
             if (false) traceDebug(".doOptimisedPainting: viewPainters=", viewPainters);
             else if (false) trace(".doOptimisedPainting: viewId=" + viewId);
-            Image back = codeBack == null ? codeBack = newImager(cache, width, height, null
-            ).getImageForValues(backValues) : codeBack;
-            if (true) codeBack = null;
-            if (codeBack != null) {
-                final long maxInt = Integer.MAX_VALUE, ints = maxInt * 2, rowInts = ints / height;
-                for (Object v : viewPainters) {
-                    long code = v.hashCode() + maxInt,
-                            x = (code % rowInts) * width / rowInts, y = code / rowInts;
-                    java.awt.Point at = new java.awt.Point((int) x, (int) y);
-                    Graphics gBack = codeBack.getGraphics();
-                    gBack.setColor(Color.gray);
-                    gBack.fillOval((int) x, (int) y, 5, 5);
-                }
-            }
-            immediate = newImager(cache, width, height, back).getImageForValues(allValues);
+            Image back = newImager(cache, width, height, null
+                        ).getImageForValues(backValues);
+            immediate = newImager(cache, width, height, back)
+                    .getImageForValues(allValues);
             viewIdThen = viewId;
         }
         g2.drawImage(immediate, 0, 0, null);
-        if (motionPainters != null) prepareAndPaint((Graphics2D) g2.create(), false, false, true);
+        if (motionPainters != null) {
+            prepareAndPaint((Graphics2D) g2.create(), false, false, true);
+        }
         sizeThen = size;
     }
 
@@ -117,7 +108,9 @@ final class SwingCanvasPainters_ extends Tracer {
         }
     }
     private ImageProviderAwt newImager(final ProvidingCache cache,
-                                       final int width, final int height, final Image back) {
+                                       final int width,
+                                       final int height,
+                                       final Image back) {
         Class<SwingCanvasPainters_> scp = SwingCanvasPainters_.class;
         return new ImageProviderAwt(cache, true ? scp : this,
                 scp.getSimpleName() + ".newImages", width, height) {
