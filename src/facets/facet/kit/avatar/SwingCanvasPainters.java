@@ -25,8 +25,8 @@ final class SwingCanvasPainters extends Tracer {
     private static final boolean optimise = true, timing = false;
     private final static PdfCanvas pdf = false ? null : new PdfCanvas();
     private final ProvidingCache localCache =
-            System.getProperty("SwingCanvasPaintersLocalCache") == null ? null :
-                    new ProvidingCache(false ? ProvidingCache.PASS_THROUGH : 20, null) {
+            System.getProperty("SwingCanvasPaintersLocalCache") != null ? null :
+                    new ProvidingCache(true ? ProvidingCache.PASS_THROUGH : 20, null) {
                         @Override
                         protected boolean doTrace() {
                             return true;
@@ -86,7 +86,7 @@ final class SwingCanvasPainters extends Tracer {
             else if (false) trace(".doOptimisedPainting: viewId=" + viewId);
             Image back = codeBack == null ? codeBack = newImager(cache, width, height, null
             ).getImageForValues(backValues) : codeBack;
-            if (false) codeBack = null;
+            if (true) codeBack = null;
             if (codeBack != null) {
                 final long maxInt = Integer.MAX_VALUE, ints = maxInt * 2, rowInts = ints / height;
                 for (Object v : viewPainters) {
