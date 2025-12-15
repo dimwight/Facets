@@ -25,7 +25,6 @@ final class SwingPainterOutlined extends Tracer implements PickPainter,Identifie
     private static final boolean hitPen=true;
     private static final float hairline=hitPen?0.8f:1;
     private final Outlined master;
-    private final SwingPdfCode pdf = new SwingPdfCode(this, false);
     private static int identities;
     private final int identity=identities++;
     private final PlaneCanvas canvas;
@@ -65,15 +64,12 @@ final class SwingPainterOutlined extends Tracer implements PickPainter,Identifie
     }
     public void paintInGraphics(Object graphics){
         Graphics2D g2=(Graphics2D)graphics;
-        pdf.setTransform(g2);
         checkPaintValues();
         if(fill!=null){
             Color color=new Color(fill.rgb());
             g2.setColor(color);
             if(fillShape==null)throw new IllegalStateException("No fillShape in "+this);
             g2.fill(fillShape);
-            pdf.definePath(fillShape);
-            pdf.fillPath(color);
         }
         if(pen!=null){
             g2.setStroke(stroke);
@@ -81,10 +77,7 @@ final class SwingPainterOutlined extends Tracer implements PickPainter,Identifie
             g2.setColor(color);
             if(hitPen&&fill==null)g2.fill(penShape);
             else g2.draw(penShape);
-            pdf.definePath(penShape);
-            pdf.strokePath(color,(float)canvas.unscale(1));
         }
-        pdf.closeCode();
     }
     public Object checkCanvasHit(Point canvasAt,double hitGap){
         if(!master.isPickable())return null;
@@ -126,6 +119,6 @@ final class SwingPainterOutlined extends Tracer implements PickPainter,Identifie
     }
     @Override
     public PdfCode code(){
-        return pdf;
+        throw new RuntimeException("Not implemented");
     }
 }
