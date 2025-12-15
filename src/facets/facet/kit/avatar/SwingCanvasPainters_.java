@@ -1,8 +1,6 @@
 package facets.facet.kit.avatar;
 
-import facets.core.app.avatar.AvatarPolicies;
 import facets.core.app.avatar.Painter;
-import facets.core.app.avatar.PdfCanvas;
 import facets.core.app.avatar.PlaneView;
 import facets.util.Debug;
 import facets.util.Times;
@@ -12,8 +10,6 @@ import facets.util.geom.Point;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
@@ -25,16 +21,17 @@ final class SwingCanvasPainters_ extends Tracer {
     private static final boolean optimise = true, timing = false;
     private final ProvidingCache localCache =
             new ProvidingCache(true ? ProvidingCache.PASS_THROUGH : 20, null) {
-        @Override
-        protected boolean doTrace() {
-            return true;
-        }
-    };
+                @Override
+                protected boolean doTrace() {
+                    return true;
+                }
+            };
     private final SwingAvatarMaster master;
     private Painter motionPainters[], viewPainters[], backPainter;
     private Dimension sizeThen;
     private Image immediate;
     private Object viewIdThen;
+
     SwingCanvasPainters_(SwingAvatarMaster master) {
         this.master = master;
     }
@@ -43,7 +40,7 @@ final class SwingCanvasPainters_ extends Tracer {
         this.backPainter = backPainter;
         this.viewPainters = viewPainters;
         this.motionPainters = motionPainters;
-        Times.times=timing;
+        Times.times = timing;
     }
 
     void doPainting(Graphics2D g2) {
@@ -65,14 +62,13 @@ final class SwingCanvasPainters_ extends Tracer {
                 viewId = Arrays.hashCode(viewPainters),
                 backValues[] = {backId, width, height},
                 allValues[] = {backId, viewId, width, height};
-       if (!viewId.equals(viewIdThen) ||
+        if (!viewId.equals(viewIdThen) ||
                 motionPainters == null
                 || motionPainters.length == 0
                 || immediate == null) {
-            if (false) traceDebug(".doOptimisedPainting: viewPainters=", viewPainters);
-            else if (false) trace(".doOptimisedPainting: viewId=" + viewId);
-            Image back = newImager(cache, width, height, null
-                        ).getImageForValues(backValues);
+            if (true) trace(".doOptimisedPainting: viewId=" + viewId);
+            Image back = newImager(cache, width, height, null)
+                    .getImageForValues(backValues);
             immediate = newImager(cache, width, height, back)
                     .getImageForValues(allValues);
             viewIdThen = viewId;
@@ -100,13 +96,14 @@ final class SwingCanvasPainters_ extends Tracer {
             if (false) trace(".prepareAndPaint: viewPainters=", viewPainters.length);
             for (Painter each : viewPainters)
                 each.paintInGraphics(g2.create());
-;
+            ;
         }
         if (motion && motionPainters != null) {
 //            System.out.println("motionPainters = " + motionPainters[0]);
             for (Painter each : motionPainters) each.paintInGraphics(g2.create());
         }
     }
+
     private ImageProviderAwt newImager(final ProvidingCache cache,
                                        final int width,
                                        final int height,

@@ -336,10 +336,15 @@ public final class TextArt extends ValueProxy implements Fonted, AvatarContent{
 							true, false,"");
 			
 				//Create line set with children
-				ValueNode lineSet = new ValueNode("lines", "Lines" + (++lineSets), 
-						new DataNode[]{
-					line0.sourceNode(), line1.sourceNode(), line2.sourceNode()
-				});
+				DataNode[] nodes=true?new DataNode[]{
+						line1.sourceNode(),
+				}: new DataNode[]{
+						line0.sourceNode(),
+						line1.sourceNode(),
+						line2.sourceNode()
+				};
+				ValueNode lineSet = new ValueNode("lines", "Lines" + (++lineSets),
+						nodes);
 				
 				boolean minimal=true;
 				//Add opening constraints settings

@@ -126,7 +126,8 @@ final class TextArtViewable extends NodeViewable {
 		limits = new SToggling(TITLE_LIMITS, limitsValue, limitsCoupler);
 		
 		boolean avoidingUndoOffsetsBug=false;
-		int selectAt=Integer.valueOf(title().replaceAll("\\D*",""))%3;
+		int selectAt=true?0:
+				Integer.valueOf(title().replaceAll("\\D*",""))%3;
 		if(!avoidingUndoOffsetsBug)defineSelection(lineSet.children()[selectAt]);
 	}
 	
