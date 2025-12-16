@@ -85,6 +85,7 @@ abstract class TextArtDragPolicy extends DragPolicy {
                 ItemList<Painter> painters = new ItemList(Painter.class);
 
                 //Update drag lines, get updated painters
+                if (false) System.out.println("dragAt = " + dragAt.x());
                 for (int i = 0; i < linePainters.length; i++) {
 
                     //Calculate raw dragged position
@@ -94,7 +95,7 @@ abstract class TextArtDragPolicy extends DragPolicy {
                     Point dragged = new Point(xThen, yThen).shifted(dragAt.jumpFrom(anchorAt));
 
                     //Pass through policies and set avatar state
-                    linePainters[i].atX = (int) xPolicy.validValue(xThen, dragged.x());
+                    linePainters[i].atX = (int) xPolicy.validValue(xThen, dragAt.x());
                     linePainters[i].atY = (int) yPolicy.validValue(yThen, dragged.y());
 
                     //Add painters for line to list

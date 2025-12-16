@@ -73,7 +73,6 @@ final class TextArtPainters extends Tracer{
 	/**
 	Called from {@link TextArtAvatarPolicies}. 
 	@param showSelection is the line selected?
-	@param active is the viewer active?
 	 */
 	Painter[] newViewPainters(boolean showSelection) {
 		//Do lazy evaluations?
@@ -224,7 +223,7 @@ final class TextArtPainters extends Tracer{
 	private void applyTransforms(Painter painter) {
 
 		//Define and apply transforms
-		Transform 
+		Transform
 			at = p.transformAt(atX, atY),
 			turn = p.transformTurn(toRadians(atAngle), 0, 0);
 		p.applyTransforms(new Transform[]{at, turn}, false, new Painter[]{painter});

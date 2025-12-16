@@ -443,12 +443,12 @@ public class TextArtFeatures extends FacetFactory{
 					
 		//Define and return complete panel
 		return tabMount(area, new SFacet[]{
-				tabFont, 
+				NumberPolicy.debug ? null : tabAngle,
+				tabFont,
 				advanceFacets.sidebarTree,
 				tabView, 
 				tabConstraints, 
 				tabXY, 
-				NumberPolicy.debug ? null : tabAngle, 
 			}, new String[]{
 				TOOL_TITLE_FONT, 
 				TAB_TITLE_TREE, 

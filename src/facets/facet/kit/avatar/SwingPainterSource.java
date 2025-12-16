@@ -210,6 +210,7 @@ final public class SwingPainterSource extends PainterSource{
 		return t;
 	}
 	public Transform transformAt(double x,double y){
+		if (false) trace(" x = " + x);
 		SwingTransform t=new SwingTransform();
 		t.setToTranslation(x,y);
 		return t;

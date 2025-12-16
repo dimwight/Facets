@@ -18,12 +18,12 @@ import static java.awt.RenderingHints.KEY_ANTIALIASING;
 import static java.awt.RenderingHints.VALUE_ANTIALIAS_ON;
 
 final class SwingCanvasPainters_ extends Tracer {
-    private static final boolean optimise = true, timing = false;
+    private static final boolean optimise = true, timing = true;
     private final ProvidingCache localCache =
-            new ProvidingCache(true ? ProvidingCache.PASS_THROUGH : 20, null) {
+            new ProvidingCache(false ? ProvidingCache.PASS_THROUGH : 20, null) {
                 @Override
                 protected boolean doTrace() {
-                    return true;
+                    return false;
                 }
             };
     private final SwingAvatarMaster master;
@@ -58,15 +58,16 @@ final class SwingCanvasPainters_ extends Tracer {
         final JPanel pane = master.findCanvasPane();
         Dimension size = pane.getSize();
         final int width = size.width, height = size.height;
-        final Object backId = backPainter.hashCode(),
-                viewId = Arrays.hashCode(viewPainters),
+        boolean refIds = true;
+        final Object backId = refIds ? backPainter : backPainter.hashCode(),
+                viewId = refIds ? viewPainters : Arrays.hashCode(viewPainters),
                 backValues[] = {backId, width, height},
                 allValues[] = {backId, viewId, width, height};
         if (!viewId.equals(viewIdThen) ||
                 motionPainters == null
                 || motionPainters.length == 0
                 || immediate == null) {
-            if (true) trace(".doOptimisedPainting: viewId=" + viewId);
+            if (false) trace(".doOptimisedPainting: viewId=" + viewId);
             Image back = newImager(cache, width, height, null)
                     .getImageForValues(backValues);
             immediate = newImager(cache, width, height, back)
