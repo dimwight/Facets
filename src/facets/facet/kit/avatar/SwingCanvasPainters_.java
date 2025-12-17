@@ -18,7 +18,7 @@ import static java.awt.RenderingHints.KEY_ANTIALIASING;
 import static java.awt.RenderingHints.VALUE_ANTIALIAS_ON;
 
 final class SwingCanvasPainters_ extends Tracer {
-    private static final boolean optimise = true, timing = true;
+    private static final boolean optimise = true, timing = false;
     private final ProvidingCache localCache =
             new ProvidingCache(false ? ProvidingCache.PASS_THROUGH : 20, null) {
                 @Override
@@ -67,13 +67,14 @@ final class SwingCanvasPainters_ extends Tracer {
                 motionPainters == null
                 || motionPainters.length == 0
                 || immediate == null) {
-            if (false) trace(".doOptimisedPainting: viewId=" + viewId);
             Image back = newImager(cache, width, height, null)
                     .getImageForValues(backValues);
+            traceDebug(" back = ", back);
             immediate = newImager(cache, width, height, back)
                     .getImageForValues(allValues);
             viewIdThen = viewId;
         }
+        traceDebug(" immediate = ", immediate);
         g2.drawImage(immediate, 0, 0, null);
         if (motionPainters != null) {
             prepareAndPaint((Graphics2D) g2.create(), false, false, true);

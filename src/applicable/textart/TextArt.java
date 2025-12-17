@@ -3,20 +3,17 @@ import static applicable.textart.TextArtConstants.*;
 import static facets.util.tree.TypedNode.*;
 import facets.core.app.Fonted;
 import facets.core.app.ViewerContenter;
-import facets.core.app.ViewerContenter.ContentSource;
 import facets.core.app.avatar.AvatarContent;
 import facets.util.Debug;
-import facets.util.Stateful;
 import facets.util.Util;
 import facets.util.ValueProxy;
-import facets.util.geom.Angle;
 import facets.util.shade.Shade;
-import facets.util.shade.Shaded;
 import facets.util.shade.Shades;
 import facets.util.tree.DataNode;
-import facets.util.tree.Nodes;
-import facets.util.tree.TypedNode;
 import facets.util.tree.ValueNode;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  Content type for spike application.  
@@ -278,10 +275,11 @@ public final class TextArt extends ValueProxy implements Fonted, AvatarContent{
 		private int jumbles, lineSets;
 
 		//Create a line with jumbled properties
-			private TextArt newJumbleLine(String text) {
-				return new TextArt(text, 
+			private TextArt newJumbleLine() {
+				return new TextArt(
+						texts[jumbles % texts.length],
 						atXs[jumbles % atXs.length],
-						atYs[jumbles % atYs.length], 
+						atYs[jumbles % atYs.length],
 						toDegrees(atRadians[jumbles % atRadians.length]),
 						SHADES[shadesAt[jumbles % shadesAt.length]], 
 						FONT_FACES[facesAt[jumbles % facesAt.length]],
@@ -296,7 +294,7 @@ public final class TextArt extends ValueProxy implements Fonted, AvatarContent{
 
 				//Create three (probably jumbled) text line objects
 				boolean jumble = true;
-				TextArt line0 = jumble ? newJumbleLine(texts[0])
+				TextArt line0 = jumble ? newJumbleLine()
 							: new TextArt(texts[0],
 						50,
 						70,
@@ -306,7 +304,7 @@ public final class TextArt extends ValueProxy implements Fonted, AvatarContent{
 						FONT_SIZES[3],
 						true, false,""),
 						
-					line1 = jumble ? newJumbleLine(texts[1])
+					line1 = jumble ? newJumbleLine()
 							: new TextArt(texts[1],
 						70,
 						100,
@@ -316,7 +314,7 @@ public final class TextArt extends ValueProxy implements Fonted, AvatarContent{
 						FONT_SIZES[4],
 						false, true,""),
 						
-					line2 = jumble ? newJumbleLine(texts[2])
+					line2 = jumble ? newJumbleLine()
 							: new TextArt(texts[2],
 						100,
 						170,
@@ -336,15 +334,15 @@ public final class TextArt extends ValueProxy implements Fonted, AvatarContent{
 							true, false,"");
 			
 				//Create line set with children
-				DataNode[] nodes=true?new DataNode[]{
-						line1.sourceNode(),
-				}: new DataNode[]{
+                ArrayList<DataNode> test = new ArrayList<>();
+				test.addAll(Arrays.asList(
 						line0.sourceNode(),
-						line1.sourceNode(),
-						line2.sourceNode()
-				};
+                        line1.sourceNode(),
+                        line2.sourceNode()));
+				while (false&& jumbles<2000)
+					test.add(newJumbleLine().sourceNode());
 				ValueNode lineSet = new ValueNode("lines", "Lines" + (++lineSets),
-						nodes);
+						test.toArray(new DataNode[0]));
 				
 				boolean minimal=true;
 				//Add opening constraints settings
@@ -368,6 +366,7 @@ public final class TextArt extends ValueProxy implements Fonted, AvatarContent{
 		};
 		
 		//Values for jumbling
+		final int add = 50;
 		final int[] atXs = {
 				50, 
 				70,
@@ -384,13 +383,24 @@ public final class TextArt extends ValueProxy implements Fonted, AvatarContent{
 				100,
 				170,
 				60,
-				100, 
-				70, 
+				100,
+				70,
 				140,
-				90, 
+				90,
 				110,
-				130, 
+				130,
 				80,
+				70+add,
+				100+add,
+				170+add,
+				60+add,
+				100+add,
+				70+add,
+				140+add,
+				90+add,
+				110+add,
+				130+add,
+				80+add,
 			},
 		facesAt = {
 				1, 
