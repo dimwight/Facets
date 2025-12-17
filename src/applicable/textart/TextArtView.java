@@ -4,6 +4,7 @@ import static applicable.textart.TextArtConstants.*;
 import facets.core.app.NodeViewable;
 import facets.core.app.SView;
 import facets.core.app.ViewableAction;
+import facets.core.app.ViewableFrame;
 import facets.core.app.avatar.AvatarPolicies;
 import facets.core.app.avatar.PlaneView;
 import facets.core.app.avatar.PlaneViewWorks;
@@ -69,7 +70,6 @@ public class TextArtView extends PlaneViewWorks{
 	 @param showWidth passed to superclass
 	 @param showHeight passed to superclass
 	 @param policies passed to superclass
-	 @param lines for grid reference
 	 @param gridShow for sharing with child views
 	 */
 	TextArtView(String title, double showWidth, double showHeight,
@@ -118,7 +118,7 @@ public class TextArtView extends PlaneViewWorks{
 
 	/**
 	 Creates indexing containing base and child views. 
-	 <p>Called by {@link TextArtContenter#newContentViews(NodeViewable)}
+	 <p>Called by {@link TextArtContenter#newContentViewers(ViewableFrame)}
 	 */
 	final static SIndexing newZoomIndexing(double nearWidth, 
 			double nearHeight, AvatarPolicies policies) {

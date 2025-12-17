@@ -186,6 +186,7 @@ public class TextArtFeatures extends FacetFactory{
 			toolsXY = NumberPolicy.debug ? null : new SFacet[]{
 				numericNudgeButtons(drawAt, HINT_NUMERIC_FIELDS + HINT_TITLE1), 
 				indexingDropdownList(gridSnap, HINT_NONE), 
+				indexingIteratorButtons(gridSnap, HINT_NONE),
 				spacerWide(3),
 				togglingButtons(limits, HINT_NONE), 
 			}, 
@@ -223,7 +224,8 @@ public class TextArtFeatures extends FacetFactory{
 				textualField(text, 20, HINT_BARE), 
 				BREAK, 
 				indexingDropdownList(views, HINT_NONE), 
-				BREAK, 
+				indexingIteratorButtons(views, HINT_NONE),
+				BREAK,
 				indexingDropdownList(toolbarSwitcher, HINT_TITLE1), 
 				advanceFacets.toolsMount
 		});
