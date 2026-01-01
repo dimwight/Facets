@@ -136,6 +136,6 @@ final class SwingCanvasPainters_ extends Tracer {
     }
 
     protected void traceOutput(String msg) {
-        if (true) super.traceOutput(msg);
+        if (false) super.traceOutput(msg);
     }
 }
