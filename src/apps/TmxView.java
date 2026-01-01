@@ -23,6 +23,7 @@ import facets.core.superficial.STrigger;
 import facets.core.superficial.app.SSelection;
 import facets.facet.FacetFactory;
 import facets.facet.app.FacetAppSurface;
+import facets.facet.app.tree.TreeAppContenter;
 import facets.facet.app.tree.TreeAppSpecifier;
 import facets.facet.kit.Toolkit;
 import facets.facet.kit.swing.KitSwing;
@@ -38,12 +39,10 @@ import facets.util.tree.ValueNode;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -344,14 +343,14 @@ public class TmxView extends TreeAppSpecifier{
 								"Cleaned file!",
 								"File loaded will be "+file.getName());
 						new TextLines(file).writeLines(clean);
-						return super.newContenter(file,app);
-					}
+                        return new TreeAppContenter(file, app);
+                    }
 				}
 			}catch(IOException e){
 				throw new RuntimeException(e);
 			}
-		return super.newContenter(source,app);
-	}
+        return new TreeAppContenter(source, app);
+    }
 	private static ValueNode getHeader(TypedNode root){
 		return (ValueNode)descendantTyped(root,"header");
 	}

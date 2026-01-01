@@ -3,7 +3,7 @@ import static facets.core.app.ActionViewerTarget.Action.*;
 import static facets.facet.app.FacetPreferences.*;
 import static facets.facet.app.tree.TreeTargets.*;
 import static facets.util.tree.DataConstants.*;
-import facets.XmlView;
+
 import facets.core.app.ActionAppSurface;
 import facets.core.app.AppActions;
 import facets.core.app.FeatureHost;
@@ -12,7 +12,6 @@ import facets.core.app.MenuFacets;
 import facets.core.app.NodeViewable;
 import facets.core.app.PagedContenter;
 import facets.core.app.SAreaTarget;
-import facets.core.app.SContentAreaTargeter;
 import facets.core.app.SContenter;
 import facets.core.app.SView;
 import facets.core.app.SViewer;
@@ -21,24 +20,16 @@ import facets.core.app.TreeView;
 import facets.core.app.ViewableAction;
 import facets.core.app.ViewableFrame;
 import facets.core.app.ViewerContenter;
-import facets.core.app.AppSurface.ContentStyle;
-import facets.core.app.FeatureHost.LayoutFeatures;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.SFrameTarget;
-import facets.core.superficial.SIndexing;
 import facets.core.superficial.STarget;
 import facets.core.superficial.STargeter;
-import facets.core.superficial.app.SHost;
 import facets.core.superficial.app.SSurface;
-import facets.core.superficial.app.SHost.FacetLayout;
 import facets.core.superficial.app.SSelection;
 import facets.facet.FacetFactory;
 import facets.facet.app.FacetAppSpecifier;
 import facets.facet.app.FacetAppSurface;
-import facets.facet.app.FacetPreferences;
-import facets.util.Debug;
 import facets.util.FileSpecifier;
-import facets.util.tree.DataConstants;
 import facets.util.tree.DataNode;
 import facets.util.tree.Nodes;
 import facets.util.tree.TypedNode;
@@ -46,9 +37,10 @@ import facets.util.tree.XmlPolicy;
 import facets.util.tree.XmlSpecifier;
 import java.io.File;
 /**
-{@link FacetAppSpecifier} for simple applications with {@link DataNode} content. 
+{@link FacetAppSpecifier} for applications with {@link DataNode} content.
 <p>{@link TreeAppSpecifier} exemplifies practical use of the superclass with
-a {@link ViewerContenter} (here {@link TreeAppContenter}) that provides the detail functionality.  
+a {@link ViewerContenter} (here {@link TreeAppContenter}) that provides the
+ detail functionality.
 It also demonstrates with {@link #newContentRootTargets(FacetAppSurface)} and
 {@link #newTreeMenuItems(FacetFactory, STargeter[], STargeter[])} the key  
 <a href="http://superficial.sourceforge.net/">Superficial</a>  mechanism for binding 
@@ -62,7 +54,6 @@ and {@link XmlSpecifier}
 <li>{@link SView}s such as {@link TreeView}, {@link ListView}, {@link TableView} 
 for appropriate content 
 </ul>
-@see XmlView
  */
 public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	/** Argument keys */
@@ -75,37 +66,16 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 		super(appClass);
 	}
 	@Override
-	public PagedContenter[]adjustPreferenceContenters(SSurface surface,
-			PagedContenter[]contenters){
-		return false?contenters:new PagedContenter[]{
-			contenters[PREFERENCES_TRACE],
-			contenters[PREFERENCES_GRAPH],
-			contenters[PREFERENCES_VALUES],
-			contenters[PREFERENCES_VIEW],
-		};
-	}
 	/**
-	Locks superclass implementation. 
-	 */
-	@Override
-	protected final AppActions newActions(ActionAppSurface app){
-		return super.newActions(app);
-	}
-	@Override
-	public boolean headerIsRibbon(){
-		return args().getOrPutBoolean(ARG_RIBBON,false);
-	}
-	/**
-	Final implementation. 
-	<p>The {@link FacetAppSurface} returned calls out to 
-	<ul>
-	<li>{@link #getInternalContentSource()} 
-	<li>{@link XmlPolicy#fileSpecifiers()} via {@link #xmlPolicy()}
-	<li>{@link #newContenter(Object, FacetAppSurface)} which by default returns a
-	 {@link TreeAppContenter}. 
+	 Final implementation.
+	 <p>The {@link FacetAppSurface} returned calls out to
 	 <ul>
-		 */
-	@Override
+	 <li>{@link XmlPolicy#fileSpecifiers()} via {@link #xmlPolicy()}
+	 <li>{@link #getInternalContentSource()}
+	 <li>{@link #newContenter(Object, FacetAppSurface)} which by default returns a
+	 {@link TreeAppContenter}.
+	 <ul>
+	 */
 	final protected FacetAppSurface newApp(FacetFactory ff,FeatureHost host){
 		return new FacetAppSurface(this,ff){
 			@Override
@@ -122,14 +92,24 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 			}
 		};
 	}
-	protected SContenter newContenter(Object source,FacetAppSurface app){
-		return new TreeAppContenter(source,app);
+	@Override
+	protected final AppActions newActions(ActionAppSurface app){
+		return super.newActions(app);
+	}
+
+    protected SContenter newContenter(Object source, FacetAppSurface app) {
+        return new TreeAppContenter(source,app);
+    }
+
+    protected ViewableAction[]viewerActions(SView view){
+		ViewableAction[]all={COPY,CUT,PASTE,PASTE_INTO,DELETE,MODIFY,UNDO,REDO};
+		return view.isLive()?all:new ViewableAction[]{COPY};
 	}
 	/**
-	Defines an {@link XmlPolicy} for the application content. 
-	<p>Called by the return of {@link #newApp(FacetFactory, FeatureHost)} 
-	and by {@link TreeAppContenter#saveToSink(Object)}.  
-	@return by default a plain {@link XmlPolicy}
+	 Defines an {@link XmlPolicy} for the application content.
+	 <p>Called by the return of {@link #newApp(FacetFactory, FeatureHost)}
+	 and by {@link TreeAppContenter#saveToSink(Object)}.
+	 @return by default a plain {@link XmlPolicy}
 	 */
 	protected XmlPolicy xmlPolicy(){
 		return new XmlPolicy(){
@@ -143,27 +123,39 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 			}
 			public XmlSpecifier[]fileSpecifiers(){
 				return false?new XmlSpecifier[]{
-					new XmlSpecifier("state.xml","Facets state files",this),
-					super.fileSpecifiers()[0],
-					super.fileSpecifiers()[1],
+						new XmlSpecifier("state.xml","Facets state files",this),
+						super.fileSpecifiers()[0],
+						super.fileSpecifiers()[1],
 				}
-				:super.fileSpecifiers();
+						:super.fileSpecifiers();
 			};
 		};
 	}
 	/**
-	Fulfils {@link FacetAppSurface#getInternalContentSource()} in the
-	return of {@link #newApp(FacetFactory, FeatureHost)}.
-	@return by default {@link Nodes#newTestTree(String, int)} with <code>width</code>=3 which
-	may be changed by passing {@link #ARG_TREE_SIZE}=<code>width</code> 
+	 Fulfils {@link FacetAppSurface#getInternalContentSource()} in the
+	 return of {@link #newApp(FacetFactory, FeatureHost)}.
+	 @return by default {@link Nodes#newTestTree(String, int)} with <code>width</code>=3 which
+	 may be changed by passing {@link #ARG_TREE_SIZE}=<code>width</code>
 	 */
 	protected Object getInternalContentSource(){
-		return false?new File("Test.xml")
-				:Nodes.newTestTree("Test",nature().getOrPutInt(ARG_TREE_SIZE,false?-1:3));
+		return Nodes.newTestTree("Test", nature().getOrPutInt(ARG_TREE_SIZE, false ? -1 : 3));
+	}
+	@Override
+	public PagedContenter[]adjustPreferenceContenters(SSurface surface,
+			PagedContenter[]contenters){
+		return false?contenters:new PagedContenter[]{
+			contenters[PREFERENCES_TRACE],
+			contenters[PREFERENCES_GRAPH],
+			contenters[PREFERENCES_VALUES],
+			contenters[PREFERENCES_VIEW],
+		};
 	}
 	/**
-	Enables redefinition of {@link SView}s supplying viewer policy. 
-	<p>Called from {@link TreeAppContenter#newContentViewers(ViewableFrame)}. 
+	Locks superclass implementation. 
+	 */
+	/**
+	Enables redefinition of {@link SView}s supplying viewer policy.
+	<p>Called from {@link TreeAppContenter#newContentViewers(ViewableFrame)}.
 	@param viewable has the content as its {@link SFrameTarget#framed}
 	@return by default a single {@link TreeView}
 	 */
@@ -210,7 +202,6 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	by default an empty {@link STarget}<code>[]</code>
 	 */
 	protected STarget[]newContentRootTargets(FacetAppSurface app){
-
 		return new STarget[]{};
 	}
 	/**
@@ -236,15 +227,15 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 		}
 		:new SFacet[]{};
 	}
-	protected ViewableAction[]viewerActions(SView view){
-		ViewableAction[]all={COPY,CUT,PASTE,PASTE_INTO,DELETE,MODIFY,UNDO,REDO};
-		return view.isLive()?all:new ViewableAction[]{COPY};
-	}
 	protected boolean usesTreeTargets(){
 		return true;
 	}
 	public boolean viewerSelectionChanged(NodeViewable viewable,SViewer viewer,
 			SSelection selection){
 		return false;
+	}
+
+	public FileSpecifier[] fileSpecifiers() {
+		return new FileSpecifier[0];
 	}
 }

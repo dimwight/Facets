@@ -4,12 +4,7 @@ import static facets.core.app.PathSelection.*;
 import static facets.facet.FacetFactory.*;
 import static facets.util.tree.Nodes.*;
 
-import facets.core.app.AppSpecifier;
-import facets.core.app.NodeViewable;
-import facets.core.app.PathSelection;
-import facets.core.app.SView;
-import facets.core.app.SViewer;
-import facets.core.app.TreeView;
+import facets.core.app.*;
 import facets.core.app.AppSurface.ContentStyle;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.SIndexing;
@@ -20,6 +15,7 @@ import facets.core.superficial.app.SelectingFrame;
 import facets.facet.FacetFactory;
 import facets.facet.app.FacetAppSpecifier;
 import facets.facet.app.FacetAppSurface;
+import facets.facet.app.tree.TreeAppContenter;
 import facets.facet.app.tree.TreeAppSpecifier;
 import facets.facet.kit.Toolkit;
 import facets.facet.kit.swing.KitSwing;
@@ -109,7 +105,7 @@ final public class XmlView extends TreeAppSpecifier{
 		return isDemo()?false:super.isFileApp();
 	}
 	private boolean isDemo(){
-		return true||
+		return false||
 				nature().getBoolean(ARG_NO_FILES)&&releaseReady;
 	}
 	@Override
@@ -118,6 +114,10 @@ final public class XmlView extends TreeAppSpecifier{
 		demoRoot.setChildren((TypedNode)nature().copyState(),(TypedNode)state().copyState());
 		demoRoot.setTitle("Demo"+demos++);
 		return demoRoot;
+	}
+	@Override
+	protected SContenter newContenter(Object source, FacetAppSurface app){
+		return new TreeAppContenter(source,app);
 	}
 	@Override
 	protected SView[]newContentViews(NodeViewable viewable){

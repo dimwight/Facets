@@ -176,9 +176,6 @@ public abstract class FacetAppSpecifier extends AppSpecifier{
 				"Not permitted for "+Debug.info(this));
 		else return new FacetPreferences(this,headless,ff);
 	}
-	public boolean headerIsRibbon(){
-		return false;
-	}
 	final PagedContenter[]newPreferenceContenters(ActionAppSurface app){
 		return adjustPreferenceContenters(app,
 				new FacetPreferences(this,app,((FacetAppSurface)app).ff).newContenters());
@@ -335,4 +332,8 @@ public abstract class FacetAppSpecifier extends AppSpecifier{
 	to expose it
 	 */
 	protected abstract FacetAppSurface newApp(FacetFactory ff, FeatureHost host);
+
+	public boolean headerIsRibbon(){
+		return args().getOrPutBoolean(ARG_RIBBON,false);
+	}
 }
