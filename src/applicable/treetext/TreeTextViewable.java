@@ -1,5 +1,5 @@
 package applicable.treetext;
-import static applicable.treetext.TreePlusContenter.*;
+import static applicable.treetext.TreeTextContenter.*;
 import static facets.core.app.ActionViewerTarget.Action.*;
 import static facets.util.tree.DataConstants.*;
 

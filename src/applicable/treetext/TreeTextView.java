@@ -36,7 +36,7 @@ public abstract class TreeTextView extends TreeAppSpecifier {
 
 	@Override
 	protected SContenter newContenter(Object source, FacetAppSurface app) {
-		return new TreePlusContenter(source, app) {};
+		return new TreeTextContenter(source, app) {};
 	}
 
 	@Override

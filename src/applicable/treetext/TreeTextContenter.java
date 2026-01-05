@@ -1,5 +1,5 @@
 package applicable.treetext;
-import applicable.treeplus.TreePlusFeatures;
+import applicable.treeplus.TreePlusFeatures_;
 import facets.core.app.ActionViewerTarget;
 import facets.core.app.FeatureHost.LayoutFeatures;
 import facets.core.app.NodeViewable;
@@ -18,6 +18,7 @@ import facets.core.superficial.app.FacetedTarget;
 import facets.facet.app.FacetAppSurface;
 import facets.facet.app.FileAppActions;
 import facets.facet.app.tree.TreeAppContenter;
+import facets.facet.app.tree.TreeAppFeatures;
 import facets.facet.app.tree.TreeAppSpecifier;
 import facets.util.Debug;
 import facets.util.FileSpecifier;
@@ -31,13 +32,13 @@ import facets.util.tree.ValueNode;
 
 import java.io.File;
 import java.io.IOException;
-public abstract class TreePlusContenter extends TreeAppContenter {
+public abstract class TreeTextContenter extends TreeAppContenter {
 	public static final int TARGETS_PANE=0;
 	public static final String STATE_OFFSETS="selectionOffsets";
 
 	private Object stateStamp=null;
 	private NodeViewable viewable;
-	public TreePlusContenter(Object source, FacetAppSurface app){
+	public TreeTextContenter(Object source, FacetAppSurface app){
 		super(source, app);
 	}
 
@@ -105,7 +106,8 @@ public abstract class TreePlusContenter extends TreeAppContenter {
 
 	@Override
 	final public LayoutFeatures newContentFeatures(SContentAreaTargeter area){
-		return newFeatures(area);
+		return false?new TreePlusFeatures_(app, area):
+				new TreeAppFeatures(app, area);
 	}
 
 	protected SFrameTarget[] newViewTargets(TreeView debugTree,boolean liveViews){
@@ -114,8 +116,8 @@ public abstract class TreePlusContenter extends TreeAppContenter {
 	protected STarget[]newContentRootTargets(){
 		return new STarget[]{};
 	}
-	protected TreePlusFeatures newFeatures(SContentAreaTargeter area){
-		return new TreePlusFeatures(app,area);
+	protected TreePlusFeatures_ newFeatures_(SContentAreaTargeter area){
+		return new TreePlusFeatures_(app,area);
 	}
 	@Override
 	public boolean hasChanged(){

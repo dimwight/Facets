@@ -1,7 +1,7 @@
 package applicable.treeplus;
 import static facets.facet.app.FileAppActions.*;
 
-import applicable.treetext.TreePlusContenter;
+import applicable.treetext.TreeTextContenter;
 import facets.core.app.MenuFacets;
 import facets.core.app.SContentAreaTargeter;
 import facets.core.app.ViewerTarget;
@@ -12,10 +12,10 @@ import facets.facet.FacetFactory;
 import facets.facet.app.FacetAppSurface;
 import facets.util.ItemList;
 import facets.util.TitledList;
-public class TreePlusFeatures extends FacetFactory{
+public class TreePlusFeatures_ extends FacetFactory{
 	private final FacetAppSurface app;
 	private final SContentAreaTargeter area;
-	public TreePlusFeatures(FacetAppSurface app, SContentAreaTargeter area){
+	public TreePlusFeatures_(FacetAppSurface app, SContentAreaTargeter area){
 		super(app.ff);
 		this.app=app;
 		this.area=area;
@@ -48,7 +48,7 @@ public class TreePlusFeatures extends FacetFactory{
 	}
 	@Override
 	protected STargeter findPaneTargeter(SContentAreaTargeter area){
-		return area.elements()[TreePlusContenter.TARGETS_PANE];
+		return area.elements()[TreeTextContenter.TARGETS_PANE];
 	}
 	@Override
 	protected MenuFacets[]adjustMenuRoots(MenuFacets[]menus){
