@@ -60,7 +60,7 @@ public final class TreeAppContenter extends ViewerContenter{
 	private final TreeAppSpecifier treeSpec;
 	private Object stateStamp=null;
 	private NodeViewable viewable;
-	TreeAppContenter(Object source,FacetAppSurface app){
+	public TreeAppContenter(Object source, FacetAppSurface app){
 		super(source);
 		this.app=app;
 		treeSpec=(TreeAppSpecifier)app.spec;

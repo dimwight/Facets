@@ -14,7 +14,8 @@ final class ToolsLayout extends BorderLayout{
 	public ToolsLayout(Object toolsAt){
 		this.toolsAt=toolsAt;
 	}
-  public void addLayoutComponent(String at,Component item){
+  @SuppressWarnings("deprecation")
+  public void addLayoutComponent(String at, Component item){
 		synchronized(item.getTreeLock()){
 		if(NORTH.equals(at)||WEST.equals(at)){
 			if(toolsAt==NORTH||toolsAt==WEST)tools=item;
