@@ -2,8 +2,8 @@ package applicable.treetext;
 import static applicable.treetext.TreeTextContenter.*;
 import static facets.core.app.ActionViewerTarget.Action.*;
 import static facets.util.tree.DataConstants.*;
-
-import applicable.treeplus.TreePlusViewable;
+import facets.core.app.ActionViewerTarget;
+import facets.core.app.NodeViewable;
 import facets.core.app.PathSelection;
 import facets.core.app.SView;
 import facets.core.app.SViewer;
@@ -18,27 +18,11 @@ import facets.util.OffsetPath;
 import facets.util.tree.NodePath;
 import facets.util.tree.TypedNode;
 import facets.util.tree.ValueNode;
-
-public abstract class TreeTextViewable extends TreePlusViewable {
-	static final String TYPE_LINE="TextLine";
+import applicable.treetext.TreeTextContenter.TreeTextView;
+public abstract class TreeTextViewable extends NodeViewable{
 	private final FacetAppSurface app;
 	final TreeView debugView;
-
-	public static class TextLineView extends TextView{
-		private final boolean canEdit;
-		public TextLineView(String title, boolean canEdit){
-			super(title);
-			this.canEdit=canEdit;
-		}
-		@Override
-		public boolean isLive(){
-			return canEdit;
-		}
-		@Override
-		public SSelection newViewerSelection(SViewer viewer,SSelection viewable){
-			return viewable;
-		}
-	}
+	protected String textViewerEdit;
 	public TreeTextViewable(TypedNode tree,ClipperSource clipperSource,
 			FacetAppSurface app){
 		super(tree,clipperSource);
@@ -79,30 +63,33 @@ public abstract class TreeTextViewable extends TreePlusViewable {
 			textViewerSelectionEdited(viewer,edit,interim);
 		else nonTreeViewerSelectionEdited(viewer,edit,interim);
 	}
-	@Override
 	protected SSelection newNonTreeViewerSelection(SViewer viewer){
 		SView view=viewer.view();
-		if(view instanceof TextLineView)
-			return((TextLineView)view).newViewerSelection(viewer,selection());
+		if(view instanceof TreeTextView)
+			return((TreeTextView)view).newViewerSelection(viewer,selection());
 		else throw new RuntimeException("Not implemented in "+this);			
 	}
-	@Override
-	protected void
-	nonTreeViewerSelectionChanged(SViewer viewer, SSelection selection){
+	protected void nonTreeViewerSelectionChanged(SViewer viewer,
+			SSelection selection){
 		SView view=viewer.view();
-		if(view instanceof TextLineView)
+		if(view instanceof TreeTextView)
 			super.viewerSelectionChanged(viewer,selection);
 		else throw new RuntimeException("Not implemented in "+this);
 	}
-	@Override
-	protected void nonTreeViewerSelectionEdited(SViewer viewer, Object edit,
-												boolean interim){
+	protected void nonTreeViewerSelectionEdited(SViewer viewer,Object edit,
+			boolean interim){
 		SView view=viewer.view();
 		if(view instanceof TextView)
 			textViewerSelectionEdited(viewer,edit,interim);
 		else throw new RuntimeException("Not implemented in "+this);
 	}
-
+	protected void textViewerSelectionEdited(SViewer viewer,Object edit,
+			boolean interim){
+		textViewerEdit=(String)edit;
+		maybeModify();
+		updateAfterEditAction();
+		textViewerEdit=null;
+	}
 	@Override
 	public boolean editSelection(){
 		if(textViewerEdit==null)return new ValueEdit(((PathSelection)selection())){

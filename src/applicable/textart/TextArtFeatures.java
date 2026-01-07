@@ -186,7 +186,6 @@ public class TextArtFeatures extends FacetFactory{
 			toolsXY = NumberPolicy.debug ? null : new SFacet[]{
 				numericNudgeButtons(drawAt, HINT_NUMERIC_FIELDS + HINT_TITLE1), 
 				indexingDropdownList(gridSnap, HINT_NONE), 
-				indexingIteratorButtons(gridSnap, HINT_NONE),
 				spacerWide(3),
 				togglingButtons(limits, HINT_NONE), 
 			}, 
@@ -224,8 +223,7 @@ public class TextArtFeatures extends FacetFactory{
 				textualField(text, 20, HINT_BARE), 
 				BREAK, 
 				indexingDropdownList(views, HINT_NONE), 
-				indexingIteratorButtons(views, HINT_NONE),
-				BREAK,
+				BREAK, 
 				indexingDropdownList(toolbarSwitcher, HINT_TITLE1), 
 				advanceFacets.toolsMount
 		});
@@ -445,12 +443,12 @@ public class TextArtFeatures extends FacetFactory{
 					
 		//Define and return complete panel
 		return tabMount(area, new SFacet[]{
-				NumberPolicy.debug ? null : tabAngle,
-				tabFont,
+				tabFont, 
 				advanceFacets.sidebarTree,
 				tabView, 
 				tabConstraints, 
 				tabXY, 
+				NumberPolicy.debug ? null : tabAngle, 
 			}, new String[]{
 				TOOL_TITLE_FONT, 
 				TAB_TITLE_TREE, 

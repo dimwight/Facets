@@ -214,7 +214,7 @@ public final class EvalCoder extends ViewerContenter{
 	}
 	@Override
 	public boolean setSink(Object sink){
-		return super.setSink(sink)//?
+		return super.setSink(sink)
 			&&(sink instanceof File&&!((File)sink).getName().startsWith("_"));
 	}
 	@Override

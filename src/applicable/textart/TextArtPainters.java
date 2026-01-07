@@ -73,6 +73,7 @@ final class TextArtPainters extends Tracer{
 	/**
 	Called from {@link TextArtAvatarPolicies}. 
 	@param showSelection is the line selected?
+	@param active is the viewer active?
 	 */
 	Painter[] newViewPainters(boolean showSelection) {
 		//Do lazy evaluations?
@@ -123,13 +124,12 @@ final class TextArtPainters extends Tracer{
 
 	/**
 	Called from {@link TextArtDragPolicy}. 
-	@param style defines the drag type
+	@param contentStyle defines the drag type
 	 */
 	Painter[] newDragPainters (DragStyle style){
 		
 		//Do lazy evaluations?
-		if (true ||
-				textLo == null) textLo = newLoText();
+		if (textLo == null) textLo = newLoText();
 		if (style == DragStyle.TURN && turnMark == null) turnMark = newTurnMark();
 		
 		//Apply transforms
@@ -223,7 +223,7 @@ final class TextArtPainters extends Tracer{
 	private void applyTransforms(Painter painter) {
 
 		//Define and apply transforms
-		Transform
+		Transform 
 			at = p.transformAt(atX, atY),
 			turn = p.transformTurn(toRadians(atAngle), 0, 0);
 		p.applyTransforms(new Transform[]{at, turn}, false, new Painter[]{painter});
