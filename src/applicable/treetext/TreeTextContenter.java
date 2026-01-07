@@ -159,7 +159,7 @@ public abstract class TreeTextContenter extends ViewerContenter{
 		:super.setSink(sink);
 	}
 	@Override
-	final public FileSpecifier[]sinkFileSpecifiers(){
+	public FileSpecifier[]sinkFileSpecifiers(){
 		Object sink=sink();
 		String name=sink instanceof File?((File)sink).getName()
 				:((TypedNode)sink).title()+"."+((TypedNode)sink).type();
