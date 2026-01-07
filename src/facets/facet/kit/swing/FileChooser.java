@@ -1,7 +1,5 @@
 package facets.facet.kit.swing;
-import static facets.facet.kit.swing.KitSwing.*;
-import static facets.util.FileSpecifier.*;
-import static facets.util.app.AppFileValues.*;
+
 import facets.core.app.ActionAppSurface;
 import facets.core.app.AppWindowHost;
 import facets.core.app.Dialogs;
@@ -13,9 +11,13 @@ import facets.util.Tracer;
 import facets.util.Util;
 import facets.util.app.AppFileValues;
 import facets.util.tree.ValueNode;
-import java.awt.Component;
-import java.awt.Point;
-import java.awt.Rectangle;
+
+import javax.swing.*;
+import javax.swing.JPopupMenu.Separator;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.filechooser.FileFilter;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -25,17 +27,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JPopupMenu.Separator;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-import javax.swing.filechooser.FileFilter;
-import sun.swing.FilePane;
+
+import static facets.facet.kit.swing.KitSwing.allComponents;
+import static facets.facet.kit.swing.KitSwing.componentTree;
+import static facets.util.FileSpecifier.KEY_AT;
+import static facets.util.app.AppFileValues.STATE_TYPE_DIALOGS;
 final class FileChooser extends JFileChooser{
 	private final Tracer t=Tracer.newTopped("FileChooser",false);
 	private final ActionAppSurface app;
@@ -136,16 +132,8 @@ final class FileChooser extends JFileChooser{
 	private void setUpFilePane(){
 		if(false)Util.printOut("FileChooser.getFile: ",componentTree(this));
 		for(Component c:allComponents(this)){
-			if(!(c instanceof FilePane))continue;
-			final FilePane pane=(FilePane)c;
-			final ValueNode state=files.stateRoot();//FILE_FILTER_CHANGED_PROPERTY
-			pane.setViewType(state.getOrPutInt(KEY_VIEW,pane.getViewType()));
-			pane.addPropertyChangeListener(KEY_VIEW,new PropertyChangeListener(){
-				@Override
-				public void propertyChange(PropertyChangeEvent e){
-					state.put(KEY_VIEW,pane.getViewType());
-				}
-			});
+//			if(!(c instanceof FilePane))continue;
+			if(true)continue;
 			final Action delete=new AbstractAction("Delete"){
 				@Override
 				public void actionPerformed(ActionEvent e){
@@ -169,19 +157,21 @@ final class FileChooser extends JFileChooser{
 					}
 				}
 			};
-			JPopupMenu menu=pane.getComponentPopupMenu();
-			menu.addPopupMenuListener(new PopupMenuListener(){
-				@Override
-				public void popupMenuWillBecomeVisible(PopupMenuEvent e){
-					File file=getSelectedFile();
-					delete.setEnabled(file!=null&&file.canWrite());
-					backup.setEnabled(file!=null);
-				}
-				@Override
-				public void popupMenuWillBecomeInvisible(PopupMenuEvent e){}
-				@Override
-				public void popupMenuCanceled(PopupMenuEvent e){}
-			});
+			JPopupMenu menu=null;//pane.getComponentPopupMenu();
+			if(menu!=null) {
+				menu.addPopupMenuListener(new PopupMenuListener(){
+					@Override
+					public void popupMenuWillBecomeVisible(PopupMenuEvent e){
+						File file=getSelectedFile();
+						delete.setEnabled(file!=null&&file.canWrite());
+						backup.setEnabled(file!=null);
+					}
+					@Override
+					public void popupMenuWillBecomeInvisible(PopupMenuEvent e){}
+					@Override
+					public void popupMenuCanceled(PopupMenuEvent e){}
+				});
+			}
 			Component[]items=menu.getComponents();
 			menu.removeAll();
 			for(Component item:items)if(item instanceof JMenuItem){
