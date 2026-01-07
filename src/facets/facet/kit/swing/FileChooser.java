@@ -35,6 +35,7 @@ import javax.swing.JPopupMenu.Separator;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.filechooser.FileFilter;
+import sun.swing.FilePane;
 final class FileChooser extends JFileChooser{
 	private final Tracer t=Tracer.newTopped("FileChooser",false);
 	private final ActionAppSurface app;
@@ -135,8 +136,16 @@ final class FileChooser extends JFileChooser{
 	private void setUpFilePane(){
 		if(false)Util.printOut("FileChooser.getFile: ",componentTree(this));
 		for(Component c:allComponents(this)){
-//			if(!(c instanceof FilePane))continue;
-			if(true)continue;
+			if(!(c instanceof FilePane))continue;
+			final FilePane pane=(FilePane)c;
+			final ValueNode state=files.stateRoot();//FILE_FILTER_CHANGED_PROPERTY
+			pane.setViewType(state.getOrPutInt(KEY_VIEW,pane.getViewType()));
+			pane.addPropertyChangeListener(KEY_VIEW,new PropertyChangeListener(){
+				@Override
+				public void propertyChange(PropertyChangeEvent e){
+					state.put(KEY_VIEW,pane.getViewType());
+				}
+			});
 			final Action delete=new AbstractAction("Delete"){
 				@Override
 				public void actionPerformed(ActionEvent e){
@@ -160,21 +169,19 @@ final class FileChooser extends JFileChooser{
 					}
 				}
 			};
-			JPopupMenu menu=null;//pane.getComponentPopupMenu();
-			if(menu!=null) {
-				menu.addPopupMenuListener(new PopupMenuListener(){
-					@Override
-					public void popupMenuWillBecomeVisible(PopupMenuEvent e){
-						File file=getSelectedFile();
-						delete.setEnabled(file!=null&&file.canWrite());
-						backup.setEnabled(file!=null);
-					}
-					@Override
-					public void popupMenuWillBecomeInvisible(PopupMenuEvent e){}
-					@Override
-					public void popupMenuCanceled(PopupMenuEvent e){}
-				});
-			}
+			JPopupMenu menu=pane.getComponentPopupMenu();
+			menu.addPopupMenuListener(new PopupMenuListener(){
+				@Override
+				public void popupMenuWillBecomeVisible(PopupMenuEvent e){
+					File file=getSelectedFile();
+					delete.setEnabled(file!=null&&file.canWrite());
+					backup.setEnabled(file!=null);
+				}
+				@Override
+				public void popupMenuWillBecomeInvisible(PopupMenuEvent e){}
+				@Override
+				public void popupMenuCanceled(PopupMenuEvent e){}
+			});
 			Component[]items=menu.getComponents();
 			menu.removeAll();
 			for(Component item:items)if(item instanceof JMenuItem){

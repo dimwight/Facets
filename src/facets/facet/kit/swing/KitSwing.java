@@ -139,7 +139,7 @@ final public class KitSwing extends KitCore{
 	public static boolean debug;
 	final static String sizeKey="JComponent.sizeVariant";
 	enum LaF{Windows,Metal,Nimbus};
-	static LaF laf=Windows;
+	static LaF laf=Metal;
 	enum NimbusSize{mini,small,regular,large;
 		int toolTipFontSize(){
 			return this==mini?9:this==small?11:this==large?14:12;

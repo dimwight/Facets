@@ -31,7 +31,7 @@ final public class TreeAppFeatures extends FacetFactory{
 	@param app created in {@link TreeAppSpecifier#newApp(FacetFactory, FeatureHost)}
 	@param root as returned by {@link FacetAppSurface#activeContentTargeter()}
 	 */
-	public TreeAppFeatures(FacetAppSurface app, SContentAreaTargeter root){
+	protected TreeAppFeatures(FacetAppSurface app,SContentAreaTargeter root){
 		super(app.ff);
 		this.app=app;
 		this.area=root;

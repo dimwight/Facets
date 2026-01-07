@@ -29,7 +29,7 @@ abstract class StatefulViewableCore extends ViewableFrame{
 	</ol>
 	 */
 	public void setFramedState(final Object stateSpec,boolean interim){
-		if (false) traceDebug(".setFramedState: selection=",selection());
+		traceDebug(".setFramedState: selection=",selection());
 		Stateful[]selections=newSelectionArray(selection()),
 			edits=newSelectionArray(new SSelection(){
 				@Override

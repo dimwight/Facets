@@ -52,15 +52,15 @@ declared <code>public</code> for documentation purposes only.
 <p>The code exemplifies 'filling out' the <code>abstract</code> {@link ViewerContenter} 
 to provide real-world functionality.  
  */
-public class TreeAppContenter extends ViewerContenter{
+public final class TreeAppContenter extends ViewerContenter{
 	/** Index into return of {@link #lazyContentAreaElements(SAreaTarget)}. */
 	public static final int TARGETS_PANE=0,TARGETS_CONTENT=1;
 	public static final String STATE_OFFSETS="selectionOffsets";
-	public final FacetAppSurface app;
-	private final TreeAppSpecifier treeSpec;//
+	private final FacetAppSurface app;
+	private final TreeAppSpecifier treeSpec;
 	private Object stateStamp=null;
 	private NodeViewable viewable;
-	public TreeAppContenter(Object source,FacetAppSurface app){
+	TreeAppContenter(Object source,FacetAppSurface app){
 		super(source);
 		this.app=app;
 		treeSpec=(TreeAppSpecifier)app.spec;
@@ -70,9 +70,8 @@ public class TreeAppContenter extends ViewerContenter{
 	 */
 	@Override
 	protected FacetedTarget[]newContentViewers(ViewableFrame viewable){
-		return ActionViewerTarget.newViewerAreas(viewable,
-				ViewerTarget.newViewFrames(
-						treeSpec.newContentViews((NodeViewable)viewable)
+		return ActionViewerTarget.newViewerAreas(viewable,ViewerTarget.newViewFrames(
+			treeSpec.newContentViews((NodeViewable)viewable)
 		));
 	}
 	@Override

@@ -1,8 +1,9 @@
 package facets.facet;
-import static facets.facet.AreaFacets.PaneMenuStyle.*;
+import static facets.facet.AreaFacets.PaneDialogStyle.*;
 import static facets.facet.FacetFactory.*;
 import static facets.util.StringFlags.*;
-
+import facets.core.app.ActionAppSurface;
+import facets.core.app.FacetHostable;
 import facets.core.app.MenuFacets;
 import facets.core.app.MountFacet;
 import facets.core.app.NestedView;
@@ -16,6 +17,7 @@ import facets.core.superficial.STargeter;
 import facets.core.superficial.TargetCore;
 import facets.core.superficial.Notifying.Impact;
 import facets.core.superficial.app.FacetedTarget;
+import facets.facet.AreaFacets.PaneDialogStyle;
 import facets.facet.HostingFacetSwing.Nested;
 import facets.facet.app.FacetAppSurface;
 import facets.facet.kit.KWrap;
@@ -31,7 +33,7 @@ import facets.util.shade.Shade;
 import facets.util.shade.Shades;
 import facets.util.tree.ValueNode;
 import java.util.Arrays;
-
+import javax.swing.JComponent;
 /**
 Sub-factory for viewer, area and surface facets.
 <p>{@link AreaFacets} provides a range of methods to create and attach viewer 
@@ -76,11 +78,7 @@ final public class AreaFacets extends Tracer{
 		void linkDefined(KWrap from,KWrap to);
 		boolean canLink(KWrap tab);
 	}
-	public enum PaneMenuStyle {
-		None,
-		Simple,
-		Dialog
-	}
+	public enum PaneDialogStyle{None,Simple,Options}
 	public class PaneFacets extends MenuFacets{
 		private final STargeter shows;
 		private final SFacet[]facets;
@@ -89,9 +87,7 @@ final public class AreaFacets extends Tracer{
 			STargeter elements[]=targeter.elements();
 			shows=elements[PANE_SHOW];
 			String hints=HINT_NONE;
-			PaneMenuStyle style = style();
-			PaneMenuStyle dialog=shows.elements().length < 3 ? None
-					:style!=null?style: Simple;
+			PaneDialogStyle dialog=dialogStyle();
 			facets=new SFacet[]{
 				dialog!=None?core.triggerMenuItems(
 						elements[dialog==Simple?PANE_SELECT:PANE_SELECT_OPTIONS],hints)
@@ -100,8 +96,8 @@ final public class AreaFacets extends Tracer{
 				core.triggerMenuItems(elements[PANE_ACTIVE],hints),
 			};
 		}
-		protected PaneMenuStyle style(){
-			return null;
+		protected PaneDialogStyle dialogStyle(){
+			return shows.elements().length<3?None:Simple;
 		}
 		@Override
 		public SFacet[]getFacets(){
