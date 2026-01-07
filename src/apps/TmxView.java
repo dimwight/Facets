@@ -1,14 +1,14 @@
 package apps;
-import static apps.TmxUnit.*;
+import facets.core.app.AppSurface.ContentStyle;
 import static facets.core.app.ActionViewerTarget.Action.*;
 import static facets.core.app.AppConstants.*;
 import static facets.util.Objects.*;
 import static facets.util.Strings.*;
-import static facets.util.Util.*;
+import static facets.util.tree.DataConstants.*;
 import static facets.util.tree.Nodes.*;
 import static facets.util.tree.TypedNode.*;
-import static java.time.LocalDateTime.*;
-import facets.core.app.AppSurface.ContentStyle;
+import static java.lang.Integer.*;
+import static java.lang.Integer.valueOf;
 import facets.core.app.NodeViewable;
 import facets.core.app.PathSelection;
 import facets.core.app.SContenter;
@@ -23,26 +23,33 @@ import facets.core.superficial.STrigger;
 import facets.core.superficial.app.SSelection;
 import facets.facet.FacetFactory;
 import facets.facet.app.FacetAppSurface;
-import facets.facet.app.tree.TreeAppContenter;
 import facets.facet.app.tree.TreeAppSpecifier;
 import facets.facet.kit.Toolkit;
 import facets.facet.kit.swing.KitSwing;
+import facets.util.Debug;
+import facets.util.Objects;
+import facets.util.Strings;
 import facets.util.TextLines;
-import facets.util.Times;
 import facets.util.Util;
+import facets.util.app.HostBounds;
 import facets.util.tree.DataNode;
 import facets.util.tree.NodeList;
 import facets.util.tree.NodePath;
 import facets.util.tree.Nodes;
 import facets.util.tree.TypedNode;
 import facets.util.tree.ValueNode;
+import facets.util.tree.XmlPolicy;
+import facets.util.tree.XmlSpecifier;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -92,7 +99,7 @@ public class TmxView extends TreeAppSpecifier{
 	}
 	@Override
 	public ContentStyle contentStyle(){
-		return true?ContentStyle.TABBED:ContentStyle.DESKTOP;
+		return ContentStyle.DESKTOP;
 	}
 	@Override
 	public Toolkit newToolkit(){
@@ -112,11 +119,54 @@ public class TmxView extends TreeAppSpecifier{
 	}
 	@Override
 	protected boolean usesTreeTargets(){
-		return true;
+		return false;
 	}
-	private static void updateDays(NodeList days,NodeList units,
-			Map<String,TypedNode>dayUnits,Map<String,TypedNode>tmxUnits){
-		Times.printElapsed("TmxView.updateDays");
+	private static long sinceModified(TypedNode root){
+		long now=LocalDateTime.now().toEpochSecond(ZoneOffset.UTC),
+			modified=LocalDateTime.parse(
+					getHeader(root).get("creationdate").replace("Z",""),
+					Formatter).toEpochSecond(ZoneOffset.UTC);
+		return now-modified;
+	}
+	private static boolean isUnit(TypedNode node){
+		return node.type().equals("tu");
+	}
+	private static NodeList checkSortUnits(TypedNode root){
+		NodeList units=new NodeList(descendantTyped(root,"body"),false);
+		List check=new ArrayList(units);
+		units.sort(new Comparator<TypedNode>(){
+			@Override
+			public int compare(TypedNode a,TypedNode b){
+				return readUnitUpdated(b).compareTo(readUnitUpdated(a));
+			}
+		});
+		if(!check.equals(units))getHeader(root).put("creationdate",
+				LocalDateTime.now().format(Formatter));
+		units.updateParent();
+		return units;
+	}
+	private static LocalDateTime readUnitUpdated(TypedNode tu){
+		if(!isUnit(tu))throw new IllegalArgumentException("Not a tu: "+tu);
+		ValueNode atts=(ValueNode)tu;
+		String attr=atts.get("changedate");
+		if(attr==null)attr=atts.get("creationdate");
+		if(attr==null)return LocalDateTime.now();
+		String raw=attr.replaceAll("(\\d{4})(\\d{2})(\\d{2})T(\\d{2})(\\d{2})(\\d{2})Z",
+				"$1 $2 $3 $4 $5 $6"),
+			splits[]=raw.split(" ");
+		int year=valueOf(splits[0]),month=valueOf(splits[1]),day=valueOf(splits[2]),
+				hour=valueOf(splits[3]),min=valueOf(splits[4]),sec=valueOf(splits[5]);
+		return LocalDateTime.of(year,month,day,hour,min,sec);
+	}
+	private static ValueNode getHeader(TypedNode root){
+		return (ValueNode)descendantTyped(root,"header");
+	}
+	private static String getUnitSource(TypedNode tu){
+		if(!isUnit(tu))throw new IllegalArgumentException("Not a tu: "+tu);
+		else return Objects.toString(descendantTyped(tu,"seg").values()," ");
+	}
+	private void updateDays(NodeList days,NodeList units,Map<String,TypedNode>dayUnits,
+			Map<String,TypedNode>tmxUnits){
 		dayUnits.clear();tmxUnits.clear();days.clear();
 		Consumer<NodeList>closeDay=new Consumer<NodeList>(){
 			@Override
@@ -126,13 +176,14 @@ public class TmxView extends TreeAppSpecifier{
 //						+", words="+((ValueNode)day.parent).get("words")
 						+ "]";
 				day.parent.setTitle(title);
+				if(false)trace(".newUnitDays: day=",title);
 			}
 		};
 		NodeList day=null;
 		LocalDate after=null;
 		int dayWords=0;
 		for(TypedNode unit:units){
-			final LocalDate before=new TmxUnit(unit).updated.toLocalDate();
+			LocalDate before=readUnitUpdated(unit).toLocalDate();
 			int gap=after==null?0:after.getDayOfYear()-before.getDayOfYear();
 			if(after==null||Math.abs(gap)>0){
 				if(day!=null)closeDay.accept(day);
@@ -143,9 +194,9 @@ public class TmxView extends TreeAppSpecifier{
 			after=before;
 			String key=newUnitKey(unit);
 			TypedNode got=tmxUnits.get(key);
-			if(got!=null)Util.printOut("Duplicate source: "+key+ 
+			if(got!=null)Util.printOut("",new IllegalStateException("Duplicate source: "+key+ 
 					"\n"+treeString(unit).replaceAll("\n\\.*","")+
-					"\n"+treeString(got).replaceAll("\n\\.*",""));
+					"\n"+treeString(got).replaceAll("\n\\.*","")));
 			tmxUnits.put(key,unit);
 			unit=(TypedNode)unit.copyState();
 			dayUnits.put(key,unit);   
@@ -153,10 +204,9 @@ public class TmxView extends TreeAppSpecifier{
 			((ValueNode)day.parent).put("words",dayWords);
 			day.add(unit);
 		}
-		if(day==null)throw new IllegalStateException("Null day in "+days.parent);
+		if(day==null)throw new IllegalStateException("Null day in "+this);
 		closeDay.accept(day);
 		days.updateParent();
-		Times.printElapsed("TmxView.updateDays~");
 	}
 	private TreeView tmx,days;
 	private SSelection unitSelection;
@@ -178,49 +228,13 @@ public class TmxView extends TreeAppSpecifier{
 	@Override
 	protected ViewableAction[]viewerActions(SView view){
 		ViewableAction[]all={COPY,CUT,PASTE,PASTE_INTO,DELETE,MODIFY,UNDO,REDO};
-		return view.isLive()?new ViewableAction[]{DELETE,COPY,PASTE,UNDO,REDO}
-			:new ViewableAction[]{COPY};
-	}
-	private static NodeList newCheckedUnits(TypedNode root){
-		Times.printElapsed("TmxView.newCheckedUnits");
-		TypedNode bodies[]=descendantsTyped(root,"body"),
-				bodyNow=bodies[0];
-		List<TmxUnit>unitsNow=newBodyUnits(bodyNow),
-				unitsThen=bodies.length==1?null:newBodyUnits(bodies[1]),
-				check=new ArrayList(unitsNow),trim=new ArrayList();
-		if(unitsThen!=null){
-			int added=0;
-			printOut("Checking unitsThen="+unitsThen.size());
-			for(TmxUnit unit:unitsThen) {
-				if(unitsNow.contains(unit))continue;
-				unitsNow.add(unit);
-				printOut("Added "+(++added)+ " unit=",unit);
-			}
-		}
-		Collections.sort(unitsNow);
-		for(TmxUnit unit:unitsNow){
-			if(trim.contains(unit))printOut("Removed duplicate: "+unit);
-			else trim.add(unit);
-		}
-		unitsNow=trim;
-		Times.printElapsed("TmxView.newCheckedUnits~");
-		if(!unitsNow.equals(check))
-			if(false)throw new IllegalStateException("Unequal check ");
-			else getHeader(root).put("creationdate",now().format(Formatter));
-		return newBodyList(bodyNow,trim);
+		return view.isLive()?new ViewableAction[]{DELETE,UNDO,REDO}:new ViewableAction[]{COPY};
 	}
 	@Override
 	protected SView[]newContentViews(NodeViewable viewable){
 		TypedNode root=(TypedNode)viewable.framed;
-		NodeList units=newCheckedUnits(root);
-		Function<TypedNode,Long>sinceModified=node->{
-			long now=now().toEpochSecond(ZoneOffset.UTC),
-					modified=parse(
-							getHeader(node).get("creationdate").replace("Z",""),
-							Formatter).toEpochSecond(ZoneOffset.UTC);
-				return now-modified;
-			};
-		if(sinceModified.apply(root)<1)viewable.updateAfterEditAction();
+		NodeList units=checkSortUnits(root);
+		if(sinceModified(root)<1)viewable.updateAfterEditAction();
 		final Map<String,TypedNode>dayUnits=new HashMap(),tmxUnits=new HashMap();
 		NodeList days=new NodeList(new ValueNode("Days",UNTITLED),false);
 		updateDays(days,units,dayUnits,tmxUnits);
@@ -241,7 +255,7 @@ public class TmxView extends TreeAppSpecifier{
 			public String nodeRenderText(TypedNode node){
 				String superText=super.nodeRenderText(node);
 				if(!isUnit(node))return superText;
-				return superText+" ["+new TmxUnit(node).updated+"]";
+				return superText+" ["+readUnitUpdated(node)+"]";
 			}
 		};
 		this.days=new DaysView("Days",tmxUnits){
@@ -302,57 +316,52 @@ public class TmxView extends TreeAppSpecifier{
 	}
 	@Override
 	protected SContenter newContenter(Object source,FacetAppSurface app){
-		class AttsCheck{
-			private final String[]lines;
-			AttsCheck(String[]lines){
-				this.lines=lines;
-			}
-			void list(){
-				SortedSet<String>atts=new TreeSet();
-				for(String line:lines){
-					String att_=".*\\s([a-z\\-]+)=\".*";
-					while(line.matches(att_)) {
-						String att=line.replaceAll(att_,"$1");
-						atts.add(att);
-						line=line.replace(att,"");
-						if(false)trace(".listAttributes: att="+att+" line="+line);
-				}
-				}
-				trace(".listAttributes: atts=",atts.toArray());
-			}
-			String[]clean(){
-				String[]clean=new String[lines.length];
-				for(int i=0;i<lines.length;i++)
-					clean[i]=lines[i].replaceAll("words=\"[^\"]+\"","");
-				return clean;
-			}
-			
-		}
 		if(source instanceof File)try{
 				File file=(File)source;
 				String[]lines=new TextLines(file).readLines();
 				if(false){
-					new AttsCheck(lines).list();
+					listAttributes(lines);
 					System.exit(0);
 				}
-				else if(false){
-					String[]clean=new AttsCheck(lines).clean();
+				else{
+					String[]clean=cleanAttributes(lines);
 					if(!linesString(lines).equals(linesString(clean))){
 						file=new File(file.getParent(),"Clean of "+file.getName());
 						app.dialogs().infoMessage(
 								"Cleaned file!",
 								"File loaded will be "+file.getName());
 						new TextLines(file).writeLines(clean);
-                        return new TreeAppContenter(file, app);
-                    }
+						return super.newContenter(file,app);
+					}
 				}
 			}catch(IOException e){
 				throw new RuntimeException(e);
 			}
-        return new TreeAppContenter(source, app);
-    }
-	private static ValueNode getHeader(TypedNode root){
-		return (ValueNode)descendantTyped(root,"header");
+		return super.newContenter(source,app);
+	}
+	private static String newUnitKey(TypedNode unit){
+		String source=getUnitSource(unit);
+		if(false)((ValueNode)unit).put("words",source.split("[ ,;\\-:]+").length);
+		return readUnitUpdated(unit)+source;
+	}
+	private String[]cleanAttributes(String[]lines){
+		String[]clean=new String[lines.length];
+		for(int i=0;i<lines.length;i++)
+			clean[i]=lines[i].replaceAll("words=\"[^\"]+\"","");
+		return clean;
+	}
+	private void listAttributes(String[]lines){
+		SortedSet<String>atts=new TreeSet();
+		for(String line:lines){
+			String att_=".*\\s([a-z\\-]+)=\".*";
+			while(line.matches(att_)) {
+				String att=line.replaceAll(att_,"$1");
+				atts.add(att);
+				line=line.replace(att,"");
+				if(false)trace(".listAttributes: att="+att+" line="+line);
+		}
+		}
+		trace(".listAttributes: atts=",atts.toArray());
 	}
 	public static void main(String[]args){
 		new TmxView().buildAndLaunchApp(args);

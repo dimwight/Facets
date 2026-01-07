@@ -43,8 +43,8 @@ final class PlaneTest extends ViewerContenter{
 	final private FacetAppSurface app;
 	private final AvatarPolicies policies=new AvatarPolicies(){
 		@Override
-		public AvatarPolicy viewerPolicy(SViewer viewer, AvatarContent content,
-										 PainterSource p){
+		public AvatarPolicy avatarPolicy(SViewer viewer,AvatarContent content,
+				PainterSource p){
 			return new AvatarPolicy(){
 				@Override
 				public Painter[]newViewPainters(boolean selected,boolean active){
@@ -158,7 +158,7 @@ final class PlaneTest extends ViewerContenter{
 			}
 			@Override
 			public SFacet toolbar(){
-				if(false)return null;
+				if(true)return null;
 				ItemList<SFacet>facets=new ItemList(SFacet.class);
 				STargeter barStart=area.elements()[0];
 				facets.add(numericSliders(barStart,200,
