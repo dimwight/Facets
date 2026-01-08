@@ -4,10 +4,8 @@ import static facets.core.app.ActionViewerTarget.Action.*;
 import static facets.core.app.AppConstants.*;
 import static facets.util.Objects.*;
 import static facets.util.Strings.*;
-import static facets.util.tree.DataConstants.*;
 import static facets.util.tree.Nodes.*;
 import static facets.util.tree.TypedNode.*;
-import static java.lang.Integer.*;
 import static java.lang.Integer.valueOf;
 import facets.core.app.NodeViewable;
 import facets.core.app.PathSelection;
@@ -26,20 +24,16 @@ import facets.facet.app.FacetAppSurface;
 import facets.facet.app.tree.TreeAppSpecifier;
 import facets.facet.kit.Toolkit;
 import facets.facet.kit.swing.KitSwing;
-import facets.util.Debug;
 import facets.util.Objects;
-import facets.util.Strings;
 import facets.util.TextLines;
 import facets.util.Util;
-import facets.util.app.HostBounds;
 import facets.util.tree.DataNode;
 import facets.util.tree.NodeList;
 import facets.util.tree.NodePath;
 import facets.util.tree.Nodes;
 import facets.util.tree.TypedNode;
 import facets.util.tree.ValueNode;
-import facets.util.tree.XmlPolicy;
-import facets.util.tree.XmlSpecifier;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -47,9 +41,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -84,7 +76,7 @@ public class TmxView extends TreeAppSpecifier{
 		super(TmxView.class);
 	}
 	@Override
-	protected Object getInternalContentSource(){
+    public Object getInternalContentSource(){
 		DataNode tmx=Nodes.decode(new ValueNode("tmx",new Object[]{
 			"789C6D52CF6B5341101EF3A324D440D20AB562A1DE14ED7B49FC4120E6D21FB481B41E12A598D3266F936E7D791B77E7A5690F82173D7811513C5AA4172108E21FE0494FA2E2A557D173C19B88079D7D49DA885E96DDD9EF9B6FE69BE91D40D45730552D6DB20EB384B4CA5C09E68A1D567379FEE5A778AFBC7F500C0174DB00104618EF70A585F40A19EB925670AAC1EA1CB5E5A3702D549C5B3798EBF335E9F00BB1B31FDFAEFE7C63C80AA6FF012E32640637B5FFE8FAD317E7CB21385685585D7AC83DD40893FDA26C97794DFB5A6D93D731DFFD9F6265BBCD1D93E9F9EF7799CFD528658A1421249C128CB599A26C08A74B7D9A6D68B6A1D987B47C0922480F848911C5322AE135E92FDE311D5502406A04B0E032AD4D4527472B2A2343DEF0DD05A9F8D557A95FEFC3F6B710844A10D5C85A6D6A6B2445917A6D7245225114E8F2DB700762DD36F99A0AE66140D60034F17577EFC7DDFB39B2A908D1A026D24E1EE1D6FC568DAB7BBD2733E38FBF3C188E6C19216C5916DD16497C6C833387ABCE5FC47EA7BBDFF7723BF9D7F301917662607F1F32B0FFE187F567497DCE1D268F231C674E4B78065420A361A6AE3843DA0F876C2864D3995C3A9BCD54D2B9CB57B2176F92C3C37FE1149C2D259A1B349C33C3204AE916563853A8658BCF5656D767971C8152214C8F62863B98B3D25606214962CC4CB0E07BB73CB9457524E41CB61A47EFA4E6CD00A1B9D92F9A1724B4AA0FEA9E5B9ED7C6FB707026A8B3157349D265895C8BD4A4B36D0293BE394F5018FE00E59A12F93A030000"	
 		}));

@@ -5,16 +5,12 @@ import facets.core.app.PagedContenter;
 import facets.core.app.SContenter;
 import facets.core.superficial.app.SSurface;
 import facets.facet.FacetFactory;
-import facets.facet.app.FacetAppSpecifier;
 import facets.facet.app.FacetAppSurface;
+import facets.facet.app.tree.TreeAppSpecifier;
 import facets.util.FileSpecifier;
-import facets.util.tree.NodeList;
-import facets.util.tree.TypedNode;
-import facets.util.tree.ValueNode;
-import facets.util.tree.XmlPolicy;
-import facets.util.tree.XmlSpecifier;
+
 import java.io.File;
-final class TreeTextSpecifier extends FacetAppSpecifier{
+final class TreeTextSpecifier extends TreeAppSpecifier {
 	public TreeTextSpecifier(){
 		super(TreeTextSpecifier.class);
 	}
@@ -37,11 +33,12 @@ final class TreeTextSpecifier extends FacetAppSpecifier{
 		return new FacetAppSurface(this,ff){
 			@Override
 			public FileSpecifier[]getFileSpecifiers(){
-				return TreeTextSpecifier.this.fileSpecifiers();
+				return false?((TreeAppSpecifier)spec).xmlPolicy().fileSpecifiers():
+						TreeTextSpecifier.this.fileSpecifiers();
 			}
 			@Override
 			protected Object getInternalContentSource(){
-				return((TreeTextSpecifier)spec).getInternalContentSource();
+				return((TreeAppSpecifier)spec).getInternalContentSource();
 			}
 			@Override
 			protected SContenter newContenter(Object source){
@@ -54,7 +51,7 @@ final class TreeTextSpecifier extends FacetAppSpecifier{
 			new FileSpecifier("txt","Text lines"),
 		};
 	}
-	protected Object getInternalContentSource(){
+	public Object getInternalContentSource(){
 		if(false)return new File("Default.txt");
 		return new String[]{"First line","Second line"};
 	}

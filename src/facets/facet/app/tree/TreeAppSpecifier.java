@@ -97,7 +97,7 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	 <ul>
 		 */
 	@Override
-	final protected FacetAppSurface newApp(FacetFactory ff,FeatureHost host){
+	protected FacetAppSurface newApp(FacetFactory ff,FeatureHost host){
 		return new FacetAppSurface(this,ff){
 			@Override
 			public FileSpecifier[]getFileSpecifiers(){
@@ -122,7 +122,7 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	and by {@link TreeAppContenter#saveToSink(Object)}.  
 	@return by default a plain {@link XmlPolicy}
 	 */
-	protected XmlPolicy xmlPolicy(){
+	public XmlPolicy xmlPolicy(){
 		return new XmlPolicy(){
 			@Override
 			protected boolean treeAsXmlRoot(){
@@ -148,7 +148,7 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	@return by default {@link Nodes#newTestTree(String, int)} with <code>width</code>=3 which
 	may be changed by passing {@link #ARG_TREE_SIZE}=<code>width</code> 
 	 */
-	protected Object getInternalContentSource(){
+	public Object getInternalContentSource(){
 		return false?new File("Test.xml")
 				:Nodes.newTestTree("Test",nature().getOrPutInt(ARG_TREE_SIZE,false?-1:3));
 	}

@@ -53,7 +53,7 @@ passing {@link #ARG_NO_FILES} to {main(String[])}.
  to be exposed in the {@value facets.facet.app.tree.TreeTargets#TITLE_MENU} menu; 
  and {@link #newTreeMenuItems(FacetFactory, STargeter[], STargeter[])}
   to define the {@link SFacet}s exposing them.  
-<li>{@link #getInternalContentSource()} to redefine default content
+<li>{@link TreeAppSpecifier#getInternalContentSource()} to redefine default content
 </ul>
 <p>In {@link FacetAppSpecifier}:
 <ul>
@@ -109,7 +109,7 @@ final public class XmlView extends TreeAppSpecifier{
 				nature().getBoolean(ARG_NO_FILES)&&releaseReady;
 	}
 	@Override
-	protected Object getInternalContentSource(){
+    public Object getInternalContentSource(){
 		if(!isDemo())return super.getInternalContentSource();
 		demoRoot.setChildren((TypedNode)nature().copyState(),(TypedNode)state().copyState());
 		demoRoot.setTitle("Demo"+demos++);

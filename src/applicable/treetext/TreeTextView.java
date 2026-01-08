@@ -39,10 +39,4 @@ public abstract class TreeTextView extends TreeAppSpecifier {
 		return new TreeTextContenter(source, app) {};
 	}
 
-	//@Override
-	public FileSpecifier[] fileSpecifiers() {//protected
-		return new FileSpecifier[]{
-				new FileSpecifier("txt", "Text lines"),
-		};
-	}
 }

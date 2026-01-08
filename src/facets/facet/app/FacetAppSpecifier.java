@@ -72,8 +72,10 @@ a {@link facets.core.app.FeatureHost.LayoutFeatures} (typically a trivial subcla
 		*/
 public abstract class FacetAppSpecifier extends AppSpecifier{
 	/** Debug flag. */
-	public static final String ARG_NO_FILES="noFiles",ARG_NO_CREATE="noCreate",
-		ARG_PREFERENCES="prefs",ARG_RIBBON="ribbon";
+	public static final String ARG_NO_FILES="noFiles",
+			ARG_NO_CREATE="noCreate",
+		ARG_PREFERENCES="prefs",
+			ARG_RIBBON="ribbon";
 	final public static int DRAG_WAIT_MIN=10;
 	final Surfacer preferences=FacetPagedSurface.newDefaultTabbedSurfacer();
 	private int graphWhereArg=-1;

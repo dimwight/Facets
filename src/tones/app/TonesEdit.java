@@ -1,6 +1,5 @@
 package tones.app;
 
-import applicable.treeplus.TreePlusFeatures_;
 import applicable.treetext.TreeTextContenter;
 import applicable.treetext.TreeTextFeatures;
 import applicable.treetext.TreeTextViewable;
@@ -127,7 +126,7 @@ public final class TonesEdit extends TreeTextContenter{
       }
 
       @Override
-      protected Object getInternalContentSource() {
+      public Object getInternalContentSource() {
         File runDir = Util.runDir(),
             txt = new File(runDir, "E major.tones.txt"),
             xml = new File(runDir, "E major.tones.xml");
