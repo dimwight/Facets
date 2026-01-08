@@ -3,7 +3,7 @@ import static facets.core.app.ActionViewerTarget.Action.*;
 import static facets.facet.app.FacetPreferences.*;
 import static facets.facet.app.tree.TreeTargets.*;
 import static facets.util.tree.DataConstants.*;
-import facets.XmlView;
+
 import facets.core.app.ActionAppSurface;
 import facets.core.app.AppActions;
 import facets.core.app.FeatureHost;
@@ -12,7 +12,6 @@ import facets.core.app.MenuFacets;
 import facets.core.app.NodeViewable;
 import facets.core.app.PagedContenter;
 import facets.core.app.SAreaTarget;
-import facets.core.app.SContentAreaTargeter;
 import facets.core.app.SContenter;
 import facets.core.app.SView;
 import facets.core.app.SViewer;
@@ -21,24 +20,16 @@ import facets.core.app.TreeView;
 import facets.core.app.ViewableAction;
 import facets.core.app.ViewableFrame;
 import facets.core.app.ViewerContenter;
-import facets.core.app.AppSurface.ContentStyle;
-import facets.core.app.FeatureHost.LayoutFeatures;
 import facets.core.superficial.SFacet;
 import facets.core.superficial.SFrameTarget;
-import facets.core.superficial.SIndexing;
 import facets.core.superficial.STarget;
 import facets.core.superficial.STargeter;
-import facets.core.superficial.app.SHost;
 import facets.core.superficial.app.SSurface;
-import facets.core.superficial.app.SHost.FacetLayout;
 import facets.core.superficial.app.SSelection;
 import facets.facet.FacetFactory;
 import facets.facet.app.FacetAppSpecifier;
 import facets.facet.app.FacetAppSurface;
-import facets.facet.app.FacetPreferences;
-import facets.util.Debug;
 import facets.util.FileSpecifier;
-import facets.util.tree.DataConstants;
 import facets.util.tree.DataNode;
 import facets.util.tree.Nodes;
 import facets.util.tree.TypedNode;
@@ -62,7 +53,7 @@ and {@link XmlSpecifier}
 <li>{@link SView}s such as {@link TreeView}, {@link ListView}, {@link TableView} 
 for appropriate content 
 </ul>
-@see XmlView
+@see apps.XmlView
  */
 public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	/** Argument keys */
