@@ -14,9 +14,9 @@ import facets.util.tree.ValueNode;
 import facets.util.tree.XmlPolicy;
 import facets.util.tree.XmlSpecifier;
 import java.io.File;
-public abstract class TreeTextSpecifier extends FacetAppSpecifier{
-	public TreeTextSpecifier(Class appClass){
-		super(appClass);
+final class TreeTextSpecifier extends FacetAppSpecifier{
+	public TreeTextSpecifier(){
+		super(TreeTextSpecifier.class);
 	}
 	@Override
 	public PagedContenter[]adjustPreferenceContenters(SSurface surface,
@@ -62,6 +62,6 @@ public abstract class TreeTextSpecifier extends FacetAppSpecifier{
 		return new TreeTextContenter(source,app){};
 	}
 	public static void main(String[]args){
-		new TreeTextSpecifier(TreeTextSpecifier.class){}.buildAndLaunchApp(args);
+		new TreeTextSpecifier().buildAndLaunchApp(args);
 	}
 }
