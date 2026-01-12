@@ -331,10 +331,10 @@ public abstract class FacetAppSpecifier extends AppSpecifier{
 	<p>Parameters match {@link FacetAppSurface#FacetAppSurface(FacetAppSpecifier, FacetFactory)}
 	and {@link AppSurface#host()}
 	@param ff as created or passed from subclass  
-	@param host as created or passed from subclass, or <code>null</code> 
+	@param host_ as created or passed from subclass, or <code>null</code>
 	if {@link AppSurface} can create its own {@link SHost}
 	@return a {@link FacetAppSurface} that will create content and the surface
 	to expose it
 	 */
-	protected abstract FacetAppSurface newApp(FacetFactory ff, FeatureHost host);
+	protected abstract FacetAppSurface newApp(FacetFactory ff, FeatureHost host_);
 }

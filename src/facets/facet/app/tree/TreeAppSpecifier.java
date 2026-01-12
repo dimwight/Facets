@@ -97,11 +97,11 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	 <ul>
 		 */
 	@Override
-	protected FacetAppSurface newApp(FacetFactory ff,FeatureHost host){
+	final protected FacetAppSurface newApp(FacetFactory ff,FeatureHost host_){
 		return new FacetAppSurface(this,ff){
 			@Override
 			public FileSpecifier[]getFileSpecifiers(){
-				return TreeAppSpecifier.this.xmlPolicy().fileSpecifiers();
+				return TreeAppSpecifier.this.getFileSpecifiers();
 			}
 			@Override
 			protected Object getInternalContentSource(){
@@ -112,6 +112,21 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 				return TreeAppSpecifier.this.newContenter(source,this);
 			}
 		};
+	}
+
+	protected FileSpecifier[] getFileSpecifiers() {
+		return xmlPolicy().fileSpecifiers();
+	}
+
+	/**
+	 Fulfils {@link FacetAppSurface#getInternalContentSource()} in the
+	 return of {@link #newApp(FacetFactory, FeatureHost)}.
+	 @return by default {@link Nodes#newTestTree(String, int)} with <code>width</code>=3 which
+	 may be changed by passing {@link #ARG_TREE_SIZE}=<code>width</code>
+	 */
+	protected Object getInternalContentSource(){
+		return false?new File("Test.xml")
+				:Nodes.newTestTree("Test",nature().getOrPutInt(ARG_TREE_SIZE,false?-1:3));
 	}
 	protected SContenter newContenter(Object source,FacetAppSurface app){
 		return new TreeAppContenter(source,app);
@@ -141,16 +156,6 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 				:super.fileSpecifiers();
 			};
 		};
-	}
-	/**
-	Fulfils {@link FacetAppSurface#getInternalContentSource()} in the
-	return of {@link #newApp(FacetFactory, FeatureHost)}.
-	@return by default {@link Nodes#newTestTree(String, int)} with <code>width</code>=3 which
-	may be changed by passing {@link #ARG_TREE_SIZE}=<code>width</code> 
-	 */
-	public Object getInternalContentSource(){
-		return false?new File("Test.xml")
-				:Nodes.newTestTree("Test",nature().getOrPutInt(ARG_TREE_SIZE,false?-1:3));
 	}
 	/**
 	Enables redefinition of {@link SView}s supplying viewer policy. 

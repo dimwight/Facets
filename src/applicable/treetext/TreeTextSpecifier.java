@@ -24,38 +24,20 @@ final class TreeTextSpecifier extends TreeAppSpecifier {
 			contenters[PREFERENCES_VIEW],
 		};
 	}
-	@Override
-	public boolean headerIsRibbon(){
-		return args().getOrPutBoolean(ARG_RIBBON,false);
-	}
-	@Override
-	final protected FacetAppSurface newApp(FacetFactory ff,FeatureHost host){
-		return new FacetAppSurface(this,ff){
-			@Override
-			public FileSpecifier[]getFileSpecifiers(){
-				return false?((TreeAppSpecifier)spec).xmlPolicy().fileSpecifiers():
-						TreeTextSpecifier.this.fileSpecifiers();
-			}
-			@Override
-			protected Object getInternalContentSource(){
-				return((TreeAppSpecifier)spec).getInternalContentSource();
-			}
-			@Override
-			protected SContenter newContenter(Object source){
-				return TreeTextSpecifier.this.newContenter(source,this);
-			}
-		};
-	}
-	protected FileSpecifier[]fileSpecifiers(){
+
+    @Override
+	protected FileSpecifier[] getFileSpecifiers(){
 		return new FileSpecifier[]{
 			new FileSpecifier("txt","Text lines"),
 		};
 	}
-	public Object getInternalContentSource(){
+	@Override
+	protected Object getInternalContentSource(){
 		if(false)return new File("Default.txt");
 		return new String[]{"First line","Second line"};
 	}
-	protected TreeTextContenter newContenter(Object source,FacetAppSurface app){
+	@Override
+	protected SContenter newContenter(Object source,FacetAppSurface app){
 		return new TreeTextContenter(source,app){};
 	}
 	public static void main(String[]args){

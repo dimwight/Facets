@@ -103,7 +103,7 @@ final class SvgPathView extends FacetAppSpecifier{
 		return ContentStyle.SINGLE;
 	}
 	@Override
-	protected FacetAppSurface newApp(FacetFactory ff, FeatureHost host){
+	protected FacetAppSurface newApp(FacetFactory ff, FeatureHost host_){
 		return new FacetAppSurface(this,ff){
 			@Override
 			public FileSpecifier[]getFileSpecifiers(){

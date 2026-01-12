@@ -163,6 +163,6 @@ public abstract class TreeTextContenter extends ViewerContenter{
 		Object sink=sink();
 		String name=sink instanceof File?((File)sink).getName()
 				:((TypedNode)sink).title()+"."+((TypedNode)sink).type();
-		return FileSpecifier.filterByName(textTreeSpec().fileSpecifiers(),name);
+		return FileSpecifier.filterByName(textTreeSpec().getFileSpecifiers(),name);
 	}
 }
