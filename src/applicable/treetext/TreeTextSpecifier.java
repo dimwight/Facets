@@ -40,6 +40,7 @@ final class TreeTextSpecifier extends TreeAppSpecifier {
 	protected SContenter newContenter(Object source,FacetAppSurface app){
 		return new TreeTextContenter(source,app){};
 	}
+
 	public static void main(String[]args){
 		new TreeTextSpecifier().buildAndLaunchApp(args);
 	}

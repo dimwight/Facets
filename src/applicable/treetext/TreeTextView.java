@@ -30,13 +30,11 @@ public abstract class TreeTextView extends TreeAppSpecifier {
 		return new String[]{"First line","Second line"};
 	}
 
-	public static void main(String[]args){
-		new TreeTextView(){}.buildAndLaunchApp(args);
-	}
-
 	@Override
 	protected SContenter newContenter(Object source, FacetAppSurface app) {
-		return new TreeTextContenter(source, app) {};
+		return new TreeTextContenter(source, app);
 	}
 
-}
+	public static void main(String[]args){
+		new TreeTextView(){}.buildAndLaunchApp(args);
+	}}

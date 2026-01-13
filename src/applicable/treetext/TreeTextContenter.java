@@ -37,7 +37,7 @@ import facets.util.tree.XmlPolicy;
 import facets.util.tree.XmlSpecifier;
 import java.io.File;
 import java.io.IOException;
-public abstract class TreeTextContenter extends ViewerContenter{
+public class TreeTextContenter extends ViewerContenter{
 	private static final String TYPE_LINE="TextLine";
 	public static final int TARGETS_PANE=0,TARGETS_CONTENT=1;
 	public static final String STATE_OFFSETS="selectionOffsets";
