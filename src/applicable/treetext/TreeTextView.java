@@ -14,7 +14,7 @@ public abstract class TreeTextView extends TreeAppSpecifier {
 		super(TreeTextView.class);
 	}
 	@Override
-	public PagedContenter[]adjustPreferenceContenters(SSurface surface,
+	protected PagedContenter[]adjustPreferenceContenters(SSurface surface,
 			PagedContenter[]contenters){
 		return true?contenters:new PagedContenter[]{
 			contenters[PREFERENCES_VALUES],

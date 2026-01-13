@@ -185,7 +185,7 @@ public abstract class FacetAppSpecifier extends AppSpecifier{
 		return adjustPreferenceContenters(app,
 				new FacetPreferences(this,app,((FacetAppSurface)app).ff).newContenters());
 	}
-	public PagedContenter[]adjustPreferenceContenters(
+	protected PagedContenter[]adjustPreferenceContenters(
 			SSurface surface,PagedContenter[]contenters){
 		return contenters;
 	}

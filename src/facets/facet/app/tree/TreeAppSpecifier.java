@@ -66,7 +66,7 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 		super(appClass);
 	}
 	@Override
-	public PagedContenter[]adjustPreferenceContenters(SSurface surface,
+	protected PagedContenter[]adjustPreferenceContenters(SSurface surface,
 			PagedContenter[]contenters){
 		return false?contenters:new PagedContenter[]{
 			contenters[PREFERENCES_TRACE],

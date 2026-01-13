@@ -15,7 +15,7 @@ final class TreeTextSpecifier extends TreeAppSpecifier {
 		super(TreeTextSpecifier.class);
 	}
 	@Override
-	public PagedContenter[]adjustPreferenceContenters(SSurface surface,
+	protected PagedContenter[]adjustPreferenceContenters(SSurface surface,
 			PagedContenter[]contenters){
 		return true?contenters:new PagedContenter[]{
 			contenters[PREFERENCES_VALUES],
