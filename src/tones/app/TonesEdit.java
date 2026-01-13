@@ -126,7 +126,7 @@ public final class TonesEdit extends TreeTextContenter{
       }
 
       @Override
-      public Object getInternalContentSource() {
+      protected Object getInternalContentSource() {
         File runDir = Util.runDir(),
             txt = new File(runDir, "E major.tones.txt"),
             xml = new File(runDir, "E major.tones.xml");

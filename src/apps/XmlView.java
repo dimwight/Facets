@@ -109,7 +109,7 @@ final public class XmlView extends TreeAppSpecifier{
 				nature().getBoolean(ARG_NO_FILES)&&releaseReady;
 	}
 	@Override
-    public Object getInternalContentSource(){
+    protected Object getInternalContentSource(){
 		if(!isDemo())return super.getInternalContentSource();
 		demoRoot.setChildren((TypedNode)nature().copyState(),(TypedNode)state().copyState());
 		demoRoot.setTitle("Demo"+demos++);

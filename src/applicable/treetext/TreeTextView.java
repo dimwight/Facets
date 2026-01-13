@@ -25,7 +25,7 @@ public abstract class TreeTextView extends TreeAppSpecifier {
 	}
 
 	@Override
-	public Object getInternalContentSource(){
+	protected Object getInternalContentSource(){
 		if(false)return new File("Default.txt");
 		return new String[]{"First line","Second line"};
 	}
