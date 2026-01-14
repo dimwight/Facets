@@ -83,7 +83,7 @@ public abstract class EvalSpecifier extends FacetAppSpecifier{
 	protected abstract String codeRootType();
 	@Override
 	protected FacetAppSurface newApp(FacetFactory ff,FeatureHost host_){
-		return new FacetAppSurface(this,ff){
+		return new FacetAppSurface(this,ff){// EvalSurface
 			@Override
 			protected
 			SContenter newContenter(Object source){
@@ -95,13 +95,13 @@ public abstract class EvalSpecifier extends FacetAppSpecifier{
 				return areaTitle(AreaTargeter.AREA_CONTENT)+
 					(findActiveContent().hasChanged()?"*":"")+" - "+title();
 			}
-			@Override
-			protected Object getInternalContentSource(){
-				return getAppInternalContentSource();
-			}
+
 			@Override
 			public FileSpecifier[]getFileSpecifiers(){
-				return getAppFileSpecifiers();
+				return new FileSpecifier[]{
+						new FileSpecifier("eval.xml","Evaluator logic files"),
+						new FileSpecifier("xml","XML files"),
+					};
 			}
 			@Override
 			protected void appOpened(){//${string_prompt:mode:noFiles}
@@ -112,13 +112,10 @@ public abstract class EvalSpecifier extends FacetAppSpecifier{
 			}
 		};
 	}
-	protected FileSpecifier[]getAppFileSpecifiers(){
-		return new FileSpecifier[]{
-				new FileSpecifier("eval.xml","Evaluator logic files"),
-				new FileSpecifier("xml","XML files"),
-			};
-	}
-	protected abstract EvalFormViewer newFormViewer(TypedNode code,FacetAppSurface app, 
-			EvalCoder coder);
-	protected abstract Object getAppInternalContentSource();
+
+    final
+	protected EvalFormViewer newFormViewer(TypedNode code, FacetAppSurface app,
+                                           EvalCoder coder) {
+        throw new RuntimeException("");
+    }
 }
