@@ -12,10 +12,13 @@ import facets.facet.FacetFactory;
 import facets.facet.SwingPanelFacet;
 import facets.facet.ViewerAreaMaster;
 import facets.facet.app.FacetAppSurface;
+import facets.facet.app.tree.TreeAppContenter;
+import facets.facet.app.tree.TreeAppSpecifier;
 import facets.util.FileSpecifier;
 import facets.util.ItemList;
 import facets.util.Util;
 import facets.util.tree.DataNode;
+import facets.util.tree.XmlPolicy;
 import tones.bar.VoicePart;
 import tones.view.PageView;
 
@@ -112,33 +115,62 @@ public final class TonesEdit extends TreeTextContenter{
   }
 
   public static void main(String[]args){
-    new facets.facet.app.tree.TreeAppSpecifier(TonesEdit.class) {
-//      @Override
-      public ContentStyle contentStyle() {
-        return true?
-                values()[args().getOrPutInt(NATURE_KEY,0)]
-                :DESKTOP;
-      }
+    new TonesSpecifier().buildAndLaunchApp(args);
+  }
+
+  private static class TonesSpecifier extends TreeAppSpecifier {
+    public TonesSpecifier() {
+      super(TonesEdit.class);
+    }
+
+    //      @Override
+          public ContentStyle contentStyle() {
+            return true?
+                    values()[args().getOrPutInt(NATURE_KEY,0)]
+                    :DESKTOP;
+          }
+
+    @Override
+    public boolean isFileApp() {
+      return false;
+    }
+
+    @Override
+    public Object getInternalContentSource_() {
+      File runDir = Util.runDir(),
+          txt = new File(runDir, "E major.tones.txt"),
+          xml = new File(runDir, "E major.tones.xml");
+      boolean useTree=args().getBoolean(ARG_TREE);
+      File use = useTree ? xml : txt;
+      return use.exists() ? use : VoicePart.TEST_CODES;
+    }
+
+    @Override
+    public TreeTextContenter newContenter_(Object source, FacetAppSurface app) {
+      return new TonesEdit(source, app);
+    }
 
       @Override
-      public boolean isFileApp() {
-        return false;
+      protected FacetAppSurface newApp(FacetFactory ff,FeatureHost host_){
+          return new FacetAppSurface(this,ff){
+              @Override
+              public FileSpecifier[]getFileSpecifiers(){
+                return xmlPolicy().fileSpecifiers();
+              }
+              @Override
+              protected Object getInternalContentSource(){
+                File runDir = Util.runDir(),
+                    txt = new File(runDir, "E major.tones.txt"),
+                    xml = new File(runDir, "E major.tones.xml");
+                boolean useTree=args().getBoolean(ARG_TREE);
+                File use = useTree ? xml : txt;
+                return use.exists() ? use : VoicePart.TEST_CODES;
+              }
+              @Override
+              protected SContenter newContenter(Object source){
+                return new TonesEdit(source, this);
+              }
+          };
       }
-
-      @Override
-      protected Object getInternalContentSource() {
-        File runDir = Util.runDir(),
-            txt = new File(runDir, "E major.tones.txt"),
-            xml = new File(runDir, "E major.tones.xml");
-        boolean useTree=args().getBoolean(ARG_TREE);
-        File use = useTree ? xml : txt;
-        return use.exists() ? use : VoicePart.TEST_CODES;
-      }
-
-      @Override
-      protected TreeTextContenter newContenter(Object source, FacetAppSurface app) {
-        return new TonesEdit(source, app);
-      }
-    }.buildAndLaunchApp(args);
   }
 }

@@ -1,5 +1,4 @@
 package applicable.treetext;
-import static facets.util.tree.DataConstants.*;
 import facets.core.app.ActionViewerTarget;
 import facets.core.app.AreaRoot;
 import facets.core.app.FeatureHost.LayoutFeatures;
@@ -32,9 +31,7 @@ import facets.util.tree.NodeList;
 import facets.util.tree.Nodes;
 import facets.util.tree.TypedNode;
 import facets.util.tree.ValueNode;
-import facets.util.tree.XmlDocRoot;
-import facets.util.tree.XmlPolicy;
-import facets.util.tree.XmlSpecifier;
+
 import java.io.File;
 import java.io.IOException;
 public class TreeTextContenter extends ViewerContenter{
@@ -163,6 +160,6 @@ public class TreeTextContenter extends ViewerContenter{
 		Object sink=sink();
 		String name=sink instanceof File?((File)sink).getName()
 				:((TypedNode)sink).title()+"."+((TypedNode)sink).type();
-		return FileSpecifier.filterByName(textTreeSpec().getFileSpecifiers(),name);
+		return FileSpecifier.filterByName(app.getFileSpecifiers(),name);
 	}
 }

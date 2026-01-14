@@ -19,11 +19,12 @@ import facets.facet.app.tree.TreeAppContenter;
 import facets.facet.app.tree.TreeAppSpecifier;
 import facets.facet.kit.Toolkit;
 import facets.facet.kit.swing.KitSwing;
+import facets.util.FileSpecifier;
 import facets.util.Tracer;
-import facets.util.tree.DataNode;
-import facets.util.tree.TypedNode;
-import facets.util.tree.ValueNode;
-import facets.util.tree.XmlSpecifier;
+import facets.util.tree.*;
+
+import java.io.File;
+
 /**
 {@link TreeAppSpecifier} that defines a utility application for viewing and editing 
 simple tree content.
@@ -53,7 +54,6 @@ passing {@link #ARG_NO_FILES} to {main(String[])}.
  to be exposed in the {@value facets.facet.app.tree.TreeTargets#TITLE_MENU} menu; 
  and {@link #newTreeMenuItems(FacetFactory, STargeter[], STargeter[])}
   to define the {@link SFacet}s exposing them.  
-<li>{@link TreeAppSpecifier#getInternalContentSource()} to redefine default content
 </ul>
 <p>In {@link FacetAppSpecifier}:
 <ul>
@@ -109,14 +109,14 @@ final public class XmlView extends TreeAppSpecifier{
 				nature().getBoolean(ARG_NO_FILES)&&releaseReady;
 	}
 	@Override
-    protected Object getInternalContentSource(){
-		if(!isDemo())return super.getInternalContentSource();
+	public Object getInternalContentSource_(){
+		if(!isDemo())return super.getInternalContentSource_();
 		demoRoot.setChildren((TypedNode)nature().copyState(),(TypedNode)state().copyState());
 		demoRoot.setTitle("Demo"+demos++);
 		return demoRoot;
 	}
 	@Override
-	protected SContenter newContenter(Object source, FacetAppSurface app){
+	public SContenter newContenter_(Object source, FacetAppSurface app){
 		return new TreeAppContenter(source,app);
 	}
 	@Override
@@ -179,5 +179,29 @@ final public class XmlView extends TreeAppSpecifier{
 		if(false)for(int i=1;i<12;i+=2)
 			newTestTree("Count",i);
 		else if(true)new XmlView().buildAndLaunchApp(args);
+	}
+
+	@Override
+	protected FacetAppSurface newApp(FacetFactory ff,FeatureHost host_){
+		return new FacetAppSurface(this,ff){
+			@Override
+			public FileSpecifier[]getFileSpecifiers(){
+				return xmlPolicy().fileSpecifiers();
+			}
+			@Override
+			protected Object getInternalContentSource(){
+				if(!isDemo()){
+					return false?new File("Test.xml")
+							:Nodes.newTestTree("Test",nature().getOrPutInt(ARG_TREE_SIZE,false?-1:3));
+				}
+				demoRoot.setChildren((TypedNode)nature().copyState(),(TypedNode)state().copyState());
+				demoRoot.setTitle("Demo"+demos++);
+				return demoRoot;
+			}
+			@Override
+			protected SContenter newContenter(Object source){
+				return new TreeAppContenter(source, this);
+			}
+		};
 	}
 }

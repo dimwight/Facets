@@ -86,49 +86,18 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	public boolean headerIsRibbon(){
 		return args().getOrPutBoolean(ARG_RIBBON,false);
 	}
-	/**
-	Final implementation. 
-	<p>The {@link FacetAppSurface} returned calls out to 
-	<ul>
-	<li>{@link #getInternalContentSource()} 
-	<li>{@link XmlPolicy#fileSpecifiers()} via {@link #xmlPolicy()}
-	<li>{@link #newContenter(Object, FacetAppSurface)} which by default returns a
-	 {@link TreeAppContenter}. 
-	 <ul>
-		 */
 	@Override
-	final protected FacetAppSurface newApp(FacetFactory ff,FeatureHost host_){
-		return new FacetAppSurface(this,ff){
-			@Override
-			public FileSpecifier[]getFileSpecifiers(){
-				return TreeAppSpecifier.this.getFileSpecifiers();
-			}
-			@Override
-			protected Object getInternalContentSource(){
-				return TreeAppSpecifier.this.getInternalContentSource();
-			}
-			@Override
-			protected SContenter newContenter(Object source){
-				return TreeAppSpecifier.this.newContenter(source,this);
-			}
-		};
-	}
+	protected abstract FacetAppSurface newApp(FacetFactory ff, FeatureHost host_);
 
-	protected FileSpecifier[] getFileSpecifiers() {
+	public FileSpecifier[] getFileSpecifiers_() {
 		return xmlPolicy().fileSpecifiers();
 	}
 
-	/**
-	 Fulfils {@link FacetAppSurface#getInternalContentSource()} in the
-	 return of {@link #newApp(FacetFactory, FeatureHost)}.
-	 @return by default {@link Nodes#newTestTree(String, int)} with <code>width</code>=3 which
-	 may be changed by passing {@link #ARG_TREE_SIZE}=<code>width</code>
-	 */
-	protected Object getInternalContentSource(){
-		return false?new File("Test.xml")
-				:Nodes.newTestTree("Test",nature().getOrPutInt(ARG_TREE_SIZE,false?-1:3));
-	}
-	protected SContenter newContenter(Object source,FacetAppSurface app){
+	public Object getInternalContentSource_(){
+        if (false) return new File("Test.xml");
+        return Nodes.newTestTree("Test", nature().getOrPutInt(ARG_TREE_SIZE, false ? -1 : 3));
+    }
+	public SContenter newContenter_(Object source, FacetAppSurface app){
 		return new TreeAppContenter(source,app);
 	}
 	/**
