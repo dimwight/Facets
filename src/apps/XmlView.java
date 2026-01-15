@@ -49,7 +49,7 @@ passing {@link #ARG_NO_FILES} to {main(String[])}.
 <p>In {@link TreeAppSpecifier}:
 <ul>
 <li>{@link #xmlPolicy()} to redefine {@link XmlSpecifier}s used in file dialogs
-<li>{@link #newContentViews(NodeViewable)} to add and customise content viewers
+<li>{@link #newContentViews_(NodeViewable)} to add and customise content viewers
 <li>{@link #newContentRootTargets(FacetAppSurface)} to define additional {@link STarget}s
  to be exposed in the {@value facets.facet.app.tree.TreeTargets#TITLE_MENU} menu; 
  and {@link #newTreeMenuItems(FacetFactory, STargeter[], STargeter[])}
@@ -120,8 +120,8 @@ final public class XmlView extends TreeAppSpecifier{
 		return new TreeAppContenter(source,app);
 	}
 	@Override
-	protected SView[]newContentViews(NodeViewable viewable){
-		if(!isDemo())return super.newContentViews(viewable);
+	protected SView[] newContentViews_(NodeViewable viewable){
+		if(!isDemo())return super.newContentViews_(viewable);
 		viewable.defineSelection(((TypedNode)viewable.framed).children()[0]);
 		final boolean liveViews=canEditContent();
 		return new SView[]{

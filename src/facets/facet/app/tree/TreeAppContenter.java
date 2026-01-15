@@ -1,8 +1,6 @@
 package facets.facet.app.tree;
-import static facets.core.app.ActionViewerTarget.Action.*;
 import static facets.facet.app.tree.TreeTargets.*;
 import facets.core.app.ActionViewerTarget;
-import facets.core.app.AppSurface;
 import facets.core.app.AreaRoot;
 import facets.core.app.NodeViewable;
 import facets.core.app.PathSelection;
@@ -26,25 +24,22 @@ import facets.core.superficial.app.FacetedTarget;
 import facets.core.superficial.app.SSelection;
 import facets.core.superficial.app.SelectionView;
 import facets.facet.AreaFacets;
-import facets.facet.app.FacetAppSpecifier;
 import facets.facet.app.FacetAppSurface;
 import facets.facet.app.FileAppActions;
 import facets.util.Debug;
 import facets.util.FileSpecifier;
 import facets.util.Stateful;
-import facets.util.Strings;
 import facets.util.TextLines;
-import facets.util.Util;
 import facets.util.tree.DataNode;
 import facets.util.tree.Nodes;
 import facets.util.tree.TypedNode;
 import facets.util.tree.ValueNode;
 import facets.util.tree.XmlDocRoot;
 import facets.util.tree.XmlSpecifier;
-import facets.util.tree.Nodes.TreeRoot;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.function.BiConsumer;
+
 /**
 {@link ViewerContenter} that manages content for {@link TreeAppSpecifier}. 
 <p>Effectively a package-private class; 
@@ -71,7 +66,7 @@ public final class TreeAppContenter extends ViewerContenter{
 	@Override
 	protected FacetedTarget[]newContentViewers(ViewableFrame viewable){
 		return ActionViewerTarget.newViewerAreas(viewable,ViewerTarget.newViewFrames(
-			treeSpec.newContentViews((NodeViewable)viewable)
+			treeSpec.newContentViews_((NodeViewable)viewable)
 		));
 	}
 	@Override

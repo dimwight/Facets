@@ -257,7 +257,7 @@ public class TmxView extends TreeAppSpecifier{
 		return view.isLive()?new ViewableAction[]{DELETE,UNDO,REDO}:new ViewableAction[]{COPY};
 	}
 	@Override
-	protected SView[]newContentViews(NodeViewable viewable){
+	protected SView[] newContentViews_(NodeViewable viewable){
 		TypedNode root=(TypedNode)viewable.framed;
 		NodeList units=checkSortUnits(root);
 		if(sinceModified(root)<1)viewable.updateAfterEditAction();

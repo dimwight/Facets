@@ -132,7 +132,7 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	@param viewable has the content as its {@link SFrameTarget#framed}
 	@return by default a single {@link TreeView}
 	 */
-	protected SView[]newContentViews(NodeViewable viewable){
+	protected SView[] newContentViews_(NodeViewable viewable){
 		final String rootTitle=((TypedNode)viewable.framed).title();
 		final boolean liveViews=canEditContent(),multiples=true;
 		SView basic=new TreeView(multiples?"Single":"Basic"){
