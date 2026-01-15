@@ -50,7 +50,7 @@ passing {@link #ARG_NO_FILES} to {main(String[])}.
 <ul>
 <li>{@link #xmlPolicy()} to redefine {@link XmlSpecifier}s used in file dialogs
 <li>{@link #newContentViews_(NodeViewable)} to add and customise content viewers
-<li>{@link #newContentRootTargets(FacetAppSurface)} to define additional {@link STarget}s
+<li>{@link #newContentRootTargets_(FacetAppSurface)} to define additional {@link STarget}s
  to be exposed in the {@value facets.facet.app.tree.TreeTargets#TITLE_MENU} menu; 
  and {@link #newTreeMenuItems(FacetFactory, STargeter[], STargeter[])}
   to define the {@link SFacet}s exposing them.  
@@ -117,7 +117,7 @@ final public class XmlView extends TreeAppSpecifier{
 	}
 	@Override
 	public SContenter newContenter_(Object source, FacetAppSurface app){
-		return new TreeAppContenter(source,app);
+		return new TreeAppContenter(source,app){};
 	}
 	@Override
 	protected SView[] newContentViews_(NodeViewable viewable){
@@ -146,8 +146,8 @@ final public class XmlView extends TreeAppSpecifier{
 		};
 	}
 	@Override
-	protected STarget[]newContentRootTargets(final FacetAppSurface app){
-		if(!isDemo())return super.newContentRootTargets(app);
+	protected STarget[] newContentRootTargets_(final FacetAppSurface app){
+		if(!isDemo())return super.newContentRootTargets_(app);
 		return new STarget[]{
 			new SIndexing("Select Node",demoRoot.children(),
 					0,new SIndexing.Coupler(){
@@ -200,7 +200,9 @@ final public class XmlView extends TreeAppSpecifier{
 			}
 			@Override
 			protected SContenter newContenter(Object source){
-				return new TreeAppContenter(source, this);
+				return new TreeAppContenter(source, this){
+					
+				};
 			}
 		};
 	}

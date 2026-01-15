@@ -40,7 +40,7 @@ import java.io.File;
 {@link FacetAppSpecifier} for simple applications with {@link DataNode} content. 
 <p>{@link TreeAppSpecifier} exemplifies practical use of the superclass with
 a {@link ViewerContenter} (here {@link TreeAppContenter}) that provides the detail functionality.  
-It also demonstrates with {@link #newContentRootTargets(FacetAppSurface)} and
+It also demonstrates with {@link #newContentRootTargets_(FacetAppSurface)} and
 {@link #newTreeMenuItems(FacetFactory, STargeter[], STargeter[])} the key  
 <a href="http://superficial.sourceforge.net/">Superficial</a>  mechanism for binding 
 data abstracted as {@link STarget}s to widgets abstracted as {@link SFacet}s 
@@ -174,7 +174,7 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	passed to {@link #newTreeMenuItems(FacetFactory, STargeter[], STargeter[])};
 	by default an empty {@link STarget}<code>[]</code>
 	 */
-	protected STarget[]newContentRootTargets(FacetAppSurface app){
+	protected STarget[] newContentRootTargets_(FacetAppSurface app){
 		return new STarget[]{};
 	}
 	/**
@@ -182,7 +182,7 @@ public abstract class TreeAppSpecifier extends FacetAppSpecifier{
 	<p>Called from {@link TreeAppFeatures#adjustMenuRoots(MenuFacets[])} 
 	@param ff the calling {@link TreeAppFeatures} 
 	@param treeLinks exposing {@link TreeTargets#appTargets()} 
-	@param contentLinks targeting returns (if any) of {@link #newContentRootTargets(FacetAppSurface)} 
+	@param contentLinks targeting returns (if any) of {@link #newContentRootTargets_(FacetAppSurface)}
 	@return by default <code>treeAppFacets</code> indexed with 
 		{@link TreeTargets#TARGET_ENCODE},{@link TreeTargets#TARGET_TYPE} where
 		{@link #canCreateContent()} returns <code>true</code>.

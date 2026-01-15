@@ -47,7 +47,7 @@ declared <code>public</code> for documentation purposes only.
 <p>The code exemplifies 'filling out' the <code>abstract</code> {@link ViewerContenter} 
 to provide real-world functionality.  
  */
-public final class TreeAppContenter extends ViewerContenter{
+public class TreeAppContenter extends ViewerContenter{
 	/** Index into return of {@link #lazyContentAreaElements(SAreaTarget)}. */
 	public static final int TARGETS_PANE=0,TARGETS_CONTENT=1;
 	public static final String STATE_OFFSETS="selectionOffsets";
@@ -81,14 +81,14 @@ public final class TreeAppContenter extends ViewerContenter{
 	Re-implementation returning pane and extra tree menu targets. 
 	@return {@link STarget}<code>[]</code> indexable by {@link #TARGETS_PANE}
 	and {@link #TARGETS_CONTENT}; the latter created in 
-		{@link TreeAppSpecifier#newContentRootTargets(FacetAppSurface)}
+		{@link TreeAppSpecifier#newContentRootTargets_(FacetAppSurface)}
 	 */
 	@Override
 	public STarget[]lazyContentAreaElements(SAreaTarget area){
 		return new STarget[]{
 				app.ff.areas().panesGetTarget(area),
 				new TargetCore("TreeMenuAdjustmentTargets",
-						treeSpec.newContentRootTargets(app)),
+						treeSpec.newContentRootTargets_(app)),
 		};
 	}
 	@Override

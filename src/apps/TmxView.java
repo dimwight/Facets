@@ -81,7 +81,9 @@ public class TmxView extends TreeAppSpecifier{
 					}catch(IOException e){
 						throw new RuntimeException(e);
 					}
-				return new TreeAppContenter(source,this);
+				return new TreeAppContenter(source,this){
+
+				};
 			}
 		};
 	}
@@ -237,7 +239,7 @@ public class TmxView extends TreeAppSpecifier{
 	private TreeView tmx,days;
 	private SSelection unitSelection;
 	@Override
-	protected STarget[]newContentRootTargets(final FacetAppSurface app){
+	protected STarget[] newContentRootTargets_(final FacetAppSurface app){
 		extract=new STrigger("E&xtract Selection",new STrigger.Coupler(){
 			@Override
 			public void fired(STrigger t){
